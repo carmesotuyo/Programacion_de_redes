@@ -63,7 +63,8 @@ namespace ServerApp
 
                     Console.WriteLine("Antes de recibir el archivo");
                     var fileCommonHandler = new FileCommsHandler(socketCliente);
-                    fileCommonHandler.ReceiveFile();
+                    string path = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+                    fileCommonHandler.ReceiveFile(path);
                     Console.WriteLine("Archivo recibido!!");
                 }
                 Console.WriteLine("Cliente Desconectado");

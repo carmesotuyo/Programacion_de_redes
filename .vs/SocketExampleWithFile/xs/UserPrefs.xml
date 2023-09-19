@@ -6,11 +6,19 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/Domain/Usuario.cs">
+    <Files>
+      <File FileName="ServerApp/ProgramServer.cs" Line="65" Column="25" />
+      <File FileName="ServerApp/Domain/Producto.cs" Line="57" Column="4" />
+      <File FileName="ServerApp/Domain/Calificacion.cs" Line="15" Column="4" />
+      <File FileName="ServerApp/Domain/Usuario.cs" Line="17" Column="4" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="SocketExampleWithFile" selected="True" />
+          <Node name="SocketExampleWithFile" expanded="True">
+            <Node name="ServerApp" selected="True" />
+          </Node>
         </State>
       </Pad>
     </Pads>
