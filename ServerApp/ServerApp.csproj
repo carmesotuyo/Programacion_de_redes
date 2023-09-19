@@ -24,10 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Domain\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="App.config">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>App.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\" />
+  </ItemGroup>
 </Project>
