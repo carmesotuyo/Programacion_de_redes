@@ -10,12 +10,12 @@ namespace ServerApp.Domain
 		public string Nombre { get; set; }
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
-		public Image Imagen { get; set; }
+		public string Imagen { get; set; }
 		public int stock;
 		public List<Calificacion> calificaciones;
 		public int promedioCalificaciones;
 
-		public Producto(string nombre, string descripcion, float precio, Image imagen, int stock)
+		public Producto(string nombre, string descripcion, float precio, string imagen, int stock)
 		{
 			Nombre = nombre;
 			Descripcion = descripcion;
