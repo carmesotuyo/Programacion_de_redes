@@ -7,12 +7,15 @@ using System.Configuration;
 using Communication;
 using System.Text;
 using System.Runtime.InteropServices;
+using ServerApp.Controllers;
 
 namespace ServerApp
 {
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        private static ProductController _productController = new ProductController();
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
@@ -110,7 +113,9 @@ namespace ServerApp
             {
                 case "1":
                     // Implementa la lógica para publicar un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Publicar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Publicar un producto: Implementa la lógica aquí."));
+                    _productController.publicarProducto(socketCliente);
+
                     break;
                 case "2":
                     // Implementa la lógica para comprar un producto
@@ -163,6 +168,7 @@ namespace ServerApp
 
         public static bool Autenticar(string email, string password)
         {
+            // a implementar
             return true;
         }
     }

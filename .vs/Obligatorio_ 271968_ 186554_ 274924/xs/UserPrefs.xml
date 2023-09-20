@@ -1,25 +1,32 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Communication/Protocol.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/ProgramServer.cs">
     <Files>
       <File FileName="ServerApp/ProgramServer.cs" Line="66" Column="43" />
-      <File FileName="ServerApp/Domain/Producto.cs" Line="57" Column="4" />
-      <File FileName="ServerApp/Domain/Usuario.cs" Line="17" Column="4" />
-      <File FileName="ServerApp/App.config" Line="5" Column="39" />
-      <File FileName="ServerApp/ServerConfig.cs" Line="14" Column="1" />
-      <File FileName="Communication/FileCommsHandler.cs" Line="95" Column="22" />
+      <File FileName="ServerApp/Domain/Producto.cs" />
+      <File FileName="ServerApp/Domain/Usuario.cs" />
+      <File FileName="ServerApp/App.config" />
+      <File FileName="ServerApp/ServerConfig.cs" />
+      <File FileName="Communication/FileCommsHandler.cs" />
       <File FileName="Communication/Protocol.cs" Line="12" Column="61" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State name="__root__" />
+        <State name="__root__">
+          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
+            <Node name="Communication" expanded="True" />
+            <Node name="ServerApp" expanded="True">
+              <Node name="ProgramServer.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
 </Properties>
