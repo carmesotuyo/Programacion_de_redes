@@ -21,6 +21,15 @@ namespace ServerApp.Controllers
                 socketCliente.Send(Encoding.UTF8.GetBytes("Ingrese nombre del producto"));
                 int bytesReceived = socketCliente.Receive(buffer);
                 string nombre = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+
+                // nombre descripcion precio imagen stock
+                socketCliente.Send(Encoding.UTF8.GetBytes("Ingrese una descripción para su producto"));
+                bytesReceived = socketCliente.Receive(buffer);
+                string descripcion = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+
+                socketCliente.Send(Encoding.UTF8.GetBytes("Ingrese el precio"));
+                bytesReceived = socketCliente.Receive(buffer);
+                string precio = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
             }
 			catch(Exception e)
 			{

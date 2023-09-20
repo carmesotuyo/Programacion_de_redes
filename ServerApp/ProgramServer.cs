@@ -58,30 +58,39 @@ namespace ServerApp
         static void ManejarCliente(Socket socketCliente, int nro)
         {
             Console.WriteLine("Cliente {0} conectado", nro);
+            MessageCommsHandler msgHandler = new MessageCommsHandler(socketCliente);
 
-            byte[] buffer = new byte[1024];
+            //byte[] buffer = new byte[1024];
             try
             {
-                socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su email"));
-                int bytesRecived = socketCliente.Receive(buffer);
-                string email = Encoding.UTF8.GetString(buffer,0,bytesRecived);
+                msgHandler.SendMessage("Por favor, ingrese su email");
+                string email = msgHandler.ReceiveMessage();
+                //socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su email"));
+                //int bytesRecived = socketCliente.Receive(buffer);
+                //string email = Encoding.UTF8.GetString(buffer,0,bytesRecived);
 
-                socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su contraseña"));
-                bytesRecived = socketCliente.Receive(buffer);
-                string password = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
+                msgHandler.SendMessage("Por favor, ingrese su contraseña");
+                string password = msgHandler.ReceiveMessage();
+                //socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su contraseña"));
+                //bytesRecived = socketCliente.Receive(buffer);
+                //string password = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
 
-                if (Autenticar(email, password)) {
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Bienvenido a dream team market, autenticacion exitosa"));
+                if (Autenticar(email, password))
+                {
+                    msgHandler.SendMessage("Bienvenido a dream team market, autenticacion exitosa");
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Bienvenido a dream team market, autenticacion exitosa"));
                     bool clienteConectado = true;
 
                     while (clienteConectado)
                     {
                         // Mostrar el menú al cliente
-                        socketCliente.Send(Encoding.UTF8.GetBytes(GetMenu()));
+                        msgHandler.SendMessage(GetMenu());
+                        //socketCliente.Send(Encoding.UTF8.GetBytes(GetMenu()));
 
                         // Leer la selección del cliente
-                        bytesRecived = socketCliente.Receive(buffer);
-                        string opcion = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
+                        string opcion = msgHandler.ReceiveMessage();
+                        //bytesRecived = socketCliente.Receive(buffer);
+                        //string opcion = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
 
                         // Procesar la selección del cliente
                         ProcesarSeleccion(socketCliente, opcion);
