@@ -11,6 +11,7 @@ namespace ClientApp
     public class ProgramCliente
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        const int bufferNumber = 1024;
         public static void Main(string[] args)
         {
             bool parar = false;
@@ -32,7 +33,7 @@ namespace ClientApp
             Console.WriteLine("Cliente Conectado al Servidor...!!!");
 
             //Console.WriteLine("Escribir mensaje y presionar enter para enviar....");
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[bufferNumber];
 
             try
             {

@@ -13,6 +13,7 @@ namespace ServerApp
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        const int bufferNumber = 1024;
         public static void Main(string[] args)
         {
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
@@ -56,7 +57,7 @@ namespace ServerApp
         {
             Console.WriteLine("Cliente {0} conectado", nro);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[bufferNumber];
             try
             {
                 socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su email"));
