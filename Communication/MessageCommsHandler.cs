@@ -30,6 +30,16 @@ namespace Communication
             string message = _conversionHandler.ConvertBytesToString(_socketHelper.Receive(msgLength));
             return message;
         }
+
+        public float ReceiveNumber()
+        {
+            // ---> Recibir el largo del mensaje
+            int msgLength = _conversionHandler.ConvertBytesToInt(_socketHelper.Receive(Protocol.FixedDataSize));
+            // ---> Recibir el valor
+            float message = _conversionHandler.ConvertBytesToFloat(_socketHelper.Receive(msgLength));
+            return message;
+
+        }
     }
 }
 

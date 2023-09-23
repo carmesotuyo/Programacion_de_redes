@@ -8,6 +8,7 @@ using Communication;
 using System.Text;
 using System.Runtime.InteropServices;
 using ServerApp.Controllers;
+using ServerApp.Domain;
 
 namespace ServerApp
 {
@@ -59,6 +60,7 @@ namespace ServerApp
         {
             Console.WriteLine("Cliente {0} conectado", nro);
             MessageCommsHandler msgHandler = new MessageCommsHandler(socketCliente);
+            FileCommsHandler fileHandler = new FileCommsHandler(socketCliente);
 
             //byte[] buffer = new byte[1024];
             try
@@ -69,52 +71,55 @@ namespace ServerApp
                 //int bytesRecived = socketCliente.Receive(buffer);
                 //string email = Encoding.UTF8.GetString(buffer,0,bytesRecived);
 
-                msgHandler.SendMessage("Por favor, ingrese su contraseña");
+                msgHandler.SendMessage("Por favor, ingrese su clave");
                 string password = msgHandler.ReceiveMessage();
                 //socketCliente.Send(Encoding.UTF8.GetBytes("Porfavor, ingrese su contraseña"));
                 //bytesRecived = socketCliente.Receive(buffer);
                 //string password = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
 
-                if (Autenticar(email, password))
+                Usuario user = Autenticar(email, password);
+                Console.WriteLine("Usuario {0} autenticado", email);
+                //socketCliente.Send(Encoding.UTF8.GetBytes("Bienvenido a dream team market, autenticacion exitosa"));
+                bool clienteConectado = true;
+
+                while (clienteConectado)
                 {
-                    msgHandler.SendMessage("Bienvenido a dream team market, autenticacion exitosa");
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Bienvenido a dream team market, autenticacion exitosa"));
-                    bool clienteConectado = true;
+                    // Mostrar el menú al cliente
+                    msgHandler.SendMessage(GetMenu());
+                    //socketCliente.Send(Encoding.UTF8.GetBytes(GetMenu()));
 
-                    while (clienteConectado)
-                    {
-                        // Mostrar el menú al cliente
-                        msgHandler.SendMessage(GetMenu());
-                        //socketCliente.Send(Encoding.UTF8.GetBytes(GetMenu()));
+                    // Leer la selección del cliente
+                    string opcion = msgHandler.ReceiveMessage();
+                    Console.WriteLine("opcion recibida {0}", opcion); //debug
+                    //bytesRecived = socketCliente.Receive(buffer);
+                    //string opcion = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
 
-                        // Leer la selección del cliente
-                        string opcion = msgHandler.ReceiveMessage();
-                        //bytesRecived = socketCliente.Receive(buffer);
-                        //string opcion = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
-
-                        // Procesar la selección del cliente
-                        ProcesarSeleccion(socketCliente, opcion);
+                    // Procesar la selección del cliente
+                    ProcesarSeleccion(msgHandler, opcion, fileHandler, user);
 
 
-                        /// RECIBO EL ARCHIVO /////
-                        // Console.WriteLine("Bienvenido a dream team market");
-                        // Console.WriteLine("Antes de recibir el archivo");
-                        //var fileCommonHandler = new FileCommsHandler(socketCliente);
-                        //fileCommonHandler.ReceiveFile();
-                        //Console.WriteLine("Archivo recibido!!");
-                    }
+                    /// RECIBO EL ARCHIVO /////
+                    // Console.WriteLine("Bienvenido a dream team market");
+                    // Console.WriteLine("Antes de recibir el archivo");
+                    //var fileCommonHandler = new FileCommsHandler(socketCliente);
+                    //fileCommonHandler.ReceiveFile();
+                    //Console.WriteLine("Archivo recibido!!");
                 }
-                
 
-                Console.WriteLine("Cliente Desconectado");
+
+                Console.WriteLine("Cliente {0} Desconectado", nro);
             }
             catch (SocketException)
             {
-                Console.WriteLine("Cliente Desconectado!");
+                Console.WriteLine("Cliente {0} Desconectado por un error", nro);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
-        private static void ProcesarSeleccion(Socket socketCliente, string opcion)
+        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, Usuario user)
         {
             // Aquí debes implementar la lógica para cada opción del menú
             // Por ejemplo, puedes usar un switch para manejar cada opción
@@ -123,36 +128,37 @@ namespace ServerApp
                 case "1":
                     // Implementa la lógica para publicar un producto
                     //socketCliente.Send(Encoding.UTF8.GetBytes("Publicar un producto: Implementa la lógica aquí."));
-                    _productController.publicarProducto(socketCliente);
+                    Console.WriteLine("entramos al switch"); //debug
+                    _productController.publicarProducto(msgHandler, fileHandler, user);
 
                     break;
                 case "2":
                     // Implementa la lógica para comprar un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Comprar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Comprar un producto: Implementa la lógica aquí."));
                     break;
                 case "3":
                     // Implementa la lógica para modificar un producto publicado
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Modificar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Modificar un producto: Implementa la lógica aquí."));
                     break;
                 case "4":
                     // Implementa la lógica para eliminar un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Eliminar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Eliminar un producto: Implementa la lógica aquí."));
                     break;
                 case "5":
                     // Implementa la lógica para buscar un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Buscar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Buscar un producto: Implementa la lógica aquí."));
                     break;
                 case "6":
                     // Implementa la lógica para ver más acerca de un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Ver más acerca de un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Ver más acerca de un producto: Implementa la lógica aquí."));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Calificar un producto: Implementa la lógica aquí."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Calificar un producto: Implementa la lógica aquí."));
                     break;
                 default:
                     // Opción no válida
-                    socketCliente.Send(Encoding.UTF8.GetBytes("Opción no válida. Intente nuevamente."));
+                    //socketCliente.Send(Encoding.UTF8.GetBytes("Opción no válida. Intente nuevamente."));
                     break;
             }
         }
@@ -175,10 +181,12 @@ namespace ServerApp
             return menu.ToString();
         }
 
-        public static bool Autenticar(string email, string password)
+        public static Usuario Autenticar(string email, string password)
         {
             // a implementar
-            return true;
+            // para mover a un controller de login/logout
+            // tirar excepcion si no existe
+            return new Usuario(email, password);
         }
     }
 }

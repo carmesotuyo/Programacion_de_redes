@@ -4,9 +4,12 @@ namespace ServerApp.Database
 {
 	public class SingletonDB
 	{
-		private SingletonDB() { }
+		private SingletonDB()
+        {
+            _productos = new List<Producto>();
+        }
 
-		private static SingletonDB _instance;
+		private static SingletonDB? _instance;
         private List<Producto> _productos;
         //private List<Calificacion> _calificaciones; // a implementar en otro PR
 
