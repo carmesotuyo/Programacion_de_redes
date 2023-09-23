@@ -42,13 +42,6 @@ namespace ClientApp
                 {
                     string comando = Console.ReadLine();
 
-                    // ENVIO DE ARCHIVOS -- NO BORRAR
-                    //Console.WriteLine("Ingrese la ruta completa del archivo a enviar: ");
-                    //String abspath = Console.ReadLine();
-                    // var fileCommonHandler = new FileCommsHandler(socketCliente);
-                    //fileCommonHandler.SendFile(abspath);
-                    //Console.WriteLine("Se envio el archivo al Servidor");
-
                     switch (comando)
                     {
                         case "0":
