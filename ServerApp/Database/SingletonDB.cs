@@ -12,6 +12,7 @@ namespace ServerApp.Database
 		private static SingletonDB? _instance;
         private List<Producto> _productos;
         //private List<Calificacion> _calificaciones; // a implementar en otro PR
+        //private List<Usuario> _usuarios;
 
         private static readonly object _lock = new object();
 
@@ -33,6 +34,7 @@ namespace ServerApp.Database
         public List<Producto> agregarProducto(Producto producto)
         {
             _productos.Add(producto);
+            Console.WriteLine("Productos: " + _productos[0].Nombre);
             return _productos;
         }
 

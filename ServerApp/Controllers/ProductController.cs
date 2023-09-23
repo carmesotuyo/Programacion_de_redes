@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
-using System.Text;
 using Communication;
 using ServerApp.Domain;
 using ServerApp.Logic;
@@ -13,37 +11,35 @@ namespace ServerApp.Controllers
 
 		public ProductController() { }
 
-		public void publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user)
+		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user)
         {
+            string mensajeAlCliente = "";
             try
 			{
-                Console.WriteLine("entramos al controller"); //debug
-                // Le pedimos la información al cliente
-                msgHandler.SendMessage("Ingrese nombre del producto");
-                string nombre = msgHandler.ReceiveMessage();
-
-                msgHandler.SendMessage("Ingrese una descripción para su producto");
-                string descripcion = msgHandler.ReceiveMessage();
-
-                msgHandler.SendMessage("Ingrese el precio");
-                float precio = msgHandler.ReceiveNumber();
-
-                msgHandler.SendMessage("Ingrese la ruta al archivo de imagen");
-                string imagen = fileHandler.ReceiveFile();
-
-                msgHandler.SendMessage("Ingrese el stock disponible");
-                int stock = (int)msgHandler.ReceiveNumber();
+                // Capturamos la informacion
+                string info = msgHandler.ReceiveMessage();
+                string[] datos = info.Split("#");
+                string nombre = datos[0];
+                string descripcion = datos[1];
+                float precio = float.Parse(datos[2]);
+                string imagen = datos[3];
+                int stock = int.Parse(datos[4]);
 
                 // Creamos el producto con la info obtenida
                 Producto producto = new Producto(nombre, descripcion, precio, imagen, stock);
 
+                fileHandler.ReceiveFile();
+
                 // Llamamos a la lógica para publicarlo
                 _productLogic.publicarProducto(producto, user);
+                mensajeAlCliente = "Producto ingresado con exito: " + nombre;
             }
             catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
+                mensajeAlCliente = "Ocurrió un error: " + e.Message;
 			}
+            return mensajeAlCliente;
         }
 
     }
