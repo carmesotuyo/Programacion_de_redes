@@ -74,7 +74,6 @@ namespace ClientApp
 
                 while (!parar)
                 {
-                    Thread.Sleep(1000);
                     Console.WriteLine("recibiendo algo"); //debug
                     Console.WriteLine(msgHandler.ReceiveMessage());
                     Console.WriteLine("enviando algo"); //debug

@@ -93,9 +93,11 @@ namespace ServerApp
                     Console.WriteLine("opcion recibida {0}", opcion); //debug
                     //bytesRecived = socketCliente.Receive(buffer);
                     //string opcion = Encoding.UTF8.GetString(buffer, 0, bytesRecived);
+                    msgHandler.SendMessage("voy a procesar la seleccion");
+                    Console.WriteLine("Mensjae recibido: "+ msgHandler.ReceiveMessage());
 
                     // Procesar la selección del cliente
-                    ProcesarSeleccion(msgHandler, opcion, fileHandler, user);
+                    //ProcesarSeleccion(msgHandler, opcion, fileHandler, user);
 
 
                     /// RECIBO EL ARCHIVO /////
