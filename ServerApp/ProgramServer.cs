@@ -103,31 +103,24 @@ namespace ServerApp
                     break;
                 case "2":
                     // Implementa la lógica para comprar un producto
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Comprar un producto: Implementa la lógica aquí."));
                     break;
                 case "3":
                     // Implementa la lógica para modificar un producto publicado
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Modificar un producto: Implementa la lógica aquí."));
                     break;
                 case "4":
                     // Implementa la lógica para eliminar un producto
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Eliminar un producto: Implementa la lógica aquí."));
                     break;
                 case "5":
                     // Implementa la lógica para buscar un producto
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Buscar un producto: Implementa la lógica aquí."));
                     break;
                 case "6":
                     // Implementa la lógica para ver más acerca de un producto
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Ver más acerca de un producto: Implementa la lógica aquí."));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Calificar un producto: Implementa la lógica aquí."));
                     break;
                 default:
-                    // Opción no válida
-                    //socketCliente.Send(Encoding.UTF8.GetBytes("Opción no válida. Intente nuevamente."));
+                    // Opción no válida, TODO resolver que hacer
                     break;
             }
         }
