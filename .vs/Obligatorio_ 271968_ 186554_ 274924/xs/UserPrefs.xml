@@ -1,0 +1,44 @@
+﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/carmelasotuyo/Desktop/PDR/N6A_274924_186554_271968/ServerApp/ProgramServer.cs" relfile="ServerApp/ProgramServer.cs" line="93" column="1" />
+      <Breakpoint file="/Users/carmelasotuyo/Desktop/PDR/N6A_274924_186554_271968/ClientApp/ProgramCliente.cs" relfile="ClientApp/ProgramCliente.cs" line="78" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ClientApp/ProgramCliente.cs">
+    <Files>
+      <File FileName="ServerApp/ProgramServer.cs" Line="72" Column="24" />
+      <File FileName="ServerApp/Domain/Producto.cs" />
+      <File FileName="ServerApp/Domain/Usuario.cs" />
+      <File FileName="ServerApp/App.config" />
+      <File FileName="ServerApp/ServerConfig.cs" Line="1" Column="1" />
+      <File FileName="Communication/FileCommsHandler.cs" Line="33" Column="64" />
+      <File FileName="Communication/Protocol.cs" />
+      <File FileName="Communication/SettingsManager.cs" />
+      <File FileName="Communication/SocketHelper.cs" Line="47" Column="1" />
+      <File FileName="ClientApp/ProgramCliente.cs" Line="78" Column="1" />
+      <File FileName="ServerApp/Controllers/ProductController.cs" />
+      <File FileName="Communication/FileHandler.cs" />
+      <File FileName="Communication/FileStreamHandler.cs" Line="1" Column="1" />
+      <File FileName="Communication/ConversionHandler.cs" Line="29" Column="1" />
+      <File FileName="ServerApp/Logic/ProductLogic.cs" />
+      <File FileName="ClientApp/ClientConfig.cs" />
+      <File FileName="ServerApp/Database/SingletonDB.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Obligatorio_ 271968_ 186554_ 274924">
+            <Node name="Communication" expanded="True">
+              <Node name="FileStreamHandler.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+</Properties>
