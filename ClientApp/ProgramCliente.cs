@@ -46,8 +46,7 @@ namespace ClientApp
                     {
                         case "0":
                             msgHandler.SendMessage("0");
-                            //login usuario#clave
-                            msgHandler.SendMessage("usuario#clave");
+                            msgHandler.SendMessage(Login.PedirDatosLogin());
                             Console.WriteLine(msgHandler.ReceiveMessage());
                             break;
                         case "1":
