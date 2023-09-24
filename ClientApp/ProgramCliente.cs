@@ -103,11 +103,27 @@ namespace ClientApp
                             break;
                         case "5":
                             Console.WriteLine("Seleccionó la opción 5: Buscar un producto");
-                            // Implementa la lógica para buscar un producto aquí
+                            Console.WriteLine("Para buscar porfavor ingrese alguna letra que contenga el nombre del producto que busca");
+                            string textoABuscar = Console.ReadLine();
+                            //Mandamos al server el comando
+                            msgHandler.SendMessage("5");
+                            //Mandamos al server la informacion
+                            msgHandler.SendMessage(textoABuscar);
+                            // Esperamos exito o error del server
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "6":
                             Console.WriteLine("Seleccionó la opción 6: Ver más acerca de un producto");
-                            // Implementa la lógica para ver más acerca de un producto aquí
+                            Console.WriteLine("Para buscar porfavor ingrese nombre del producto que quiere ver mas informacion");
+                            string nombreProducto = Console.ReadLine();
+                            //Mandamos al server el comando
+                            msgHandler.SendMessage("6");
+                            //Mandamos al server la informacion
+                            msgHandler.SendMessage(nombreProducto);
+                            // Esperamos exito o error del server
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "7":
                             Console.WriteLine("Seleccionó la opción 7: Calificar un producto");

@@ -37,6 +37,22 @@ namespace ServerApp.Database
             Console.WriteLine("Productos: " + _productos[0].Nombre);
             return _productos;
         }
+        public List<Producto> darProductos(Producto producto) {
+            Console.WriteLine("Productos: " + _productos);
+            return this._productos;
+        }
+        public List<Producto> buscarProductoPorNombre(string nombre)
+{
+            List<Producto> retorno = new List<Producto>();
+            foreach (Producto p in _productos) {
+                if (p.Nombre.Contains(nombre)) { 
+                    retorno.Add(p);
+                }
+            }
+            return retorno;                
+        }
+
+
 
         public bool existeProducto(Producto producto)
         {

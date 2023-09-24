@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Communication;
 using ServerApp.Domain;
 using ServerApp.Logic;
@@ -41,6 +42,51 @@ namespace ServerApp.Controllers
 			}
             return mensajeAlCliente;
         }
+        public string productosBuscados(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user) {
+            int i = 1;
+            List<Producto> listaProd = new List<Producto>();
+            StringBuilder retorno = new StringBuilder();
+            try {
+                // Capturamos la informacion
+                string nombreProd = msgHandler.ReceiveMessage();
+                // Buscamos el prodcuto con la informacion
+                listaProd = _productLogic.buscarProductoPorNombre(nombreProd);
+                foreach (Producto producto in listaProd)
+                {
+                    retorno.AppendLine(i+"- " + producto.Nombre);
+                    i++;
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine("Ocurrio un error: ", e.Message);
+            }
+            return retorno.ToString();
+
+        }
+        public string verMasProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user)
+        {
+            
+            StringBuilder retorno = new StringBuilder();
+            try
+            {
+                // Capturamos la informacion
+                string nombreProd = msgHandler.ReceiveMessage();
+                // Buscamos el prodcuto con la informacion
+                Producto p = _productLogic.buscarProductoPorNombre(nombreProd)[0];
+                retorno.AppendLine("Nombre: "+p.Nombre);
+                retorno.AppendLine("Descripcion: "+p.Descripcion);
+                retorno.AppendLine("Precio: "+p.Precio.ToString());
+                retorno.AppendLine("Ruta de imagen: " + p.Imagen);
+                retorno.AppendLine("Stock: " + p.Stock.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ocurrio un error: ", e.Message);
+            }
+            return retorno.ToString();
+
+        }
+
 
     }
 }
