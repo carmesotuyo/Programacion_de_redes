@@ -37,5 +37,15 @@ namespace Communication
         {
             return BitConverter.ToInt64(value);
         }
+
+        public byte[] ConvertFloatToBytes(float value)
+        {
+            return BitConverter.GetBytes(value);
+        }
+
+        public float ConvertBytesToFloat(byte[] value)
+        {
+            return BitConverter.ToSingle(value);
+        }
     }
 }
