@@ -117,11 +117,39 @@ namespace ClientApp
                             break;
                         case "3":
                             Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
-                            // Implementa la lógica para modificar un producto aquí
+                            Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
+
+                            string nombreProducto = Console.ReadLine();
+
+                            Console.WriteLine("Ingrese que atributo quiere modificar");
+                            string atributoAModificar = Console.ReadLine();
+
+                            Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado");
+                            string nuevoValorDelAtributo = Console.ReadLine();
+
+                            msgHandler.SendMessage("3");
+
+                            string informacion = nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
+
+                            msgHandler.SendMessage(informacion);
+
+                            // Esperamos exito o error del server
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
+
                         case "4":
                             Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
-                            // Implementa la lógica para eliminar un producto aquí
+                            Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
+                            string nombreProductoABorrar = Console.ReadLine();
+                            //Mandamos al server el comando
+                            msgHandler.SendMessage("4");
+                            //Mandamos al server la informacion
+                            msgHandler.SendMessage(nombreProductoABorrar);
+                            // Esperamos exito o error del server
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "5":
                             Console.WriteLine("Seleccionó la opción 5: Buscar un producto");
@@ -138,11 +166,11 @@ namespace ClientApp
                         case "6":
                             Console.WriteLine("Seleccionó la opción 6: Ver más acerca de un producto");
                             Console.WriteLine("Para buscar porfavor ingrese nombre del producto que quiere ver mas informacion");
-                            string nombreProducto = Console.ReadLine();
+                            string nombreProductoMasInfo = Console.ReadLine();
                             //Mandamos al server el comando
                             msgHandler.SendMessage("6");
                             //Mandamos al server la informacion
-                            msgHandler.SendMessage(nombreProducto);
+                            msgHandler.SendMessage(nombreProductoMasInfo);
                             // Esperamos exito o error del server
                             Console.WriteLine(msgHandler.ReceiveMessage());
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");

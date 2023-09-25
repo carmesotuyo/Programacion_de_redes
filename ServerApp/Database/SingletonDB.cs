@@ -51,8 +51,29 @@ namespace ServerApp.Database
             }
             return retorno;                
         }
+        public Producto eliminarProducto(Producto p) {
+            Producto ret = null;
+            foreach (Producto prod in _productos.ToList()) {
+                if (prod.Equals(p)) {
+                    _productos.Remove(prod);
+                    ret = prod;
+                }
+            }
 
+            return ret;
+        }
+        public Producto modificarProducto (Producto p, string nombreOriginalProd) {
 
+            Producto prodOriginal = buscarProductoPorNombre(nombreOriginalProd)[0];
+
+            prodOriginal.Nombre = p.Nombre;
+            prodOriginal.Descripcion = p.Descripcion;
+            prodOriginal.Precio = p.Precio;
+            prodOriginal.Imagen = p.Imagen;
+            prodOriginal.Stock = p.Stock;
+
+            return prodOriginal;
+        }
 
         public bool existeProducto(Producto producto)
         {

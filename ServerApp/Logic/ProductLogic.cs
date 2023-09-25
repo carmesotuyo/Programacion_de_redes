@@ -31,14 +31,29 @@ namespace ServerApp.Logic
 			}
 		}
 		public List<Producto> buscarProductoPorNombre(string nombre) {
-			if (_database.buscarProductoPorNombre(nombre).Count == 0) {
-                throw new Exception("No existe tal producto");
-            } 
+            return _database.buscarProductoPorNombre(nombre);
+        }
+		public Producto eliminarProducto(string nombre) {
+			if (this.buscarProductoPorNombre(nombre).Count > 0)
+			{
+				Producto p = buscarProductoPorNombre(nombre)[0]; ;
+				_database.eliminarProducto(p);
+				return p;
+			}
 			else {
-                return _database.buscarProductoPorNombre(nombre);
-            }
-
+				throw new Exception("El nombre de producto ingresado no existe");
+			}
+ 
 		}
+		public Producto modificarProducto (Producto producto, string nombre) {
+			
+			Producto prodAModificar = buscarProductoPorNombre(nombre)[0];
+			//validarProductoRepetido(producto);
+			_database.modificarProducto(producto, nombre);
+
+			return producto;
+		}
+
 
     }
 }
