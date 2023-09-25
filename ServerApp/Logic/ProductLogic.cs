@@ -71,7 +71,13 @@ namespace ServerApp.Logic
 			return p;
 		}
 
-
+		public bool esQuienPublicoElProducto(string username, Producto prod)
+		{
+            Usuario user = _userLogic.buscarUsuario(username);
+			bool es = false;
+			if (user.publicados.Contains(prod)) es = true;
+			return es;
+        }
     }
 }
 

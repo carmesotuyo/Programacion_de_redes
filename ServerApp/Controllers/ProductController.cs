@@ -12,77 +12,85 @@ namespace ServerApp.Controllers
 
 		public ProductController() { }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, Usuario user) {
+        public string modificarProducto(MessageCommsHandler msgHandler) {
 
             string mensajeACliente = "";
             string info = msgHandler.ReceiveMessage();
 
             string[] datos = info.Split('#');
-            string nombreProd = datos[0];
-            string atributoAModificar = datos[1].ToLower();
-            string nuevoValor = datos[2];
+            string username = datos[0];
+            string nombreProd = datos[1];
+            string atributoAModificar = datos[2].ToLower();
+            string nuevoValor = datos[3];
             if (_productLogic.buscarProductoPorNombre(nombreProd).Count > 0)
             {
                 Producto p = _productLogic.buscarProductoPorNombre(nombreProd)[0];
-
-                switch (atributoAModificar)
+                if(_productLogic.esQuienPublicoElProducto(username, p))
                 {
-                    case "nombre":
-                        if (_productLogic.buscarProductoPorNombre(nuevoValor).Count == 0)
-                        {
-                            p.Nombre = nuevoValor;
-                            mensajeACliente = "Nombre del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo nombre ya es utilizado por otro producto";
-                        }
+                    switch (atributoAModificar)
+                    {
+                        case "nombre":
+                            if (_productLogic.buscarProductoPorNombre(nuevoValor).Count == 0)
+                            {
+                                p.Nombre = nuevoValor;
+                                mensajeACliente = "Nombre del producto actualizado con éxito.";
+                            }
+                            else
+                            {
+                                mensajeACliente = "El nuevo nombre ya es utilizado por otro producto";
+                            }
 
-                        break;
+                            break;
 
-                    case "descripcion":
-                        p.Descripcion = nuevoValor;
-                        _productLogic.modificarProducto(p, nombreProd);
-                        mensajeACliente = "Descripción del producto actualizada con éxito.";
-                        break;
-
-                    case "precio":
-                        if (float.TryParse(nuevoValor, out float nuevoPrecio))
-                        {
-                            p.Precio = nuevoPrecio;
+                        case "descripcion":
+                            p.Descripcion = nuevoValor;
                             _productLogic.modificarProducto(p, nombreProd);
-                            mensajeACliente = "Precio del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de precio no es válido.";
-                        }
-                        break;
+                            mensajeACliente = "Descripción del producto actualizada con éxito.";
+                            break;
 
-                    case "imagen":
-                        p.Imagen = nuevoValor;
-                        _productLogic.modificarProducto(p, nombreProd);
-                        mensajeACliente = "Imagen del producto actualizada con éxito.";
-                        break;
+                        case "precio":
+                            if (float.TryParse(nuevoValor, out float nuevoPrecio))
+                            {
+                                p.Precio = nuevoPrecio;
+                                _productLogic.modificarProducto(p, nombreProd);
+                                mensajeACliente = "Precio del producto actualizado con éxito.";
+                            }
+                            else
+                            {
+                                mensajeACliente = "El nuevo valor de precio no es válido.";
+                            }
+                            break;
 
-                    case "stock":
-                        if (int.TryParse(nuevoValor, out int nuevoStock))
-                        {
-
-                            p.Stock = nuevoStock;
+                        case "imagen":
+                            p.Imagen = nuevoValor;
                             _productLogic.modificarProducto(p, nombreProd);
-                            mensajeACliente = "Stock del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de stock no es válido.";
-                        }
-                        break;
+                            mensajeACliente = "Imagen del producto actualizada con éxito.";
+                            break;
 
-                    default:
-                        mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
-                        break;
+                        case "stock":
+                            if (int.TryParse(nuevoValor, out int nuevoStock))
+                            {
+
+                                p.Stock = nuevoStock;
+                                _productLogic.modificarProducto(p, nombreProd);
+                                mensajeACliente = "Stock del producto actualizado con éxito.";
+                            }
+                            else
+                            {
+                                mensajeACliente = "El nuevo valor de stock no es válido.";
+                            }
+                            break;
+
+                        default:
+                            mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
+                            break;
+                    }
+                } else
+                {
+                    mensajeACliente = "No tiene permiso para modificar un producto que no publicó";
                 }
+
+                
             }
             else {
                 mensajeACliente = "El producto ingresado no existe :(";
@@ -130,6 +138,7 @@ namespace ServerApp.Controllers
 			}
             return mensajeAlCliente;
         }
+
         public string eliminarProducto(MessageCommsHandler msgHandler) {
             string retorno = "";
             try {
@@ -146,6 +155,7 @@ namespace ServerApp.Controllers
             return retorno;
         
         }
+
         public string productosBuscados(MessageCommsHandler msgHandler, Usuario user) {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();

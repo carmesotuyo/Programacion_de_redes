@@ -124,25 +124,31 @@ namespace ClientApp
                             // Implementa la lógica para comprar un producto aquí
                             break;
                         case "3":
-                            Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
-                            Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
+                                Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
 
-                            string nombreProducto = Console.ReadLine();
+                                string nombreProducto = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese que atributo quiere modificar");
-                            string atributoAModificar = Console.ReadLine();
+                                Console.WriteLine("Ingrese que atributo quiere modificar");
+                                string atributoAModificar = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado");
-                            string nuevoValorDelAtributo = Console.ReadLine();
+                                Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado");
+                                string nuevoValorDelAtributo = Console.ReadLine();
 
-                            msgHandler.SendMessage("3");
+                                msgHandler.SendMessage("3");
 
-                            string informacion = nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
+                                string informacion = user + "#" + nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
 
-                            msgHandler.SendMessage(informacion);
+                                msgHandler.SendMessage(informacion);
 
-                            // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                                // Esperamos exito o error del server
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            } else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
 
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
