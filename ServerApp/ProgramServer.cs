@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Net;
-using System.Configuration;
 using Communication;
-using System.Text;
+using ServerApp.Controllers;
+using ServerApp.Domain;
 
 namespace ServerApp
 {
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        private static ProductController _productController = new ProductController();
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
@@ -53,27 +53,85 @@ namespace ServerApp
 
         static void ManejarCliente(Socket socketCliente, int nro)
         {
+            Console.WriteLine("Cliente {0} conectado", nro);
+            MessageCommsHandler msgHandler = new MessageCommsHandler(socketCliente);
+            FileCommsHandler fileHandler = new FileCommsHandler(socketCliente);
+
             try
             {
-                Console.WriteLine("Cliente {0} conectado", nro);
                 bool clienteConectado = true;
+
                 while (clienteConectado)
                 {
-                    /// RECIBO EL ARCHIVO /////
+                    // Leer la selección del cliente
+                    string comando = msgHandler.ReceiveMessage();
+                    Console.WriteLine("opcion recibida {0}", comando); // debug
 
-                    Console.WriteLine("Antes de recibir el archivo");
-                    var fileCommonHandler = new FileCommsHandler(socketCliente);
-                    fileCommonHandler.ReceiveFile();
-                    Console.WriteLine("Archivo recibido!!");
+                    // Procesar la selección del cliente
+                    Usuario user = new Usuario("mail", "clave"); // TODO sacar esto, usar los datos posta que ingresa el cliente
+                    ProcesarSeleccion(msgHandler, comando, fileHandler, user);
                 }
-                Console.WriteLine("Cliente Desconectado");
+
+
+                Console.WriteLine("Cliente {0} Desconectado", nro);
             }
             catch (SocketException)
             {
-                Console.WriteLine("Cliente Desconectado!");
+                Console.WriteLine("Cliente {0} Desconectado por un error", nro);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
+        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, Usuario user)
+        {
+            switch (opcion)
+            {
+                case "0":
+                    //TODO
+                    Console.WriteLine("El cliente entro a la opcion 0"); //debug
+                    string datosLogin = msgHandler.ReceiveMessage();
+                    Console.WriteLine("Datos de login " + datosLogin); //debug
+                    //logica de login
+                    msgHandler.SendMessage("Login exitoso");
+                    break;
+                case "1":
+                    Console.WriteLine("entramos a la opcion 1"); //debug
+                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, user));
+                    break;
+                case "2":
+                    // Implementa la lógica para comprar un producto
+                    break;
+                case "3":
+                    // Implementa la lógica para modificar un producto publicado
+                    break;
+                case "4":
+                    // Implementa la lógica para eliminar un producto
+                    break;
+                case "5":
+                    // Implementa la lógica para buscar un producto
+                    break;
+                case "6":
+                    // Implementa la lógica para ver más acerca de un producto
+                    break;
+                case "7":
+                    // Implementa la lógica para calificar un producto
+                    break;
+                default:
+                    // Opción no válida, TODO resolver que hacer
+                    break;
+            }
+        }
+
+        public static Usuario Autenticar(string email, string password)
+        {
+            // TODO
+            // para mover a un controller de login/logout con logica de usuario
+            // tirar excepcion si no existe
+            return new Usuario(email, password);
+        }
     }
 }
 

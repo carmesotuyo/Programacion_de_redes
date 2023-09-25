@@ -25,6 +25,9 @@
 
   <ItemGroup>
     <None Remove="Domain\" />
+    <None Remove="Logic\" />
+    <None Remove="Database\" />
+    <None Remove="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="App.config">
@@ -35,5 +38,8 @@
 
   <ItemGroup>
     <Folder Include="Domain\" />
+    <Folder Include="Logic\" />
+    <Folder Include="Database\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>
