@@ -115,7 +115,8 @@ namespace ServerApp
                     msgHandler.SendMessage(_productController.modificarProducto(msgHandler, user));
                     break;
                 case "4":
-                    // Implementa la lógica para eliminar un producto
+                    Console.WriteLine("entramos a la opcion 4"); //debug
+                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler, user));
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug
