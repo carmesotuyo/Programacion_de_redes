@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-
-namespace ServerApp.Domain
+﻿namespace ServerApp.Domain
 {
 	public class Producto
 	{

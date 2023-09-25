@@ -1,5 +1,5 @@
-﻿using System;
-using ServerApp.Domain;
+﻿using ServerApp.Domain;
+
 namespace ServerApp.Database
 {
 	public class SingletonDB

@@ -1,5 +1,4 @@
-﻿using System;
-using ServerApp.Domain;
+﻿using ServerApp.Domain;
 using ServerApp.Database;
 
 namespace ServerApp.Logic
