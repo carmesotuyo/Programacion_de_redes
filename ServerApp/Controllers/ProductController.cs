@@ -26,10 +26,19 @@ namespace ServerApp.Controllers
                 string imagen = datos[3];
                 int stock = int.Parse(datos[4]);
 
-                // Creamos el producto con la info obtenida
-                Producto producto = new Producto(nombre, descripcion, precio, imagen, stock);
+                Producto producto;
 
-                fileHandler.ReceiveFile();
+                if(imagen != Protocol.NoImagePath)
+                {
+                    // Creamos el producto con la info obtenida
+                    producto = new (nombre, descripcion, precio, stock, imagen);
+                    // Recibimos la imagen
+                    fileHandler.ReceiveFile();
+                } else
+                {
+                    // Creamos el producto sin imagen
+                    producto = new (nombre, descripcion, precio, stock);
+                }
 
                 // Llamamos a la lógica para publicarlo
                 _productLogic.publicarProducto(producto, user);

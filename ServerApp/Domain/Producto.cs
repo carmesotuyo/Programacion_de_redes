@@ -1,4 +1,5 @@
-﻿namespace ServerApp.Domain
+﻿using Communication;
+namespace ServerApp.Domain
 {
 	public class Producto
 	{
@@ -7,23 +8,26 @@
 		public string Nombre { get; set; }
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
-		public string Imagen { get; set; }
+		public string? Imagen { get; set; }
 
         public int Stock { get; set; }
 		public List<Calificacion> calificaciones;
 
 		public int promedioCalificaciones;
 
-		public Producto(string nombre, string descripcion, float precio, string imagen, int stock)
+		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImagePath)
 		{
 			Nombre = nombre;
 			Descripcion = descripcion;
 			Precio = precio;
-			Imagen = imagen;
 			Stock = stock;
 			calificaciones = new List<Calificacion>();
 			id = globalIdCounter++;
             globalIdCounter++;
+			if (imagen != Protocol.NoImagePath)
+			{
+                Imagen = imagen;
+            }
 		}
 
 		public int agregarStock(int cantidad)

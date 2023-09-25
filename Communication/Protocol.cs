@@ -8,6 +8,7 @@ namespace Communication
 
         public const int FixedFileSize = 8;
         public const int MaxPacketSize = 32768; //32KB tamaño maximo de los paquetes que vamos a enviar
+        public const string NoImagePath = "SIN_IMAGEN";
 
         public static long CalculateFileParts(long fileSize)
         {

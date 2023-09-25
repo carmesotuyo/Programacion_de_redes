@@ -82,8 +82,16 @@ namespace ClientApp
                                 Console.WriteLine("Ingrese el precio");
                                 string precio = Console.ReadLine();
 
-                                Console.WriteLine("Ingrese la ruta al archivo de imagen");
-                                string imagen = Console.ReadLine();
+                                Console.WriteLine("Desea ingresar una imagen? Responda 'si' para cargar imagen, enter para seguir sin subir imagen");
+                                bool subeImagen = false;
+                                string imagen = Protocol.NoImagePath;
+
+                                if(Console.ReadLine() == "si")
+                                {
+                                    subeImagen = true;
+                                    Console.WriteLine("Ingrese la ruta al archivo de imagen");
+                                    imagen = Console.ReadLine();
+                                }
 
                                 Console.WriteLine("Ingrese el stock disponible");
                                 string stock = Console.ReadLine();
@@ -95,8 +103,11 @@ namespace ClientApp
                                 string info = nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
                                 msgHandler.SendMessage(info);
 
-                                //Mandamos al server el archivo de imagen
-                                fileHandler.SendFile(imagen);
+                                if (subeImagen)
+                                {
+                                    //Mandamos al server el archivo de imagen
+                                    fileHandler.SendFile(imagen);
+                                }
 
                                 // Esperamos exito o error del server
                                 Console.WriteLine(msgHandler.ReceiveMessage());
