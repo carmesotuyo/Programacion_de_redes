@@ -11,8 +11,12 @@ namespace ClientApp
     public class ProgramCliente
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        
+
         public static void Main(string[] args)
         {
+            bool estaAutenticado = false;
+            string user = "user#pass";
             bool parar = false;
             Console.WriteLine("Iniciando Aplicacion Cliente....!!!");
 
@@ -46,8 +50,21 @@ namespace ClientApp
                     {
                         case "0":
                             msgHandler.SendMessage("0");
-                            msgHandler.SendMessage(Login.PedirDatosLogin());
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            string credenciales = Login.PedirDatosLogin();
+                            msgHandler.SendMessage(credenciales);
+
+                            string respuesta = msgHandler.ReceiveMessage();
+
+                            if (respuesta == "1")
+                            {
+                                Console.WriteLine("Login exitoso");
+                                estaAutenticado = true;
+                                user = credenciales;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Usuario o contraseña incorrecta");
+                            }
                             break;
                         case "1":
                             //TODO:
@@ -91,6 +108,15 @@ namespace ClientApp
                         case "2":
                             Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
                             // Implementa la lógica para comprar un producto aquí
+                            //si está autenticado muestra el mensaje "esta operación la podes hacer", si no muestra "No estas logueado"
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Esta operación la podes hacer");
+                            }
+                            else
+                            {
+                                Console.WriteLine("No estas logueado");
+                            }
                             break;
                         case "3":
                             Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");

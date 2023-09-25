@@ -18,5 +18,15 @@ namespace ClientApp
             string pass = Console.ReadLine();
             return user + "#" + pass;
         }
+
+        public string Autenticacion(bool autenticado)
+        {
+            string respuesta = "Usuario o contraseña incorrecta";
+            if (autenticado)
+            {
+                respuesta = "Login exitoso";
+            }
+            return respuesta;
+        }
     }
 }
