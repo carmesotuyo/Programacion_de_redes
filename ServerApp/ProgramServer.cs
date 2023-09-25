@@ -22,7 +22,6 @@ namespace ServerApp
         {
             ProgramServer server = new ProgramServer();
             server.agregarUsuarios();
-            _userController.crearUsuario("admin", "admin");
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             
             var socketServer = new Socket(
@@ -133,14 +132,6 @@ namespace ServerApp
             }
         }
 
-        public static Usuario Autenticar(string email, string password)
-        {
-            // TODO
-            // para mover a un controller de login/logout con logica de usuario
-            // tirar excepcion si no existe
-            return new Usuario(email, password);
-        }
-
         public void agregarUsuarios()
         {
             foreach (string key in usuarios.AllKeys)
@@ -149,7 +140,7 @@ namespace ServerApp
                 string correo = userInfo[0];
                 string clave = userInfo[1];
 
-                // Agrega el usuario a tu base de datos
+             
                 _userController.crearUsuario(correo, clave);
             }
         }

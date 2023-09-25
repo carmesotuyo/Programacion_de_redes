@@ -11,8 +11,6 @@ namespace ClientApp
     public class ProgramCliente
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
-        
-
         public static void Main(string[] args)
         {
             bool estaAutenticado = false;
@@ -65,6 +63,7 @@ namespace ClientApp
                             {
                                 Console.WriteLine("Usuario o contraseña incorrecta");
                             }
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "1":
                             //TODO:
@@ -72,51 +71,49 @@ namespace ClientApp
                             //agregar validacion para que no se puedan ingresar simbolos especiales -> #
                             // validar en precio y stock que los tipos de datos se pueden parsear a int/float segun corresponde
 
-                            Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
 
-                            // Le pedimos la información al cliente
-                            Console.WriteLine("Ingrese nombre del producto");
-                            string nombre = Console.ReadLine();
+                                // Le pedimos la información al cliente
+                                Console.WriteLine("Ingrese nombre del producto");
+                                string nombre = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese una descripción para su producto");
-                            string descripcion = Console.ReadLine();
+                                Console.WriteLine("Ingrese una descripción para su producto");
+                                string descripcion = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese el precio");
-                            string precio = Console.ReadLine();
+                                Console.WriteLine("Ingrese el precio");
+                                string precio = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese la ruta al archivo de imagen");
-                            string imagen = Console.ReadLine();
+                                Console.WriteLine("Ingrese la ruta al archivo de imagen");
+                                string imagen = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese el stock disponible");
-                            string stock = Console.ReadLine();
+                                Console.WriteLine("Ingrese el stock disponible");
+                                string stock = Console.ReadLine();
 
-                            //Mandamos al server el comando
-                            msgHandler.SendMessage("1");
+                                //Mandamos al server el comando
+                                msgHandler.SendMessage("1");
 
-                            //Mandamos al server la informacion
-                            string info = nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
-                            msgHandler.SendMessage(info);
+                                //Mandamos al server la informacion
+                                string info = nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
+                                msgHandler.SendMessage(info);
 
-                            //Mandamos al server el archivo de imagen
-                            fileHandler.SendFile(imagen);
+                                //Mandamos al server el archivo de imagen
+                                fileHandler.SendFile(imagen);
 
-                            // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                                // Esperamos exito o error del server
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            }
+                            else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
 
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "2":
                             Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
                             // Implementa la lógica para comprar un producto aquí
-                            //si está autenticado muestra el mensaje "esta operación la podes hacer", si no muestra "No estas logueado"
-                            if (estaAutenticado)
-                            {
-                                Console.WriteLine("Esta operación la podes hacer");
-                            }
-                            else
-                            {
-                                Console.WriteLine("No estas logueado");
-                            }
                             break;
                         case "3":
                             Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
