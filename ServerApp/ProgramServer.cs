@@ -112,11 +112,11 @@ namespace ServerApp
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug
-                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, fileHandler, user));
+                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, user));
                     break;
                 case "6":
                     Console.WriteLine("entramos a la opcion 6"); //debug
-                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, fileHandler, user));
+                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, user));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto

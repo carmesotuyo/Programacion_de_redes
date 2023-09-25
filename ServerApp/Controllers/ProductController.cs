@@ -42,7 +42,7 @@ namespace ServerApp.Controllers
 			}
             return mensajeAlCliente;
         }
-        public string productosBuscados(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user) {
+        public string productosBuscados(MessageCommsHandler msgHandler, Usuario user) {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();
             StringBuilder retorno = new StringBuilder();
@@ -56,14 +56,16 @@ namespace ServerApp.Controllers
                     retorno.AppendLine(i+"- " + producto.Nombre);
                     i++;
                 }
+                return retorno.ToString();
             }
             catch (Exception e) {
-                Console.WriteLine("Ocurrio un error: ", e.Message);
+                Console.WriteLine(e.Message);
+                string ret = "Ocurrió un error: " + e.Message;
+                return ret;
             }
-            return retorno.ToString();
-
+            
         }
-        public string verMasProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user)
+        public string verMasProducto(MessageCommsHandler msgHandler, Usuario user)
         {
             
             StringBuilder retorno = new StringBuilder();
@@ -77,17 +79,27 @@ namespace ServerApp.Controllers
                 retorno.AppendLine("Descripcion: "+p.Descripcion);
                 retorno.AppendLine("Precio: "+p.Precio.ToString());
                 retorno.AppendLine("Ruta de imagen: " + p.Imagen);
+                retorno.AppendLine("Nombre de imagen: " + DameNombreImagen(p.Imagen));
                 retorno.AppendLine("Stock: " + p.Stock.ToString());
+
+                return retorno.ToString();
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ocurrio un error: ", e.Message);
+                Console.WriteLine(e.Message);
+                string ret = "Ocurrió un error: " + e.Message;
+                return ret;
             }
-            return retorno.ToString();
+            
 
         }
 
+        private string DameNombreImagen(string imagen)
+        {
+            FileHandler _fileHandeler = new FileHandler();
 
+           return _fileHandeler.GetFileName(imagen);
+        }
     }
 }
 

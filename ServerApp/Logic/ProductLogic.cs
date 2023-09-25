@@ -31,7 +31,7 @@ namespace ServerApp.Logic
 			}
 		}
 		public List<Producto> buscarProductoPorNombre(string nombre) {
-			if (_database.buscarProductoPorNombre(nombre) == null) {
+			if (_database.buscarProductoPorNombre(nombre).Count == 0) {
                 throw new Exception("No existe tal producto");
             } 
 			else {
