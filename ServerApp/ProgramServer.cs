@@ -111,7 +111,8 @@ namespace ServerApp
                     // Implementa la lógica para comprar un producto
                     break;
                 case "3":
-                    // Implementa la lógica para modificar un producto publicado
+                    Console.WriteLine("entramos a la opcion 3"); //debug
+                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, user));
                     break;
                 case "4":
                     Console.WriteLine("entramos a la opcion 4"); //debug
