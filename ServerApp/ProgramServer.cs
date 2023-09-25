@@ -115,7 +115,7 @@ namespace ServerApp
                     break;
                 case "4":
                     Console.WriteLine("entramos a la opcion 4"); //debug
-                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler, user));
+                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler));
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug

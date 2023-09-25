@@ -6,6 +6,7 @@ namespace ServerApp.Logic
     public class ProductLogic
 	{
 		private readonly SingletonDB _database;
+		private readonly UserLogic _userLogic;
 
 		public ProductLogic()
 		{
@@ -30,15 +31,25 @@ namespace ServerApp.Logic
 				throw new Exception("Una imagen con ese nombre ya existe, probá cambiándolo :)");
 			}
 		}
+
 		public List<Producto> buscarProductoPorNombre(string nombre) {
             return _database.buscarProductoPorNombre(nombre);
         }
-		public Producto eliminarProducto(string nombre) {
-			if (this.buscarProductoPorNombre(nombre).Count > 0)
+
+		public Producto eliminarProducto(string nombre, string username) {
+			Usuario user = _userLogic.buscarUsuario(username);
+			
+			if (buscarProductoPorNombre(nombre).Count > 0)
 			{
-				Producto p = buscarProductoPorNombre(nombre)[0]; ;
-				_database.eliminarProducto(p);
-				return p;
+				Producto p = buscarProductoPorNombre(nombre)[0];
+                if (user.publicados.Contains(p))
+                {
+                    _database.eliminarProducto(p);
+                    return p;
+                } else
+				{
+					throw new Exception("El usuario no puede eliminar un producto que no publicó");
+				}
 			}
 			else {
 				throw new Exception("El nombre de producto ingresado no existe");

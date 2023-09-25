@@ -130,11 +130,13 @@ namespace ServerApp.Controllers
 			}
             return mensajeAlCliente;
         }
-        public string eliminarProducto(MessageCommsHandler msgHandler, Usuario user) {
+        public string eliminarProducto(MessageCommsHandler msgHandler) {
             string retorno = "";
             try {
-                string nombreProd = msgHandler.ReceiveMessage();
-                retorno = "Se ha eliminado exitosamente el producto: "+ _productLogic.eliminarProducto(nombreProd).Nombre;
+                string[] datos = msgHandler.ReceiveMessage().Split("#");
+                string username = datos[0];
+                string nombreProd = datos[1];
+                retorno = "Se ha eliminado exitosamente el producto: "+ _productLogic.eliminarProducto(nombreProd, username).Nombre;
             }
             catch (Exception e)
             {

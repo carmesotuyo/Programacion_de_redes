@@ -132,7 +132,10 @@ namespace ServerApp.Database
             return existe;
         }
 
-
+        public Usuario buscarUsuario(string username)
+        {
+            return _usuarios.FirstOrDefault(u => u.mail == username);
+        }
     }
 }
 

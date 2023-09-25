@@ -11,7 +11,7 @@ namespace ClientApp
         public static void Main(string[] args)
         {
             bool estaAutenticado = false;
-            string user = "user#pass";
+            string user = "";
             bool parar = false;
             Console.WriteLine("Iniciando Aplicacion Cliente....!!!");
 
@@ -54,7 +54,7 @@ namespace ClientApp
                             {
                                 Console.WriteLine("Login exitoso");
                                 estaAutenticado = true;
-                                user = credenciales;
+                                user = credenciales.Split("#")[0];
                             }
                             else
                             {
@@ -148,15 +148,22 @@ namespace ClientApp
                             break;
 
                         case "4":
-                            Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
-                            Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
-                            string nombreProductoABorrar = Console.ReadLine();
-                            //Mandamos al server el comando
-                            msgHandler.SendMessage("4");
-                            //Mandamos al server la informacion
-                            msgHandler.SendMessage(nombreProductoABorrar);
-                            // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
+                                Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
+                                string nombreProductoABorrar = Console.ReadLine();
+                                //Mandamos al server el comando
+                                msgHandler.SendMessage("4");
+                                //Mandamos al server la informacion
+                                msgHandler.SendMessage(user + "#" + nombreProductoABorrar);
+                                // Esperamos exito o error del server
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            }
+                            else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "5":
