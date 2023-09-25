@@ -51,6 +51,17 @@ namespace ServerApp.Database
             }
             return retorno;                
         }
+        public Producto eliminarProducto(Producto p) {
+            Producto ret = null;
+            foreach (Producto prod in _productos.ToList()) {
+                if (prod.Equals(p)) {
+                    _productos.Remove(prod);
+                    ret = prod;
+                }
+            }
+
+            return ret;
+        }
 
 
 

@@ -121,7 +121,15 @@ namespace ClientApp
                             break;
                         case "4":
                             Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
-                            // Implementa la lógica para eliminar un producto aquí
+                            Console.WriteLine("Para buscar porfavor ingrese el nombre del producto que quiere eliminar");
+                            string nombreProductoABorrar = Console.ReadLine();
+                            //Mandamos al server el comando
+                            msgHandler.SendMessage("4");
+                            //Mandamos al server la informacion
+                            msgHandler.SendMessage(nombreProductoABorrar);
+                            // Esperamos exito o error del server
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "5":
                             Console.WriteLine("Seleccionó la opción 5: Buscar un producto");

@@ -42,6 +42,20 @@ namespace ServerApp.Controllers
 			}
             return mensajeAlCliente;
         }
+        public string eliminarProducto(MessageCommsHandler msgHandler, Usuario user) {
+            string retorno = "";
+            try {
+                string nombreProd = msgHandler.ReceiveMessage();
+                retorno = "Se ha eliminado exitosamente el producto: "+ _productLogic.eliminarProducto(nombreProd).Nombre;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                retorno = "Ocurrió un error: " + e.Message;
+            }
+            return retorno;
+        
+        }
         public string productosBuscados(MessageCommsHandler msgHandler, Usuario user) {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();
