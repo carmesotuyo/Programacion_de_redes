@@ -3,18 +3,25 @@ using System.Net;
 using Communication;
 using ServerApp.Controllers;
 using ServerApp.Domain;
+using System.Collections.Specialized;
+using System.Configuration;
 
 namespace ServerApp
 {
     public class ProgramServer
     {
-        static readonly SettingsManager settingsMngr = new SettingsManager();
-        private static ProductController _productController = new ProductController();
+        static readonly SettingsManager settingsMngr = new();
+        private static readonly ProductController _productController = new();
+        private static readonly UserController _userController = new();
+        NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
+
 
         public static void Main(string[] args)
         {
+            ProgramServer server = new ProgramServer();
+            server.agregarUsuarios();
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
-
+            
             var socketServer = new Socket(
             AddressFamily.InterNetwork,
                 SocketType.Stream,
@@ -53,8 +60,8 @@ namespace ServerApp
         static void ManejarCliente(Socket socketCliente, int nro)
         {
             Console.WriteLine("Cliente {0} conectado", nro);
-            MessageCommsHandler msgHandler = new MessageCommsHandler(socketCliente);
-            FileCommsHandler fileHandler = new FileCommsHandler(socketCliente);
+            MessageCommsHandler msgHandler = new(socketCliente);
+            FileCommsHandler fileHandler = new(socketCliente);
 
             try
             {
@@ -67,7 +74,7 @@ namespace ServerApp
                     Console.WriteLine("opcion recibida {0}", comando); // debug
 
                     // Procesar la selección del cliente
-                    Usuario user = new Usuario("mail", "clave"); // TODO sacar esto, usar los datos posta que ingresa el cliente
+                    Usuario user = new("mail", "clave"); // TODO sacar esto, usar los datos posta que ingresa el cliente
                     ProcesarSeleccion(msgHandler, comando, fileHandler, user);
                 }
 
@@ -89,12 +96,11 @@ namespace ServerApp
             switch (opcion)
             {
                 case "0":
-                    //TODO
                     Console.WriteLine("El cliente entro a la opcion 0"); //debug
                     string datosLogin = msgHandler.ReceiveMessage();
                     Console.WriteLine("Datos de login " + datosLogin); //debug
                     //logica de login
-                    msgHandler.SendMessage("Login exitoso");
+                    msgHandler.SendMessage(""+_userController.VerificarLogin(datosLogin));
                     break;
                 case "1":
                     Console.WriteLine("entramos a la opcion 1"); //debug
@@ -110,10 +116,12 @@ namespace ServerApp
                     // Implementa la lógica para eliminar un producto
                     break;
                 case "5":
-                    // Implementa la lógica para buscar un producto
+                    Console.WriteLine("entramos a la opcion 5"); //debug
+                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, user));
                     break;
                 case "6":
-                    // Implementa la lógica para ver más acerca de un producto
+                    Console.WriteLine("entramos a la opcion 6"); //debug
+                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, user));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto
@@ -124,13 +132,19 @@ namespace ServerApp
             }
         }
 
-        public static Usuario Autenticar(string email, string password)
+        public void agregarUsuarios()
         {
-            // TODO
-            // para mover a un controller de login/logout con logica de usuario
-            // tirar excepcion si no existe
-            return new Usuario(email, password);
+            foreach (string key in usuarios.AllKeys)
+            {
+                string[] userInfo = usuarios[key].Split(',');
+                string correo = userInfo[0];
+                string clave = userInfo[1];
+
+             
+                _userController.crearUsuario(correo, clave);
+            }
         }
+
     }
 }
 
