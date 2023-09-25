@@ -1,10 +1,9 @@
-﻿using System;
+﻿using ServerApp.Database;
 using ServerApp.Domain;
-using ServerApp.Database;
 
 namespace ServerApp.Logic
 {
-	public class ProductLogic
+    public class ProductLogic
 	{
 		private readonly SingletonDB _database;
 
@@ -30,6 +29,15 @@ namespace ServerApp.Logic
 			{
 				throw new Exception("Una imagen con ese nombre ya existe, probá cambiándolo :)");
 			}
+		}
+		public List<Producto> buscarProductoPorNombre(string nombre) {
+			if (_database.buscarProductoPorNombre(nombre).Count == 0) {
+                throw new Exception("No existe tal producto");
+            } 
+			else {
+                return _database.buscarProductoPorNombre(nombre);
+            }
+
 		}
 
     }

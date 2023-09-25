@@ -111,10 +111,12 @@ namespace ServerApp
                     // Implementa la lógica para eliminar un producto
                     break;
                 case "5":
-                    // Implementa la lógica para buscar un producto
+                    Console.WriteLine("entramos a la opcion 5"); //debug
+                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, user));
                     break;
                 case "6":
-                    // Implementa la lógica para ver más acerca de un producto
+                    Console.WriteLine("entramos a la opcion 6"); //debug
+                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, user));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto

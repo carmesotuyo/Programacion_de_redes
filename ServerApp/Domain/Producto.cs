@@ -11,8 +11,10 @@ namespace ServerApp.Domain
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
 		public string Imagen { get; set; }
-		public int stock;
+
+        public int Stock { get; set; }
 		public List<Calificacion> calificaciones;
+
 		public int promedioCalificaciones;
 
 		public Producto(string nombre, string descripcion, float precio, string imagen, int stock)
@@ -21,7 +23,7 @@ namespace ServerApp.Domain
 			Descripcion = descripcion;
 			Precio = precio;
 			Imagen = imagen;
-			this.stock = stock;
+			Stock = stock;
 			calificaciones = new List<Calificacion>();
 			id = globalIdCounter++;
             globalIdCounter++;
@@ -29,14 +31,14 @@ namespace ServerApp.Domain
 
 		public int agregarStock(int cantidad)
 		{
-			stock += cantidad;
-			return stock;
+			Stock += cantidad;
+			return Stock;
         }
 
         public int quitarStock(int cantidad)
         {
-            stock -= cantidad;
-            return stock;
+            Stock -= cantidad;
+            return Stock;
         }
 
 		public int actualizarPromedioDeCalificaciones()
