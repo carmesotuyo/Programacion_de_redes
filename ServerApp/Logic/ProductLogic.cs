@@ -39,6 +39,12 @@ namespace ServerApp.Logic
             }
 
 		}
+		public Producto eliminarProducto(string nombre) {
+			Producto p = null;
+			p = buscarProductoPorNombre(nombre)[0];
+			_database.eliminarProducto(p);
+			return p;
+		}
 
     }
 }
