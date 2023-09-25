@@ -42,7 +42,7 @@ namespace ServerApp.Logic
 
 		public string calificarProducto(string nombreProducto, string puntaje)
 		{
-			string ret = "Producto " + nombreProducto + " calificado con puntaje " + puntaje;
+			string ret = "";
 			int punt;
 			try
 			{
@@ -53,8 +53,9 @@ namespace ServerApp.Logic
 
                 } else
 				{
-					_database.agregarCalificacion(nombreProducto, punt);
-				}
+					Producto prod = _database.agregarCalificacion(nombreProducto, punt);
+					ret = "Producto " + prod.Nombre + " calificado con puntaje " + puntaje;
+                }
 			} catch(Exception e)
 			{
 				ret = "Debe ingresar un valor numérico entero del 1 al 5";

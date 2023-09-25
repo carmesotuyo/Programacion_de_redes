@@ -123,7 +123,7 @@ namespace ServerApp.Database
             return _productos.FirstOrDefault(p => p.Nombre == nombre);
         }
 
-        public void agregarCalificacion(string nombreProd, int puntaje)
+        public Producto agregarCalificacion(string nombreProd, int puntaje)
         {
             Producto prod = encontrarProducto(nombreProd);
             Calificacion cal = new(prod, puntaje);
@@ -133,6 +133,7 @@ namespace ServerApp.Database
             Producto encontrado = encontrarProducto(nombreProd);
             Console.WriteLine("Producto " + encontrado + " calificado con " + encontrado.calificaciones);
             // actualizarproducto ?
+            return encontrarProducto(nombreProd); // para validar que se haya actualizado en la bd
         }
     }
 }
