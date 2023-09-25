@@ -35,11 +35,20 @@ namespace ServerApp.Logic
         }
 
         //metodo para agregar un usuario
-        public List<Usuario> agregarUsuario(string mail, string clave)
+        public Usuario agregarUsuario(string mail, string clave)
         {
             Usuario newUser = new Usuario(mail, clave);
+            validarUsuarioRepetido(newUser);
             _database.agregarUsuario(newUser);
-            return _database.usuarios();
+            return newUser;
+        }
+
+        private void validarUsuarioRepetido(Usuario usuario)
+        {
+            if (_database.existeUsuario(usuario))
+            {
+                throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
+            }
         }
 
     }

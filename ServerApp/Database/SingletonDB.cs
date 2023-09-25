@@ -84,7 +84,22 @@ namespace ServerApp.Database
             return _usuarios;
         }
 
-        
+        public bool existeUsuario(Usuario usuario)
+        {
+            bool existe = false;
+
+            foreach (Usuario user in _usuarios)
+            {
+                // Tomando como supuesto que no se permiten productos con el mismo nombre para validar los repetidos
+                if (user.mail == usuario.mail)
+                {
+                    existe = true;
+                }
+            }
+            return existe;
+        }
+
+
     }
 }
 

@@ -20,16 +20,6 @@ namespace ServerApp.Controllers
             return _userLogic.VerificarLogin(userPass);
         }
 
-        public string Login(bool autenticado)
-        {
-            string respuesta = "Usuario o contraseña incorrecta";
-            if (autenticado)
-            {
-                respuesta = "Login exitoso";
-            }
-            return respuesta;
-        }
-
         public void crearUsuario(string mail, string clave)
         {
             _userLogic.agregarUsuario(mail, clave);

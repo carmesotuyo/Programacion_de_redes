@@ -17,7 +17,6 @@ namespace ServerApp
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
 
 
-
         public static void Main(string[] args)
         {
             ProgramServer server = new ProgramServer();
