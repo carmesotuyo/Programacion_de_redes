@@ -3,14 +3,17 @@
 	public class Calificacion
 	{
 		public int puntaje;
-		public string comentario;
+		public string? comentario;
 		public Producto producto;
 
-		public Calificacion(Producto producto, int puntaje, string comentario)
+		public Calificacion(Producto producto, int puntaje, string comentario = null)
 		{
             this.producto = producto;
 			this.puntaje = puntaje;
-			this.comentario = comentario;
+			if(comentario != null)
+			{
+                this.comentario = comentario;
+            }
 		}
 	}
 }

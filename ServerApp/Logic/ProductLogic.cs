@@ -40,6 +40,29 @@ namespace ServerApp.Logic
 
 		}
 
+		public string calificarProducto(string nombreProducto, string puntaje)
+		{
+			string ret = "Producto " + nombreProducto + " calificado con puntaje " + puntaje;
+			int punt;
+			try
+			{
+				punt = int.Parse(puntaje);
+				if(punt < 1 && punt > 5)
+				{
+					ret = "El puntaje ingresado no es un valor válido";
+
+                } else
+				{
+					_database.agregarCalificacion(nombreProducto, punt);
+				}
+			} catch(Exception e)
+			{
+				ret = "Debe ingresar un valor numérico entero del 1 al 5";
+			}
+			return ret;
+
+        }
+
     }
 }
 

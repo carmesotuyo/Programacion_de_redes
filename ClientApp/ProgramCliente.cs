@@ -156,8 +156,28 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "7":
-                            Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
-                            // Implementa la lógica para calificar un producto aquí
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
+                                // Enviamos el comando y mostramos el listado de productos comprados por el user
+                                msgHandler.SendMessage("7");
+                                //msgHandler.SendMessage(user); // no deberia necesitar mandarselo
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+
+                                // Le pedimos la información para calificar
+                                Console.WriteLine("Ingrese el nombre del producto que desea calificar");
+                                string productoACalificar = Console.ReadLine();
+                                Console.WriteLine("Ingrese un valor entero del 1 al 5 para calificar su producto");
+                                string puntaje = Console.ReadLine();
+
+                                msgHandler.SendMessage(productoACalificar + "#" + puntaje);
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                                Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
                             break;
                         case "desconectar":
                             parar = true;

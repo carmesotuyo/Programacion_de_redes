@@ -117,14 +117,16 @@ namespace ServerApp
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug
-                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, user));
+                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler));
                     break;
                 case "6":
                     Console.WriteLine("entramos a la opcion 6"); //debug
-                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, user));
+                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto
+                    msgHandler.SendMessage(_productController.productosComprados(user));
+                    msgHandler.SendMessage(_productController.calificarProducto(msgHandler, user));
                     break;
                 default:
                     // Opción no válida, TODO resolver que hacer

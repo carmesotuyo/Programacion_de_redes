@@ -9,6 +9,7 @@ namespace ServerApp.Controllers
 	public class ProductController
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
+        private readonly UserLogic _userLogic = new UserLogic();
 
 		public ProductController() { }
 
@@ -46,12 +47,11 @@ namespace ServerApp.Controllers
             }
             catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
                 mensajeAlCliente = "Ocurrió un error: " + e.Message;
 			}
             return mensajeAlCliente;
         }
-        public string productosBuscados(MessageCommsHandler msgHandler, Usuario user) {
+        public string productosBuscados(MessageCommsHandler msgHandler) {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();
             StringBuilder retorno = new StringBuilder();
@@ -68,13 +68,12 @@ namespace ServerApp.Controllers
                 return retorno.ToString();
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
                 string ret = "Ocurrió un error: " + e.Message;
                 return ret;
             }
             
         }
-        public string verMasProducto(MessageCommsHandler msgHandler, Usuario user)
+        public string verMasProducto(MessageCommsHandler msgHandler)
         {
             
             StringBuilder retorno = new StringBuilder();
@@ -108,6 +107,47 @@ namespace ServerApp.Controllers
             FileHandler _fileHandeler = new FileHandler();
 
            return _fileHandeler.GetFileName(imagen);
+        }
+
+        public string productosComprados(Usuario user)
+        {
+            StringBuilder retorno = new StringBuilder();
+            try
+            {
+                List<Producto> productos = _userLogic.ProductosComprados(user);
+
+                foreach(Producto prod in productos)
+                {
+                    retorno.AppendLine(prod.Nombre);
+                }
+
+                return retorno.ToString();
+            }
+            catch (Exception e)
+            {
+                string ret = "Ocurrió un error: " + e.Message;
+                return ret;
+            }
+        }
+
+        public string calificarProducto(MessageCommsHandler msgHandler, Usuario user)
+        {
+            string mensajeAlCliente = "";
+            try
+            {
+                // Capturamos la informacion
+                string info = msgHandler.ReceiveMessage();
+                string[] datos = info.Split("#");
+                string nombreProd = datos[0];
+                string puntaje = datos[1];
+
+                _productLogic.calificarProducto(nombreProd, puntaje);
+            }
+            catch(Exception e)
+            {
+                mensajeAlCliente = "Ocurrió un error: " + e.Message;
+            }
+            return mensajeAlCliente;
         }
     }
 }
