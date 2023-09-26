@@ -15,12 +15,13 @@ namespace ServerApp
         private static readonly ProductController _productController = new(filesPath);
         private static readonly UserController _userController = new();
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
-
+        NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
 
         public static void Main(string[] args)
         {
             ProgramServer server = new ProgramServer();
             server.agregarUsuarios();
+            server.agregarProductos();
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             
             var socketServer = new Socket(
@@ -108,7 +109,7 @@ namespace ServerApp
                     break;
                 case "2":
                     Console.WriteLine("entramos a la opcion 2"); //debug
-                    msgHandler.SendMessage(_userController.agregarProductoACompras(msgHandler, user));
+                    msgHandler.SendMessage(_userController.agregarProductoACompras(msgHandler));
                     break;
                 case "3":
                     Console.WriteLine("entramos a la opcion 3"); //debug
@@ -131,7 +132,7 @@ namespace ServerApp
                     break;
                 case "8":
                     Console.WriteLine("entramos a la opcion 8"); //debug
-                    msgHandler.SendMessage(_productController.darProductos(msgHandler, user));
+                    msgHandler.SendMessage(_productController.darProductos());
                     break;
                 default:
                     // Opción no válida, TODO resolver que hacer
@@ -139,7 +140,7 @@ namespace ServerApp
             }
         }
 
-        public void agregarUsuarios()
+        private void agregarUsuarios()
         {
             foreach (string key in usuarios.AllKeys)
             {
@@ -149,6 +150,19 @@ namespace ServerApp
 
              
                 _userController.crearUsuario(correo, clave);
+            }
+        }
+        private void agregarProductos() {
+            foreach (string key in productos.AllKeys)
+            {
+                string[] prodInfo = productos[key].Split(',');
+                string nombreProd = prodInfo[0];
+                string descrProd = prodInfo[1];
+                float precio = float.Parse(prodInfo[2]);
+                int stock = int.Parse(prodInfo[3]);
+                string username = prodInfo[4];
+
+                _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
             }
         }
 

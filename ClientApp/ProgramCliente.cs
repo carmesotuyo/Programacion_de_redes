@@ -100,7 +100,7 @@ namespace ClientApp
                                 msgHandler.SendMessage("1");
 
                                 //Mandamos al server la informacion
-                                string info = user + "# "+ nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
+                                string info = user + "#"+ nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
                                 msgHandler.SendMessage(info);
 
                                 if (subeImagen)
@@ -124,7 +124,7 @@ namespace ClientApp
                             Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
                             string nombreProductoAComprar = Console.ReadLine();
                             msgHandler.SendMessage("2");
-                            msgHandler.SendMessage(nombreProductoAComprar);
+                            msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
                             Console.WriteLine(msgHandler.ReceiveMessage());
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;

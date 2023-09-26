@@ -15,7 +15,13 @@ namespace ServerApp.Controllers
         {
             _filesPath = filesPath;
         }
-        public string darProductos(MessageCommsHandler msgHandler, Usuario user) {
+
+        public void agregarProductosBase(string nombre,string desc,float precio, int stock, string username) {
+            Producto p = new Producto(nombre,desc,precio,stock);
+
+            _productLogic.publicarProducto(p,username);
+        }
+        public string darProductos() {
             StringBuilder retorno = new StringBuilder();
             int i = 1;
             if (_productLogic.darListadoProductos().ToList().Count > 0)

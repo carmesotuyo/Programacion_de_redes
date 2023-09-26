@@ -28,19 +28,26 @@ namespace ServerApp.Controllers
         {
             _userLogic.agregarUsuario(mail, clave);
         }
-        public string agregarProductoACompras(MessageCommsHandler msgHandler, Usuario user) {
+        public string agregarProductoACompras(MessageCommsHandler msgHandler) {
+            Console.WriteLine("llegue al metodo");
             string mensajeACliente = "";
+            string user = "";
+            string nombreProd = "";
             try {
                 int i = 1;
                 
                 StringBuilder retorno = new StringBuilder();
-                string nombreProducto = msgHandler.ReceiveMessage();
+                string informacionRecibida = msgHandler.ReceiveMessage();
+                string[] info = informacionRecibida.Split("#");
+                user = info[0];
+                nombreProd = info[1];
+                Usuario u = _userLogic.buscarUsuario(user);
 
-                Producto p = _productLogic.buscarProductoPorNombre(nombreProducto)[0];
+                Producto p = _productLogic.buscarUnProducto(nombreProd);
 
-                _userLogic.agregarProductoACompras(p, user);
+                _userLogic.agregarProductoACompras(p, u);
                 retorno = retorno.AppendLine();
-                foreach (Producto prod  in _userLogic.darProductosComprados(user))
+                foreach (Producto prod  in _userLogic.darProductosComprados(u))
                 {
                     retorno.AppendLine(i + "- " + prod.Nombre);
                     i++;

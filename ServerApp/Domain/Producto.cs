@@ -8,7 +8,7 @@ namespace ServerApp.Domain
 		public string Nombre { get; set; }
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
-		public string? Imagen { get; set; }
+		public string Imagen { get; set; }
 
         public int Stock { get; set; }
 		public List<Calificacion> calificaciones;
@@ -24,10 +24,7 @@ namespace ServerApp.Domain
 			calificaciones = new List<Calificacion>();
 			id = globalIdCounter++;
             globalIdCounter++;
-			if (imagen != Protocol.NoImage)
-			{
-                Imagen = imagen;
-            }
+			Imagen = imagen;
 		}
 
 		public int agregarStock(int cantidad)
