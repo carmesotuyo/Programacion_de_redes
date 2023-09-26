@@ -27,7 +27,7 @@ namespace ServerApp.Logic
 
             Usuario usuario = usuarios.FirstOrDefault(u => u.mail == user);
 
-            
+
             if (usuario != null && usuario.clave == pass)
             {
                 autenticado = 1;
@@ -52,35 +52,35 @@ namespace ServerApp.Logic
                 throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
             }
         }
-        public List<Producto> darProductosComprados(Usuario u) {
+        public List<Producto> darProductosComprados(Usuario u)
+        {
             return _database.darListaProductosCompradosPorUsuario(u);
         }
-        public List<Producto> agregarProductoACompras(Producto p, Usuario u) {
-                if (_database.existeProducto(p))
+        public List<Producto> agregarProductoACompras(Producto p, Usuario u)
+        {
+            if (_database.existeProducto(p))
+            {
+                if (_database.tieneStock(p))
                 {
-                    if (_database.tieneStock(p))
-                    {
-                        _database.agregarProductoACompras(p, u);
-                        return u.comprados;
-                    }
-                    else
-                    {
-                        throw new Exception("El producto que quieres comprar no tiene stock disponible");
-                    }
-
+                    _database.agregarProductoACompras(p, u);
+                    return u.comprados;
                 }
                 else
                 {
-                    throw new Exception("El producto que quieres comprar no existe");
+                    throw new Exception("El producto que quieres comprar no tiene stock disponible");
                 }
-            }
-        
-        }
 
+            }
+            else
+            {
+                throw new Exception("El producto que quieres comprar no existe");
+            }
+        }
         public Usuario buscarUsuario(string username)
         {
             return _database.buscarUsuario(username);
         }
 
     }
+}
 

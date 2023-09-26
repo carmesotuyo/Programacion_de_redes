@@ -49,7 +49,6 @@ namespace ServerApp.Database
         public List<Producto> agregarProducto(Producto producto)
         {
             _productos.Add(producto);
-            Console.WriteLine("Productos: " + _productos[0].Nombre);
             return _productos;
         }
         public List<Producto> buscarProductoPorNombre(string nombre)
@@ -61,6 +60,16 @@ namespace ServerApp.Database
                 }
             }
             return retorno;                
+        }
+        public Producto buscarUnProducto(string nombre) {
+            foreach (Producto p in _productos)
+            {
+                if (p.Nombre.ToLower().Equals(nombre.ToLower()))
+                {
+                    return p;
+                }
+            }
+            throw new Exception("No existe tal producto :(");
         }
         public Producto eliminarProducto(Producto p) {
             Producto ret = null;

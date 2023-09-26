@@ -25,7 +25,7 @@ namespace ServerApp.Logic
 			Usuario usuario = _userLogic.buscarUsuario(username);
 			_database.agregarProducto(producto);
 			usuario.agregarProductoAPublicados(producto);
-			return _database.buscarProductoPorNombre(producto.Nombre)[0]; // confirmamos que se guardó
+			return _database.buscarUnProducto(producto.Nombre); // confirmamos que se guardó
 		}
 
 		private void validarProductoRepetido(Producto producto)
@@ -53,14 +53,17 @@ namespace ServerApp.Logic
 			existeProducto(palabra);
 			return buscarProductoPorNombre(palabra);
 		}
-        private List<Producto> buscarProductoPorNombre(string nombre) {
+        public List<Producto> buscarProductoPorNombre(string nombre) {
             return _database.buscarProductoPorNombre(nombre);
+        }
+        public Producto buscarUnProducto(string nombre) {
+            return _database.buscarUnProducto(nombre);
         }
 
 		public Producto eliminarProducto(string nombreProd, string username)
 		{
 			existeProducto(nombreProd);
-			Producto p = buscarProductoPorNombre(nombreProd)[0];
+			Producto p = buscarUnProducto(nombreProd);
 			tienePermisos(username, p);
 
             _database.eliminarProducto(p);
@@ -121,7 +124,7 @@ namespace ServerApp.Logic
 		public string CambiarImagen(Producto producto, string user, string nuevaImagen)
 		{
 			existeProducto(producto.Nombre);
-            Producto prodAModificar = buscarProductoPorNombre(producto.Nombre)[0];
+            Producto prodAModificar = buscarUnProducto(producto.Nombre);
 			string imagenAnterior = prodAModificar.Imagen;
             tienePermisos(user, prodAModificar);
 			ValidarImagenRepetida(nuevaImagen);
@@ -132,7 +135,7 @@ namespace ServerApp.Logic
         public Producto VerMasProducto(string nombreProd)
 		{
 			existeProducto(nombreProd);
-			return buscarProductoPorNombre(nombreProd)[0];
+			return buscarUnProducto(nombreProd);
         }
 
         private void existeProducto(string nombre)
