@@ -54,7 +54,7 @@ namespace ServerApp.Controllers
                     case "imagen":
                         p.Imagen = DameNombreImagen(nuevoValor);
                         string imagenAnterior = _productLogic.CambiarImagen(p, username);
-                        if (imagenAnterior != Protocol.NoImage) _productLogic.BorrarImagen(filesPath, nombreProd);
+                        if (imagenAnterior != Protocol.NoImage) BorrarImagen(filesPath, nombreProd);
                         fileHandler.ReceiveFile(filesPath);
                         mensajeACliente = "Imagen del producto actualizada con éxito.";
                         break;
@@ -88,7 +88,7 @@ namespace ServerApp.Controllers
 
         }
 
-		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler, Usuario user, string filesPath)
+		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler, string filesPath)
         {
             string mensajeAlCliente = "";
             try
@@ -96,11 +96,12 @@ namespace ServerApp.Controllers
                 // Capturamos la informacion
                 string info = msgHandler.ReceiveMessage();
                 string[] datos = info.Split("#");
-                string nombre = datos[0];
-                string descripcion = datos[1];
-                float precio = float.Parse(datos[2]);
-                string pathImagen = datos[3];
-                int stock = int.Parse(datos[4]);
+                string user = datos[0];
+                string nombre = datos[1];
+                string descripcion = datos[2];
+                float precio = float.Parse(datos[3]);
+                string pathImagen = datos[4];
+                int stock = int.Parse(datos[5]);
 
                 Producto producto;
 

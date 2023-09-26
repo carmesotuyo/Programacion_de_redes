@@ -12,14 +12,16 @@ namespace ServerApp.Logic
 		public ProductLogic()
 		{
 			_database = SingletonDB.GetInstance();
+			_userLogic = new UserLogic();
 		}
 
-		public Producto publicarProducto(Producto producto, Usuario usuario)
+		public Producto publicarProducto(Producto producto, string username)
 		{
 			validarProductoRepetido(producto);
+			Usuario usuario = _userLogic.buscarUsuario(username);
 			_database.agregarProducto(producto);
 			usuario.agregarProductoAPublicados(producto);
-			return producto; // podria traer el producto de la db confirmando que se guardó
+			return _database.buscarProductoPorNombre(producto.Nombre)[0]; // confirmamos que se guardó
 		}
 
 		private void validarProductoRepetido(Producto producto)
@@ -85,7 +87,8 @@ namespace ServerApp.Logic
 			return prodAModificar.Imagen;
         }
 
-		public Producto VerMasProducto(string nombreProd)
+
+        public Producto VerMasProducto(string nombreProd)
 		{
 			existeProducto(nombreProd);
 			return buscarProductoPorNombre(nombreProd)[0];

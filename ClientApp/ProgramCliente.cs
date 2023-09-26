@@ -84,7 +84,7 @@ namespace ClientApp
 
                                 Console.WriteLine("Desea ingresar una imagen? Responda 'si' para cargar imagen, enter para seguir sin subir imagen");
                                 bool subeImagen = false;
-                                string imagen = Protocol.NoImagePath;
+                                string imagen = Protocol.NoImage;
 
                                 if(Console.ReadLine() == "si")
                                 {
@@ -100,7 +100,7 @@ namespace ClientApp
                                 msgHandler.SendMessage("1");
 
                                 //Mandamos al server la informacion
-                                string info = nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
+                                string info = user + "# "+ nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
                                 msgHandler.SendMessage(info);
 
                                 if (subeImagen)
