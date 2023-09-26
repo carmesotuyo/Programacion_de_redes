@@ -1,5 +1,4 @@
-﻿using System;
-namespace ServerApp.Domain
+﻿namespace ServerApp.Domain
 {
 	public class Calificacion
 	{

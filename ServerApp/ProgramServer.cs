@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
 using Communication;
 using ServerApp.Controllers;
@@ -12,7 +11,8 @@ namespace ServerApp
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new();
-        private static readonly ProductController _productController = new();
+        private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+        private static readonly ProductController _productController = new(filesPath);
         private static readonly UserController _userController = new();
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
 
@@ -75,8 +75,7 @@ namespace ServerApp
                     Console.WriteLine("opcion recibida {0}", comando); // debug
 
                     // Procesar la selección del cliente
-                    Usuario user = new("mail", "clave"); // TODO sacar esto, usar los datos posta que ingresa el cliente
-                    ProcesarSeleccion(msgHandler, comando, fileHandler, user);
+                    ProcesarSeleccion(msgHandler, comando, fileHandler);
                 }
 
 
@@ -92,7 +91,7 @@ namespace ServerApp
             }
         }
 
-        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, Usuario user)
+        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
         {
             switch (opcion)
             {
@@ -105,7 +104,7 @@ namespace ServerApp
                     break;
                 case "1":
                     Console.WriteLine("entramos a la opcion 1"); //debug
-                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, user));
+                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
                     Console.WriteLine("entramos a la opcion 2"); //debug
@@ -113,22 +112,26 @@ namespace ServerApp
                     break;
                 case "3":
                     Console.WriteLine("entramos a la opcion 3"); //debug
-                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, user));
+                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler));
                     break;
                 case "4":
                     Console.WriteLine("entramos a la opcion 4"); //debug
-                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler, user));
+                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler));
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug
-                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler, user));
+                    msgHandler.SendMessage(_productController.productosBuscados(msgHandler));
                     break;
                 case "6":
                     Console.WriteLine("entramos a la opcion 6"); //debug
-                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler, user));
+                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler));
                     break;
                 case "7":
                     // Implementa la lógica para calificar un producto
+                    break;
+                case "8":
+                    Console.WriteLine("entramos a la opcion 8"); //debug
+                    msgHandler.SendMessage(_productController.darProductos(msgHandler, user));
                     break;
                 default:
                     // Opción no válida, TODO resolver que hacer

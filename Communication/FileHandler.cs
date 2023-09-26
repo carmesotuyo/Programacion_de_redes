@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Communication
 {
     public class FileHandler
@@ -31,6 +26,18 @@ namespace Communication
             }
 
             throw new Exception("File does not exist");
+        }
+
+        public void DeleteFile(string path)
+        {
+            if (FileExists(path))
+            {
+                File.Delete(path);
+            }
+            else
+            {
+                throw new Exception("File does not exist");
+            }
         }
     }
 }

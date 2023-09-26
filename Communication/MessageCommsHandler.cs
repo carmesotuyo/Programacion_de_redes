@@ -1,10 +1,9 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 
 namespace Communication
 {
-	public class MessageCommsHandler
-	{
+    public class MessageCommsHandler
+    {
         private readonly ConversionHandler _conversionHandler;
         private readonly SocketHelper _socketHelper;
 

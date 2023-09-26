@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
@@ -14,7 +11,7 @@ namespace ClientApp
         public static void Main(string[] args)
         {
             bool estaAutenticado = false;
-            string user = "user#pass";
+            string user = "";
             bool parar = false;
             Console.WriteLine("Iniciando Aplicacion Cliente....!!!");
 
@@ -57,7 +54,7 @@ namespace ClientApp
                             {
                                 Console.WriteLine("Login exitoso");
                                 estaAutenticado = true;
-                                user = credenciales;
+                                user = credenciales.Split("#")[0];
                             }
                             else
                             {
@@ -85,8 +82,16 @@ namespace ClientApp
                                 Console.WriteLine("Ingrese el precio");
                                 string precio = Console.ReadLine();
 
-                                Console.WriteLine("Ingrese la ruta al archivo de imagen");
-                                string imagen = Console.ReadLine();
+                                Console.WriteLine("Desea ingresar una imagen? Responda 'si' para cargar imagen, enter para seguir sin subir imagen");
+                                bool subeImagen = false;
+                                string imagen = Protocol.NoImage;
+
+                                if(Console.ReadLine() == "si")
+                                {
+                                    subeImagen = true;
+                                    Console.WriteLine("Ingrese la ruta al archivo de imagen");
+                                    imagen = Console.ReadLine();
+                                }
 
                                 Console.WriteLine("Ingrese el stock disponible");
                                 string stock = Console.ReadLine();
@@ -95,11 +100,14 @@ namespace ClientApp
                                 msgHandler.SendMessage("1");
 
                                 //Mandamos al server la informacion
-                                string info = nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
+                                string info = user + "# "+ nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
                                 msgHandler.SendMessage(info);
 
-                                //Mandamos al server el archivo de imagen
-                                fileHandler.SendFile(imagen);
+                                if (subeImagen)
+                                {
+                                    //Mandamos al server el archivo de imagen
+                                    fileHandler.SendFile(imagen);
+                                }
 
                                 // Esperamos exito o error del server
                                 Console.WriteLine(msgHandler.ReceiveMessage());
@@ -121,39 +129,57 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "3":
-                            Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
-                            Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
+                                Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
 
-                            string nombreProducto = Console.ReadLine();
+                                string nombreProducto = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese que atributo quiere modificar");
-                            string atributoAModificar = Console.ReadLine();
+                                Console.WriteLine("Ingrese que atributo quiere modificar");
+                                string atributoAModificar = Console.ReadLine();
 
-                            Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado");
-                            string nuevoValorDelAtributo = Console.ReadLine();
+                                Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado, en caso de la imagen ingrese la ruta completa");
+                                string nuevoValorDelAtributo = Console.ReadLine();
 
-                            msgHandler.SendMessage("3");
+                                msgHandler.SendMessage("3");
 
-                            string informacion = nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
+                                string informacion = user + "#" + nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
 
-                            msgHandler.SendMessage(informacion);
+                                msgHandler.SendMessage(informacion);
 
-                            // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                                if(atributoAModificar.ToLower() == "imagen")
+                                {
+                                    fileHandler.SendFile(nuevoValorDelAtributo);
+                                }
+
+                                // Esperamos exito o error del server
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            } else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
 
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
 
                         case "4":
-                            Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
-                            Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
-                            string nombreProductoABorrar = Console.ReadLine();
-                            //Mandamos al server el comando
-                            msgHandler.SendMessage("4");
-                            //Mandamos al server la informacion
-                            msgHandler.SendMessage(nombreProductoABorrar);
-                            // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
+                                Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
+                                string nombreProductoABorrar = Console.ReadLine();
+                                //Mandamos al server el comando
+                                msgHandler.SendMessage("4");
+                                //Mandamos al server la informacion
+                                msgHandler.SendMessage(user + "#" + nombreProductoABorrar);
+                                // Esperamos exito o error del server
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            }
+                            else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "5":
@@ -183,6 +209,12 @@ namespace ClientApp
                         case "7":
                             Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
                             // Implementa la lógica para calificar un producto aquí
+                            break;
+                        case "8":
+                            Console.WriteLine("Seleccionó la opción 8: Ver todos los productos");
+                            msgHandler.SendMessage("8");
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "desconectar":
                             parar = true;
@@ -222,6 +254,7 @@ namespace ClientApp
             menu.AppendLine("* Seleccione 5 para buscar un producto");
             menu.AppendLine("* Seleccione 6 para ver más acerca de un producto");
             menu.AppendLine("* Seleccione 7 para calificar un producto");
+            menu.AppendLine("* Seleccione 8 para ver el listado de productos");
             menu.AppendLine("Muchas gracias por elegirnos!");
             menu.AppendLine("****************************");
             return menu.ToString();

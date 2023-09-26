@@ -11,10 +11,12 @@ namespace ServerApp.Logic
     public class UserLogic
     {
         private readonly SingletonDB _database;
+
         public UserLogic()
         {
             _database = SingletonDB.GetInstance();
         }
+
         public int VerificarLogin(string userPass)
         {
             int autenticado = 0;
@@ -73,6 +75,11 @@ namespace ServerApp.Logic
                 }
             }
         
+        }
+
+        public Usuario buscarUsuario(string username)
+        {
+            return _database.buscarUsuario(username);
         }
 
     }
