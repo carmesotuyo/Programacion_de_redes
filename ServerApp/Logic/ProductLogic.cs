@@ -26,7 +26,7 @@ namespace ServerApp.Logic
 
 		private void validarProductoRepetido(Producto producto)
 		{
-			existeProducto(producto.Nombre);
+            ValidarNombreRepetido(producto.Nombre);
 			if(producto.Imagen != Protocol.NoImage) ValidarImagenRepetida(producto.Imagen);
             if (_database.existeProducto(producto))
 			{
