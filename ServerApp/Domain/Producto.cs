@@ -15,7 +15,7 @@ namespace ServerApp.Domain
 
 		public int promedioCalificaciones;
 
-		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImagePath)
+		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImage)
 		{
 			Nombre = nombre;
 			Descripcion = descripcion;
@@ -24,7 +24,7 @@ namespace ServerApp.Domain
 			calificaciones = new List<Calificacion>();
 			id = globalIdCounter++;
             globalIdCounter++;
-			if (imagen != Protocol.NoImagePath)
+			if (imagen != Protocol.NoImage)
 			{
                 Imagen = imagen;
             }

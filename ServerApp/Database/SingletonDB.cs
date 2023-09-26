@@ -57,6 +57,11 @@ namespace ServerApp.Database
                 if (prod.Equals(p)) {
                     _productos.Remove(prod);
                     ret = prod;
+                    if(prod.Imagen != null)
+                    {
+                        FileHandler fileHandler = new();
+                        fileHandler.DeleteFile(prod.Imagen);
+                    }
                 }
             }
 
@@ -93,11 +98,12 @@ namespace ServerApp.Database
         public bool existeImagen(string nombreImagen)
         {
             bool existe = false;
+            FileHandler fileHandler = new();
 
             foreach (Producto prod in _productos)
             {
                 // Tomando como supuesto que no se permiten imagenes con el mismo nombre en el servidor
-                if (prod.Imagen == nombreImagen)
+                if (prod.Imagen != null && fileHandler.GetFileName(prod.Imagen)  == nombreImagen)
                 {
                     existe = true;
                 }

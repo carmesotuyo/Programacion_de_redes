@@ -134,7 +134,7 @@ namespace ClientApp
                                 Console.WriteLine("Ingrese que atributo quiere modificar");
                                 string atributoAModificar = Console.ReadLine();
 
-                                Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado");
+                                Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado, en caso de la imagen ingrese la ruta completa");
                                 string nuevoValorDelAtributo = Console.ReadLine();
 
                                 msgHandler.SendMessage("3");
@@ -142,6 +142,11 @@ namespace ClientApp
                                 string informacion = user + "#" + nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
 
                                 msgHandler.SendMessage(informacion);
+
+                                if(atributoAModificar.ToLower() == "imagen")
+                                {
+                                    fileHandler.SendFile(nuevoValorDelAtributo);
+                                }
 
                                 // Esperamos exito o error del server
                                 Console.WriteLine(msgHandler.ReceiveMessage());

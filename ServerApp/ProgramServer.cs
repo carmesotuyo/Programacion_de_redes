@@ -13,6 +13,7 @@ namespace ServerApp
         static readonly SettingsManager settingsMngr = new();
         private static readonly ProductController _productController = new();
         private static readonly UserController _userController = new();
+        private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
 
 
@@ -104,14 +105,14 @@ namespace ServerApp
                     break;
                 case "1":
                     Console.WriteLine("entramos a la opcion 1"); //debug
-                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, user));
+                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, user, filesPath));
                     break;
                 case "2":
                     // Implementa la lógica para comprar un producto
                     break;
                 case "3":
                     Console.WriteLine("entramos a la opcion 3"); //debug
-                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler));
+                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler, filesPath));
                     break;
                 case "4":
                     Console.WriteLine("entramos a la opcion 4"); //debug
