@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 
 namespace Communication
 {
@@ -46,7 +41,7 @@ namespace Communication
             }
         }
 
-        public string ReceiveFile()
+        public string ReceiveFile(string path)
         {
             // ---> Recibir el largo del nombre del archivo
             int fileNameSize = _conversionHandler.ConvertBytesToInt(_socketHelper.Receive(Protocol.FixedDataSize));
@@ -55,7 +50,7 @@ namespace Communication
             // ---> Recibir el largo del archivo
             long fileSize = _conversionHandler.ConvertBytesToLong(_socketHelper.Receive(Protocol.FixedFileSize));
             // ---> Recibir el archivo
-            ReceiveFileWithStreams(fileSize, fileName);
+            ReceiveFileWithStreams(fileSize, path+fileName);
             return fileName;
         }
 

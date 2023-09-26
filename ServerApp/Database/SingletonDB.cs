@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Communication;
 using ServerApp.Domain;
 namespace ServerApp.Database
@@ -97,7 +97,7 @@ namespace ServerApp.Database
             foreach (Producto prod in _productos)
             {
                 // Tomando como supuesto que no se permiten imagenes con el mismo nombre en el servidor
-                if (prod.Imagen == nombreImagen)
+                if (prod.Imagen  == nombreImagen)
                 {
                     existe = true;
                 }
@@ -132,7 +132,10 @@ namespace ServerApp.Database
             return existe;
         }
 
-
+        public Usuario buscarUsuario(string username)
+        {
+            return _usuarios.FirstOrDefault(u => u.mail == username);
+        }
     }
 }
 
