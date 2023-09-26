@@ -1,6 +1,7 @@
 using ServerApp.Database;
 using ServerApp.Domain;
 using Communication;
+using System;
 
 namespace ServerApp.Logic
 {
@@ -63,28 +64,76 @@ namespace ServerApp.Logic
 
             _database.eliminarProducto(p);
             return p;
-
         }
 
-		public Producto modificarProducto (Producto producto, string nombreOriginal, string user)
+		public string modificarProducto (Producto producto, string user, string atributo, string nuevoValor)
 		{
-            existeProducto(nombreOriginal);
-            Producto prodAModificar = buscarProductoPorNombre(nombreOriginal)[0];
-			tienePermisos(user, prodAModificar);
-			validarProductoRepetido(producto);
-			_database.modificarProducto(producto, nombreOriginal);
-			return _database.buscarProductoPorNombre(producto.Nombre)[0]; // para validar que el objeto en bd realmente se actualizó
+            string mensajeACliente = "";
+
+            existeProducto(producto.Nombre);
+            //Producto prodAModificar = buscarProductoPorNombre(nombreOriginal)[0];
+            tienePermisos(user, producto);
+
+            //validarProductoRepetido(producto);
+            //_database.modificarProducto(producto, nombreOriginal);
+
+            switch (atributo)
+            {
+                case "nombre":
+                    ValidarNombreRepetido(nuevoValor);
+                    producto.Nombre = nuevoValor;
+                    mensajeACliente = "Nombre del producto actualizado con éxito.";
+                    break;
+
+                case "descripcion":
+                    producto.Descripcion = nuevoValor;
+                    mensajeACliente = "Descripción del producto actualizada con éxito.";
+                    break;
+
+                case "precio":
+                    if (float.TryParse(nuevoValor, out float nuevoPrecio))
+                    {
+                        producto.Precio = nuevoPrecio;
+                        mensajeACliente = "Precio del producto actualizado con éxito.";
+                    }
+                    else
+                    {
+                        mensajeACliente = "El nuevo valor de precio no es válido.";
+                    }
+                    break;
+
+                case "stock":
+                    if (int.TryParse(nuevoValor, out int nuevoStock))
+                    {
+                        producto.Stock = nuevoStock;
+                        mensajeACliente = "Stock del producto actualizado con éxito.";
+                    }
+                    else
+                    {
+                        mensajeACliente = "El nuevo valor de stock no es válido.";
+                    }
+                    break;
+
+                default:
+                    mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
+                    break;
+
+            }
+
+			return mensajeACliente;
 		}
 
 		// Método para validar que el usuario puede actualizar la imagen de su producto
 		// Devuelve el nombre de la imagen anterior para eliminarla
-		public string CambiarImagen(Producto producto, string user)
+		public string CambiarImagen(Producto producto, string user, string nuevaImagen)
 		{
 			existeProducto(producto.Nombre);
             Producto prodAModificar = buscarProductoPorNombre(producto.Nombre)[0];
+			string imagenAnterior = prodAModificar.Imagen;
             tienePermisos(user, prodAModificar);
-			ValidarImagenRepetida(producto.Imagen);
-			return prodAModificar.Imagen;
+			ValidarImagenRepetida(nuevaImagen);
+			producto.Imagen = nuevaImagen;
+			return imagenAnterior;
         }
 
 

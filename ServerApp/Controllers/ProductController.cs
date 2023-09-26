@@ -26,58 +26,16 @@ namespace ServerApp.Controllers
 
                 Producto p = _productLogic.BuscarProductos(nombreProd)[0];
 
-                switch (atributoAModificar)
+                if(atributoAModificar == "imagen")
                 {
-                    case "nombre":
-                        _productLogic.ValidarNombreRepetido(nuevoValor);
-                        p.Nombre = nuevoValor;
-                        mensajeACliente = "Nombre del producto actualizado con éxito.";
-                        break;
-
-                    case "descripcion":
-                        p.Descripcion = nuevoValor;
-                        mensajeACliente = "Descripción del producto actualizada con éxito.";
-                        break;
-
-                    case "precio":
-                        if (float.TryParse(nuevoValor, out float nuevoPrecio))
-                        {
-                            p.Precio = nuevoPrecio;
-                            mensajeACliente = "Precio del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de precio no es válido.";
-                        }
-                        break;
-
-                    case "imagen":
-                        p.Imagen = DameNombreImagen(nuevoValor);
-                        string imagenAnterior = _productLogic.CambiarImagen(p, username);
-                        if (imagenAnterior != Protocol.NoImage) BorrarImagen(filesPath, nombreProd);
-                        fileHandler.ReceiveFile(filesPath);
-                        mensajeACliente = "Imagen del producto actualizada con éxito.";
-                        break;
-
-                    case "stock":
-                        if (int.TryParse(nuevoValor, out int nuevoStock))
-                        {
-                            p.Stock = nuevoStock;
-                            mensajeACliente = "Stock del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de stock no es válido.";
-                        }
-                        break;
-
-                    default:
-                        mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
-                        break;
-
+                    string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
+                    if (imagenAnterior != Protocol.NoImage) BorrarImagen(filesPath, imagenAnterior);
+                    fileHandler.ReceiveFile(filesPath);
+                    mensajeACliente = "Imagen del producto actualizada con éxito.";
+                } else
+                {
+                    _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
                 }
-
-                _productLogic.modificarProducto(p, nombreProd, username);
             }
             catch(Exception e)
             {
@@ -123,7 +81,7 @@ namespace ServerApp.Controllers
             }
             catch (Exception e)
 			{
-                mensajeAlCliente = "Ocurrió un error: " + e.Message;
+                mensajeAlCliente = "Hubo un error: " + e.Message;
 			}
             return mensajeAlCliente;
         }
@@ -138,7 +96,7 @@ namespace ServerApp.Controllers
             }
             catch (Exception e)
             {
-                retorno = "Ocurrió un error: " + e.Message;
+                retorno = "Hubo un error: " + e.Message;
             }
             return retorno;
         
@@ -165,7 +123,7 @@ namespace ServerApp.Controllers
 
             }
             catch (Exception e) {
-                return "Ocurrió un error: " + e.Message;
+                return "Hubo un error: " + e.Message;
             }
             
         }
@@ -184,14 +142,14 @@ namespace ServerApp.Controllers
                 retorno.AppendLine("Nombre: " + p.Nombre);
                 retorno.AppendLine("Descripcion: " + p.Descripcion);
                 retorno.AppendLine("Precio: " + p.Precio.ToString());
-                if(p.Imagen != null) retorno.AppendLine("Nombre de imagen: " + DameNombreImagen(p.Imagen));
+                if(p.Imagen != Protocol.NoImage) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
                 retorno.AppendLine("Stock: " + p.Stock.ToString());
 
                 return retorno.ToString();
             }
             catch (Exception e)
             {
-                return "Ocurrió un error: " + e.Message;
+                return "Hubo un error: " + e.Message;
             }
             
 
@@ -207,7 +165,7 @@ namespace ServerApp.Controllers
         private void BorrarImagen(string pathImagenesGuardadas, string nombreImagen)
         {
             FileHandler _fileHandler = new FileHandler();
-            _fileHandler.DeleteFile(pathImagenesGuardadas+"/"+nombreImagen);
+            _fileHandler.DeleteFile(pathImagenesGuardadas+nombreImagen);
         }
     }
 }
