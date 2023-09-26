@@ -15,6 +15,9 @@ namespace ServerApp.Logic
 			_database = SingletonDB.GetInstance();
 			_userLogic = new UserLogic();
 		}
+		public List<Producto> darListadoProductos() { 
+			return _database.darListaProductos();
+		}
 
 		public Producto publicarProducto(Producto producto, string username)
 		{
@@ -50,8 +53,6 @@ namespace ServerApp.Logic
 			existeProducto(palabra);
 			return buscarProductoPorNombre(palabra);
 		}
-
-
         private List<Producto> buscarProductoPorNombre(string nombre) {
             return _database.buscarProductoPorNombre(nombre);
         }
@@ -71,12 +72,7 @@ namespace ServerApp.Logic
             string mensajeACliente = "";
 
             existeProducto(producto.Nombre);
-            //Producto prodAModificar = buscarProductoPorNombre(nombreOriginal)[0];
             tienePermisos(user, producto);
-
-            //validarProductoRepetido(producto);
-            //_database.modificarProducto(producto, nombreOriginal);
-
             switch (atributo)
             {
                 case "nombre":
@@ -122,7 +118,6 @@ namespace ServerApp.Logic
 
 			return mensajeACliente;
 		}
-
 		// Método para validar que el usuario puede actualizar la imagen de su producto
 		// Devuelve el nombre de la imagen anterior para eliminarla
 		public string CambiarImagen(Producto producto, string user, string nuevaImagen)
