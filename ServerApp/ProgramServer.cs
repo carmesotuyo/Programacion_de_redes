@@ -11,9 +11,9 @@ namespace ServerApp
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new();
-        private static readonly ProductController _productController = new();
-        private static readonly UserController _userController = new();
         private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+        private static readonly ProductController _productController = new(filesPath);
+        private static readonly UserController _userController = new();
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
 
 
@@ -104,14 +104,14 @@ namespace ServerApp
                     break;
                 case "1":
                     Console.WriteLine("entramos a la opcion 1"); //debug
-                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, filesPath));
+                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
                     // Implementa la lógica para comprar un producto
                     break;
                 case "3":
                     Console.WriteLine("entramos a la opcion 3"); //debug
-                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler, filesPath));
+                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler));
                     break;
                 case "4":
                     Console.WriteLine("entramos a la opcion 4"); //debug

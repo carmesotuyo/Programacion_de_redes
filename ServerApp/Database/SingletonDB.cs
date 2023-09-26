@@ -57,11 +57,6 @@ namespace ServerApp.Database
                 if (prod.Equals(p)) {
                     _productos.Remove(prod);
                     ret = prod;
-                    if(prod.Imagen != Protocol.NoImage)
-                    {
-                        FileHandler fileHandler = new();
-                        fileHandler.DeleteFile(prod.Imagen);
-                    }
                 }
             }
 

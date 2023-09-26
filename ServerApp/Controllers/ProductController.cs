@@ -9,10 +9,14 @@ namespace ServerApp.Controllers
 	public class ProductController
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
+        private readonly string _filesPath;
 
-		public ProductController() { }
+		public ProductController(string filesPath)
+        {
+            _filesPath = filesPath;
+        }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, string filesPath) {
+        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler) {
 
             string mensajeACliente = "";
             try
@@ -29,8 +33,8 @@ namespace ServerApp.Controllers
                 if(atributoAModificar == "imagen")
                 {
                     string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
-                    if (imagenAnterior != Protocol.NoImage) BorrarImagen(filesPath, imagenAnterior);
-                    fileHandler.ReceiveFile(filesPath);
+                    if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
+                    fileHandler.ReceiveFile(_filesPath);
                     mensajeACliente = "Imagen del producto actualizada con éxito.";
                 } else
                 {
@@ -46,7 +50,7 @@ namespace ServerApp.Controllers
 
         }
 
-		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler, string filesPath)
+		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler)
         {
             string mensajeAlCliente = "";
             try
@@ -68,7 +72,7 @@ namespace ServerApp.Controllers
                     // Creamos el producto con la info obtenida
                     producto = new (nombre, descripcion, precio, stock, DameNombreImagen(pathImagen));
                     // Recibimos la imagen
-                    fileCommsHandler.ReceiveFile(filesPath);
+                    fileCommsHandler.ReceiveFile(_filesPath);
                 } else
                 {
                     // Creamos el producto sin imagen
@@ -92,7 +96,11 @@ namespace ServerApp.Controllers
                 string[] datos = msgHandler.ReceiveMessage().Split("#");
                 string username = datos[0];
                 string nombreProd = datos[1];
-                retorno = "Se ha eliminado exitosamente el producto: "+ _productLogic.eliminarProducto(nombreProd, username).Nombre;
+
+                Producto eliminado = _productLogic.eliminarProducto(nombreProd, username);
+                if (eliminado.Imagen != Protocol.NoImage) BorrarImagen(_filesPath, eliminado.Imagen);
+
+                retorno = "Se ha eliminado exitosamente el producto: "+ eliminado.Nombre;
             }
             catch (Exception e)
             {
