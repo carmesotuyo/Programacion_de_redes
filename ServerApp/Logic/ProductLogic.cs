@@ -118,8 +118,6 @@ namespace ServerApp.Logic
 
 			return mensajeACliente;
 		}
-		// Método para validar que el usuario puede actualizar la imagen de su producto
-		// Devuelve el nombre de la imagen anterior para eliminarla
 		public string CambiarImagen(Producto producto, string user, string nuevaImagen)
 		{
 			existeProducto(producto.Nombre);
@@ -130,8 +128,7 @@ namespace ServerApp.Logic
 			producto.Imagen = nuevaImagen;
 			return imagenAnterior;
         }
-
-
+      
         public Producto VerMasProducto(string nombreProd)
 		{
 			existeProducto(nombreProd);

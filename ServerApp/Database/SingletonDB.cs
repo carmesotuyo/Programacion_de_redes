@@ -37,6 +37,15 @@ namespace ServerApp.Database
         public List<Producto> darListaProductos() { 
             return this._productos;
         }
+      
+        public List<Producto> darListaProductosCompradosPorUsuario(Usuario u) {
+            List<Producto> retorno = new List<Producto>();
+            foreach (Producto p in u.comprados) { 
+                retorno.Add(p);
+            }
+            return retorno;
+        }
+      
         public List<Producto> agregarProducto(Producto producto)
         {
             _productos.Add(producto);
@@ -91,6 +100,15 @@ namespace ServerApp.Database
             }
             return existe;
         }
+        public bool tieneStock(Producto p) {
+            if (p.Stock > 0)
+            {
+                return true;
+            }
+            else { 
+                return false;
+            }
+        }
 
         public bool existeImagen(string nombreImagen)
         {
@@ -110,6 +128,11 @@ namespace ServerApp.Database
         public List<Usuario> usuarios()
         {
             return _usuarios;
+        }
+        public List<Producto> agregarProductoACompras(Producto p,Usuario u) {
+            u.comprados.Add(p);
+            p.Stock--;
+            return u.comprados;
         }
 
         //metodo para agregar usuarios

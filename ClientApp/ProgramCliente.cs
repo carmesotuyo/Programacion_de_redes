@@ -121,7 +121,12 @@ namespace ClientApp
                             break;
                         case "2":
                             Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
-                            // Implementa la lógica para comprar un producto aquí
+                            Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
+                            string nombreProductoAComprar = Console.ReadLine();
+                            msgHandler.SendMessage("2");
+                            msgHandler.SendMessage(nombreProductoAComprar);
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "3":
                             if (estaAutenticado)

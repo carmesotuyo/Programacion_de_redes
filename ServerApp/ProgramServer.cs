@@ -107,7 +107,8 @@ namespace ServerApp
                     msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    // Implementa la lógica para comprar un producto
+                    Console.WriteLine("entramos a la opcion 2"); //debug
+                    msgHandler.SendMessage(_userController.agregarProductoACompras(msgHandler, user));
                     break;
                 case "3":
                     Console.WriteLine("entramos a la opcion 3"); //debug

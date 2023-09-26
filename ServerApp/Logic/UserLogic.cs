@@ -52,6 +52,30 @@ namespace ServerApp.Logic
                 throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
             }
         }
+        public List<Producto> darProductosComprados(Usuario u) {
+            return _database.darListaProductosCompradosPorUsuario(u);
+        }
+        public List<Producto> agregarProductoACompras(Producto p, Usuario u) {
+                if (_database.existeProducto(p))
+                {
+                    if (_database.tieneStock(p))
+                    {
+                        _database.agregarProductoACompras(p, u);
+                        return u.comprados;
+                    }
+                    else
+                    {
+                        throw new Exception("El producto que quieres comprar no tiene stock disponible");
+                    }
+
+                }
+                else
+                {
+                    throw new Exception("El producto que quieres comprar no existe");
+                }
+            }
+        
+        }
 
         public Usuario buscarUsuario(string username)
         {
@@ -59,4 +83,4 @@ namespace ServerApp.Logic
         }
 
     }
-}
+
