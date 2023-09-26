@@ -12,6 +12,26 @@ namespace ServerApp.Controllers
 
 		public ProductController() { }
 
+
+        public string darProductos(MessageCommsHandler msgHandler, Usuario user) {
+            StringBuilder retorno = new StringBuilder();
+            int i = 1;
+            if (_productLogic.darListadoProductos().ToList().Count > 0)
+            {
+                foreach (Producto p in _productLogic.darListadoProductos().ToList())
+                {
+                    retorno.AppendLine(i + "- " + p.Nombre);
+                    i++;
+                }
+            }
+            else {
+                return "No existen productos registrados";
+            }
+
+            return retorno.ToString();
+            
+        }
+
         public string modificarProducto(MessageCommsHandler msgHandler, Usuario user) {
 
             string mensajeACliente = "";

@@ -34,7 +34,9 @@ namespace ServerApp.Database
             }
             return _instance;
         }
-
+        public List<Producto> darListaProductos() { 
+            return this._productos;
+        }
         public List<Producto> agregarProducto(Producto producto)
         {
             _productos.Add(producto);

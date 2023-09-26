@@ -129,6 +129,10 @@ namespace ServerApp
                 case "7":
                     // Implementa la lógica para calificar un producto
                     break;
+                case "8":
+                    Console.WriteLine("entramos a la opcion 8"); //debug
+                    msgHandler.SendMessage(_productController.darProductos(msgHandler, user));
+                    break;
                 default:
                     // Opción no válida, TODO resolver que hacer
                     break;

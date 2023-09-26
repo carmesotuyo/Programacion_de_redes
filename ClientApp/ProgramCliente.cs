@@ -179,6 +179,12 @@ namespace ClientApp
                             Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
                             // Implementa la lógica para calificar un producto aquí
                             break;
+                        case "8":
+                            Console.WriteLine("Seleccionó la opción 8: Ver todos los productos");
+                            msgHandler.SendMessage("8");
+                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
+                            break;
                         case "desconectar":
                             parar = true;
                             Console.WriteLine("Desconectando");
@@ -217,6 +223,7 @@ namespace ClientApp
             menu.AppendLine("* Seleccione 5 para buscar un producto");
             menu.AppendLine("* Seleccione 6 para ver más acerca de un producto");
             menu.AppendLine("* Seleccione 7 para calificar un producto");
+            menu.AppendLine("* Seleccione 8 para ver el listado de productos");
             menu.AppendLine("Muchas gracias por elegirnos!");
             menu.AppendLine("****************************");
             return menu.ToString();

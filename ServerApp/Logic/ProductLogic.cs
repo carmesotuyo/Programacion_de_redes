@@ -11,6 +11,9 @@ namespace ServerApp.Logic
 		{
 			_database = SingletonDB.GetInstance();
 		}
+		public List<Producto> darListadoProductos() { 
+			return _database.darListaProductos();
+		}
 
 		public Producto publicarProducto(Producto producto, Usuario usuario)
 		{
@@ -53,12 +56,12 @@ namespace ServerApp.Logic
 
 			return producto;
 		}
-		public Producto eliminarProducto(string nombre) {
-			Producto p = null;
-			p = buscarProductoPorNombre(nombre)[0];
-			_database.eliminarProducto(p);
-			return p;
-		}
+		//public Producto eliminarProducto(string nombre) {
+		//	Producto p = null;
+		//	p = buscarProductoPorNombre(nombre)[0];
+		//	_database.eliminarProducto(p);
+		//	return p;
+		//}
 
 
     }
