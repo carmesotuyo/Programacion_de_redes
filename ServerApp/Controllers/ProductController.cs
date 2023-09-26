@@ -9,10 +9,12 @@ namespace ServerApp.Controllers
 	public class ProductController
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
+        private readonly string _filesPath;
 
-		public ProductController() { }
-
-
+		public ProductController(string filesPath)
+        {
+            _filesPath = filesPath;
+        }
         public string darProductos(MessageCommsHandler msgHandler, Usuario user) {
             StringBuilder retorno = new StringBuilder();
             int i = 1;
@@ -32,86 +34,42 @@ namespace ServerApp.Controllers
             
         }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, Usuario user) {
+        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler) {
+
 
             string mensajeACliente = "";
-            string info = msgHandler.ReceiveMessage();
-
-            string[] datos = info.Split('#');
-            string nombreProd = datos[0];
-            string atributoAModificar = datos[1].ToLower();
-            string nuevoValor = datos[2];
-            if (_productLogic.buscarProductoPorNombre(nombreProd).Count > 0)
+            try
             {
-                Producto p = _productLogic.buscarProductoPorNombre(nombreProd)[0];
+                string info = msgHandler.ReceiveMessage();
+                string[] datos = info.Split('#');
+                string username = datos[0];
+                string nombreProd = datos[1];
+                string atributoAModificar = datos[2].ToLower();
+                string nuevoValor = datos[3];
 
-                switch (atributoAModificar)
+                Producto p = _productLogic.BuscarProductos(nombreProd)[0];
+
+                if(atributoAModificar == "imagen")
                 {
-                    case "nombre":
-                        if (_productLogic.buscarProductoPorNombre(nuevoValor).Count == 0)
-                        {
-                            p.Nombre = nuevoValor;
-                            mensajeACliente = "Nombre del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo nombre ya es utilizado por otro producto";
-                        }
-
-                        break;
-
-                    case "descripcion":
-                        p.Descripcion = nuevoValor;
-                        _productLogic.modificarProducto(p, nombreProd);
-                        mensajeACliente = "Descripción del producto actualizada con éxito.";
-                        break;
-
-                    case "precio":
-                        if (float.TryParse(nuevoValor, out float nuevoPrecio))
-                        {
-                            p.Precio = nuevoPrecio;
-                            _productLogic.modificarProducto(p, nombreProd);
-                            mensajeACliente = "Precio del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de precio no es válido.";
-                        }
-                        break;
-
-                    case "imagen":
-                        p.Imagen = nuevoValor;
-                        _productLogic.modificarProducto(p, nombreProd);
-                        mensajeACliente = "Imagen del producto actualizada con éxito.";
-                        break;
-
-                    case "stock":
-                        if (int.TryParse(nuevoValor, out int nuevoStock))
-                        {
-
-                            p.Stock = nuevoStock;
-                            _productLogic.modificarProducto(p, nombreProd);
-                            mensajeACliente = "Stock del producto actualizado con éxito.";
-                        }
-                        else
-                        {
-                            mensajeACliente = "El nuevo valor de stock no es válido.";
-                        }
-                        break;
-
-                    default:
-                        mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
-                        break;
+                    string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
+                    if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
+                    fileHandler.ReceiveFile(_filesPath);
+                    mensajeACliente = "Imagen del producto actualizada con éxito.";
+                } else
+                {
+                    _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
                 }
             }
-            else {
-                mensajeACliente = "El producto ingresado no existe :(";
+            catch(Exception e)
+            {
+                mensajeACliente = e.Message;
             }
             
             return mensajeACliente;
 
         }
-		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler, Usuario user)
+
+		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler)
         {
             string mensajeAlCliente = "";
             try
@@ -119,16 +77,26 @@ namespace ServerApp.Controllers
                 // Capturamos la informacion
                 string info = msgHandler.ReceiveMessage();
                 string[] datos = info.Split("#");
-                string nombre = datos[0];
-                string descripcion = datos[1];
-                float precio = float.Parse(datos[2]);
-                string imagen = datos[3];
-                int stock = int.Parse(datos[4]);
+                string user = datos[0];
+                string nombre = datos[1];
+                string descripcion = datos[2];
+                float precio = float.Parse(datos[3]);
+                string pathImagen = datos[4];
+                int stock = int.Parse(datos[5]);
 
-                // Creamos el producto con la info obtenida
-                Producto producto = new Producto(nombre, descripcion, precio, imagen, stock);
+                Producto producto;
 
-                fileHandler.ReceiveFile();
+                if(pathImagen != Protocol.NoImage)
+                {
+                    // Creamos el producto con la info obtenida
+                    producto = new (nombre, descripcion, precio, stock, DameNombreImagen(pathImagen));
+                    // Recibimos la imagen
+                    fileCommsHandler.ReceiveFile(_filesPath);
+                } else
+                {
+                    // Creamos el producto sin imagen
+                    producto = new (nombre, descripcion, precio, stock);
+                }
 
                 // Llamamos a la lógica para publicarlo
                 _productLogic.publicarProducto(producto, user);
@@ -136,57 +104,58 @@ namespace ServerApp.Controllers
             }
             catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-                mensajeAlCliente = "Ocurrió un error: " + e.Message;
+                mensajeAlCliente = "Hubo un error: " + e.Message;
 			}
             return mensajeAlCliente;
         }
-        public string eliminarProducto(MessageCommsHandler msgHandler, Usuario user) {
+
+        public string eliminarProducto(MessageCommsHandler msgHandler) {
             string retorno = "";
             try {
-                string nombreProd = msgHandler.ReceiveMessage();
-                retorno = "Se ha eliminado exitosamente el producto: "+ _productLogic.eliminarProducto(nombreProd).Nombre;
+                string[] datos = msgHandler.ReceiveMessage().Split("#");
+                string username = datos[0];
+                string nombreProd = datos[1];
+
+                Producto eliminado = _productLogic.eliminarProducto(nombreProd, username);
+                if (eliminado.Imagen != Protocol.NoImage) BorrarImagen(_filesPath, eliminado.Imagen);
+
+                retorno = "Se ha eliminado exitosamente el producto: "+ eliminado.Nombre;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                retorno = "Ocurrió un error: " + e.Message;
+                retorno = "Hubo un error: " + e.Message;
             }
             return retorno;
         
         }
-        public string productosBuscados(MessageCommsHandler msgHandler, Usuario user) {
+
+        public string productosBuscados(MessageCommsHandler msgHandler)
+        {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();
             StringBuilder retorno = new StringBuilder();
             try {
                 // Capturamos la informacion
                 string nombreProd = msgHandler.ReceiveMessage();
+
                 // Buscamos el prodcuto con la informacion
-                listaProd = _productLogic.buscarProductoPorNombre(nombreProd);
-                if (listaProd.Count > 0)
+                listaProd = _productLogic.BuscarProductos(nombreProd);
+
+                foreach (Producto producto in listaProd)
                 {
-                    foreach (Producto producto in listaProd)
-                    {
-                        retorno.AppendLine(i + "- " + producto.Nombre);
-                        i++;
-                    }
-                    return retorno.ToString();
+                    retorno.AppendLine(i + "- " + producto.Nombre);
+                    i++;
                 }
-                else {
-                    string ret = "No existen productos con ese nombre";
-                    return ret;
-                }
+                return retorno.ToString();
 
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
-                string ret = "Ocurrió un error: " + e.Message;
-                return ret;
+                return "Hubo un error: " + e.Message;
             }
             
         }
-        public string verMasProducto(MessageCommsHandler msgHandler, Usuario user)
+
+        public string verMasProducto(MessageCommsHandler msgHandler)
         {
             
             StringBuilder retorno = new StringBuilder();
@@ -194,30 +163,20 @@ namespace ServerApp.Controllers
             {
                 // Capturamos la informacion
                 string nombreProd = msgHandler.ReceiveMessage();
+
                 // Buscamos el prodcuto con la informacion
-                if (_productLogic.buscarProductoPorNombre(nombreProd).Count > 0)
-                {
-                    Producto p = _productLogic.buscarProductoPorNombre(nombreProd)[0];
-                    retorno.AppendLine("Nombre: " + p.Nombre);
-                    retorno.AppendLine("Descripcion: " + p.Descripcion);
-                    retorno.AppendLine("Precio: " + p.Precio.ToString());
-                    retorno.AppendLine("Ruta de imagen: " + p.Imagen);
-                    retorno.AppendLine("Nombre de imagen: " + DameNombreImagen(p.Imagen));
-                    retorno.AppendLine("Stock: " + p.Stock.ToString());
+                Producto p = _productLogic.VerMasProducto(nombreProd);
+                retorno.AppendLine("Nombre: " + p.Nombre);
+                retorno.AppendLine("Descripcion: " + p.Descripcion);
+                retorno.AppendLine("Precio: " + p.Precio.ToString());
+                if(p.Imagen != Protocol.NoImage) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
+                retorno.AppendLine("Stock: " + p.Stock.ToString());
 
-                    return retorno.ToString();
-                }
-                else {
-                    string ret = "El nombre del producto ingresado no existe :(";
-                    return ret;
-                }
-
+                return retorno.ToString();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                string ret = "Ocurrió un error: " + e.Message;
-                return ret;
+                return "Hubo un error: " + e.Message;
             }
             
 
@@ -225,9 +184,15 @@ namespace ServerApp.Controllers
 
         private string DameNombreImagen(string imagen)
         {
-            FileHandler _fileHandeler = new FileHandler();
+           FileHandler _fileHandeler = new FileHandler();
 
            return _fileHandeler.GetFileName(imagen);
+        }
+
+        private void BorrarImagen(string pathImagenesGuardadas, string nombreImagen)
+        {
+            FileHandler _fileHandler = new FileHandler();
+            _fileHandler.DeleteFile(pathImagenesGuardadas+nombreImagen);
         }
     }
 }
