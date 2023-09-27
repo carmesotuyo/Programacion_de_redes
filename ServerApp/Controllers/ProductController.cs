@@ -64,7 +64,7 @@ namespace ServerApp.Controllers
                     mensajeACliente = "Imagen del producto actualizada con éxito.";
                 } else
                 {
-                    _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
+                    mensajeACliente = _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
                 }
             }
             catch(Exception e)
