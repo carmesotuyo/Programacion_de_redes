@@ -57,6 +57,7 @@ namespace ServerApp.Controllers
 
                 if(atributoAModificar == "imagen")
                 {
+                    validarNombreArchivoSinEspacios(nuevoValor);
                     string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
                     if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
                     fileHandler.ReceiveFile(_filesPath);
@@ -91,6 +92,7 @@ namespace ServerApp.Controllers
                 int stock = int.Parse(datos[5]);
 
                 Producto producto;
+                validarNombreArchivoSinEspacios(pathImagen);
 
                 if(pathImagen != Protocol.NoImage)
                 {
@@ -269,6 +271,12 @@ namespace ServerApp.Controllers
         {
             FileHandler _fileHandler = new FileHandler();
             _fileHandler.DeleteFile(pathImagenesGuardadas+nombreImagen);
+        }
+
+        private void validarNombreArchivoSinEspacios(string pathImagen)
+        {
+            string[] datos = pathImagen.Split(" ");
+            if (datos.Count() > 1) throw new Exception("La imagen ingresada no puede tener espacios en blanco en su nombre. Proba cambiandolos por '_' ");
         }
     }
 }
