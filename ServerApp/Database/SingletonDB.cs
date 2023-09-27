@@ -82,7 +82,7 @@ namespace ServerApp.Database
         }
         public Producto modificarProducto (Producto p, string nombreOriginalProd) {
 
-            Producto prodOriginal = buscarProductoPorNombre(nombreOriginalProd)[0];
+            Producto prodOriginal = buscarUnProducto(nombreOriginalProd);
 
             prodOriginal.Nombre = p.Nombre;
             prodOriginal.Descripcion = p.Descripcion;
