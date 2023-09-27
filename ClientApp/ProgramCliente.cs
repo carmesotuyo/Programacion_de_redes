@@ -207,15 +207,8 @@ namespace ClientApp
                             //Mandamos al server la informacion
                             msgHandler.SendMessage(nombreProductoMasInfo);
                             // Esperamos exito o error del server
-
-                            //string[] infoRecibida = msgHandler.ReceiveMessage().Split("#");
-                            //Console.WriteLine("Recibi " + infoRecibida.Count() + " cantidad de elementos");
-                            //string traeImagen = infoRecibida[0];
-                            //Console.WriteLine("trae imagen? " + traeImagen);
-                            //string nombreImagen = infoRecibida[1]; // viene como un espacio si no hay imagen asociada
-                            //Console.WriteLine("Nombre imagen: " + nombreImagen);
-                            //string datosAMostrar = infoRecibida[2];
                             Console.WriteLine(msgHandler.ReceiveMessage());
+                            // Validamos si debemos recibir una imagen asociada
                             string vieneImagen = msgHandler.ReceiveMessage();
                             if(vieneImagen == "1")
                             {
