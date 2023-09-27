@@ -11,10 +11,12 @@ namespace ServerApp.Logic
     public class UserLogic
     {
         private readonly SingletonDB _database;
+
         public UserLogic()
         {
             _database = SingletonDB.GetInstance();
         }
+
         public int VerificarLogin(string userPass)
         {
             int autenticado = 0;
@@ -25,7 +27,7 @@ namespace ServerApp.Logic
 
             Usuario usuario = usuarios.FirstOrDefault(u => u.mail == user);
 
-            
+
             if (usuario != null && usuario.clave == pass)
             {
                 autenticado = 1;
@@ -50,14 +52,43 @@ namespace ServerApp.Logic
                 throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
             }
         }
+        public List<Producto> darProductosComprados(Usuario u)
+        {
+            return _database.darListaProductosCompradosPorUsuario(u);
+        }
+        public List<Producto> agregarProductoACompras(Producto p, Usuario u)
+        {
+            if (_database.existeProducto(p))
+            {
+                if (_database.tieneStock(p))
+                {
+                    _database.agregarProductoACompras(p, u);
+                    return u.comprados;
+                }
+                else
+                {
+                    throw new Exception("El producto que quieres comprar no tiene stock disponible");
+                }
+
+            }
+            else
+            {
+                throw new Exception("El producto que quieres comprar no existe");
+            }
+        }
+        public Usuario buscarUsuario(string username)
+        {
+            return _database.buscarUsuario(username);
+        }
 
         public List<Producto> ProductosComprados(Usuario usuario)
         {
-            if (!_database.existeUsuario(usuario)) throw new Exception("El usuario no está registrado");
+            if (!_database.existeUsuario(usuario)) throw new Exception("El usuario no está registrado ");
             List<Producto> comprados = _database.productosComprados(usuario);
-            if (comprados.Count() == 0) throw new Exception("El usuario no compró ningún producto");
+            if (comprados.Count() == 0) throw new Exception("El usuario no compró ningún producto  ");
             return comprados;
         }
 
     }
 }
+

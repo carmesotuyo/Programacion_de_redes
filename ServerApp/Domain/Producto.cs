@@ -8,14 +8,14 @@ namespace ServerApp.Domain
 		public string Nombre { get; set; }
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
-		public string? Imagen { get; set; }
+		public string Imagen { get; set; }
 
         public int Stock { get; set; }
 		public List<Calificacion> calificaciones;
 
 		public int promedioCalificaciones;
 
-		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImagePath)
+		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImage)
 		{
 			Nombre = nombre;
 			Descripcion = descripcion;
@@ -24,10 +24,7 @@ namespace ServerApp.Domain
 			calificaciones = new List<Calificacion>();
 			id = globalIdCounter++;
             globalIdCounter++;
-			if (imagen != Protocol.NoImagePath)
-			{
-                Imagen = imagen;
-            }
+			Imagen = imagen;
 		}
 
 		public int agregarStock(int cantidad)
@@ -42,7 +39,7 @@ namespace ServerApp.Domain
             return Stock;
         }
 
-		public int actualizarPromedioDeCalificaciones()
+		private int actualizarPromedioDeCalificaciones()
 		{
 			int sumaPuntajes = 0;
 			int totalPuntajes = 0;
@@ -58,9 +55,10 @@ namespace ServerApp.Domain
 
 		public List<Calificacion> agregarCalificacion(Calificacion calificacion)
 		{
-			if (calificacion.producto == this)
+			if (calificacion.producto.Nombre == this.Nombre)
 			{
 				calificaciones.Add(calificacion);
+				actualizarPromedioDeCalificaciones();
                 return calificaciones;
             }
 			else throw new Exception("Esta calificación no pertenece a este producto.");

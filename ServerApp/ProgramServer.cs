@@ -11,15 +11,17 @@ namespace ServerApp
     public class ProgramServer
     {
         static readonly SettingsManager settingsMngr = new();
-        private static readonly ProductController _productController = new();
+        private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+        private static readonly ProductController _productController = new(filesPath);
         private static readonly UserController _userController = new();
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
-
+        NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
 
         public static void Main(string[] args)
         {
             ProgramServer server = new ProgramServer();
             server.agregarUsuarios();
+            server.agregarProductos();
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             
             var socketServer = new Socket(
@@ -74,8 +76,7 @@ namespace ServerApp
                     Console.WriteLine("opcion recibida {0}", comando); // debug
 
                     // Procesar la selección del cliente
-                    Usuario user = new("mail", "clave"); // TODO sacar esto, usar los datos posta que ingresa el cliente
-                    ProcesarSeleccion(msgHandler, comando, fileHandler, user);
+                    ProcesarSeleccion(msgHandler, comando, fileHandler);
                 }
 
 
@@ -91,7 +92,7 @@ namespace ServerApp
             }
         }
 
-        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, Usuario user)
+        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
         {
             switch (opcion)
             {
@@ -104,16 +105,19 @@ namespace ServerApp
                     break;
                 case "1":
                     Console.WriteLine("entramos a la opcion 1"); //debug
-                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler, user));
+                    msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    // Implementa la lógica para comprar un producto
+                    Console.WriteLine("entramos a la opcion 2"); //debug
+                    msgHandler.SendMessage(_userController.agregarProductoACompras(msgHandler));
                     break;
                 case "3":
-                    // Implementa la lógica para modificar un producto publicado
+                    Console.WriteLine("entramos a la opcion 3"); //debug
+                    msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler));
                     break;
                 case "4":
-                    // Implementa la lógica para eliminar un producto
+                    Console.WriteLine("entramos a la opcion 4"); //debug
+                    msgHandler.SendMessage(_productController.eliminarProducto(msgHandler));
                     break;
                 case "5":
                     Console.WriteLine("entramos a la opcion 5"); //debug
@@ -124,9 +128,16 @@ namespace ServerApp
                     msgHandler.SendMessage(_productController.verMasProducto(msgHandler));
                     break;
                 case "7":
-                    // Implementa la lógica para calificar un producto
-                    msgHandler.SendMessage(_productController.productosComprados(user));
-                    msgHandler.SendMessage(_productController.calificarProducto(msgHandler, user));
+                    string productos = _productController.productosComprados(msgHandler);
+                    msgHandler.SendMessage(productos);
+                    if(!productos.Contains("El usuario no compró"))
+                    {
+                        msgHandler.SendMessage(_productController.calificarProducto(msgHandler));
+                    }
+                    break;
+                case "8":
+                    Console.WriteLine("entramos a la opcion 8"); //debug
+                    msgHandler.SendMessage(_productController.darProductos());
                     break;
                 default:
                     // Opción no válida, TODO resolver que hacer
@@ -134,7 +145,7 @@ namespace ServerApp
             }
         }
 
-        public void agregarUsuarios()
+        private void agregarUsuarios()
         {
             foreach (string key in usuarios.AllKeys)
             {
@@ -144,6 +155,19 @@ namespace ServerApp
 
              
                 _userController.crearUsuario(correo, clave);
+            }
+        }
+        private void agregarProductos() {
+            foreach (string key in productos.AllKeys)
+            {
+                string[] prodInfo = productos[key].Split(',');
+                string nombreProd = prodInfo[0];
+                string descrProd = prodInfo[1];
+                float precio = float.Parse(prodInfo[2]);
+                int stock = int.Parse(prodInfo[3]);
+                string username = prodInfo[4];
+
+                _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
             }
         }
 

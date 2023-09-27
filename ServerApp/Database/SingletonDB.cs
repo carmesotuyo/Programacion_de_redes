@@ -10,6 +10,7 @@ namespace ServerApp.Database
         {
             _productos = new List<Producto>();
             _usuarios = new List<Usuario>();
+            _calificaciones = new List<Calificacion>();
         }
 
         private static SingletonDB? _instance;
@@ -34,11 +35,21 @@ namespace ServerApp.Database
             }
             return _instance;
         }
-
+        public List<Producto> darListaProductos() { 
+            return this._productos;
+        }
+      
+        public List<Producto> darListaProductosCompradosPorUsuario(Usuario u) {
+            List<Producto> retorno = new List<Producto>();
+            foreach (Producto p in u.comprados) { 
+                retorno.Add(p);
+            }
+            return retorno;
+        }
+      
         public List<Producto> agregarProducto(Producto producto)
         {
             _productos.Add(producto);
-            Console.WriteLine("Productos: " + _productos[0].Nombre);
             return _productos;
         }
 
@@ -52,8 +63,39 @@ namespace ServerApp.Database
             }
             return retorno;                
         }
+        public Producto buscarUnProducto(string nombre) {
+            foreach (Producto p in _productos)
+            {
+                if (p.Nombre.ToLower().Equals(nombre.ToLower()))
+                {
+                    return p;
+                }
+            }
+            throw new Exception("No existe tal producto :(");
+        }
+        public Producto eliminarProducto(Producto p) {
+            Producto ret = null;
+            foreach (Producto prod in _productos.ToList()) {
+                if (prod.Equals(p)) {
+                    _productos.Remove(prod);
+                    ret = prod;
+                }
+            }
 
+            return ret;
+        }
+        public Producto modificarProducto (Producto p, string nombreOriginalProd) {
 
+            Producto prodOriginal = buscarProductoPorNombre(nombreOriginalProd)[0];
+
+            prodOriginal.Nombre = p.Nombre;
+            prodOriginal.Descripcion = p.Descripcion;
+            prodOriginal.Precio = p.Precio;
+            prodOriginal.Imagen = p.Imagen;
+            prodOriginal.Stock = p.Stock;
+
+            return prodOriginal;
+        }
 
         public bool existeProducto(Producto producto)
         {
@@ -69,6 +111,15 @@ namespace ServerApp.Database
             }
             return existe;
         }
+        public bool tieneStock(Producto p) {
+            if (p.Stock > 0)
+            {
+                return true;
+            }
+            else { 
+                return false;
+            }
+        }
 
         public bool existeImagen(string nombreImagen)
         {
@@ -77,7 +128,7 @@ namespace ServerApp.Database
             foreach (Producto prod in _productos)
             {
                 // Tomando como supuesto que no se permiten imagenes con el mismo nombre en el servidor
-                if (prod.Imagen == nombreImagen)
+                if (prod.Imagen  == nombreImagen)
                 {
                     existe = true;
                 }
@@ -88,6 +139,11 @@ namespace ServerApp.Database
         public List<Usuario> usuarios()
         {
             return _usuarios;
+        }
+        public List<Producto> agregarProductoACompras(Producto p,Usuario u) {
+            u.comprados.Add(p);
+            p.Stock--;
+            return u.comprados;
         }
 
         //metodo para agregar usuarios
@@ -123,17 +179,18 @@ namespace ServerApp.Database
             return _productos.FirstOrDefault(p => p.Nombre == nombre);
         }
 
-        public Producto agregarCalificacion(string nombreProd, int puntaje)
+        public Producto agregarCalificacion(string nombreProd, int puntaje, string comentario)
         {
             Producto prod = encontrarProducto(nombreProd);
-            Calificacion cal = new(prod, puntaje);
+            Calificacion cal = new(prod, puntaje, comentario);
             _calificaciones.Add(cal);
             prod.agregarCalificacion(cal);
-            // DEBUG TODO CORREGIR
-            Producto encontrado = encontrarProducto(nombreProd);
-            Console.WriteLine("Producto " + encontrado + " calificado con " + encontrado.calificaciones);
-            // actualizarproducto ?
-            return encontrarProducto(nombreProd); // para validar que se haya actualizado en la bd
+            return prod;
+        }
+
+        public Usuario buscarUsuario(string username)
+        {
+            return _usuarios.FirstOrDefault(u => u.mail == username);
         }
     }
 }
