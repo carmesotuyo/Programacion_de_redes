@@ -41,9 +41,8 @@ namespace ServerApp.Controllers
             
         }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler) {
-
-
+        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        {
             string mensajeACliente = "";
             try
             {
@@ -54,7 +53,7 @@ namespace ServerApp.Controllers
                 string atributoAModificar = datos[2].ToLower();
                 string nuevoValor = datos[3];
 
-                Producto p = _productLogic.BuscarProductos(nombreProd)[0];
+                Producto p = _productLogic.buscarUnProducto(nombreProd);
 
                 if(atributoAModificar == "imagen")
                 {
