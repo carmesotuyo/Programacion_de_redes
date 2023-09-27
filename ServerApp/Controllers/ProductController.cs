@@ -178,7 +178,9 @@ namespace ServerApp.Controllers
                 {
                     vaImagen = true;
                     retorno.AppendLine("1#"+p.Imagen+"#"); // indicamos que va a recibir imagen
-                } else
+
+                }
+                else
                 {
                     retorno.AppendLine("0# #"); // indicamos que no va imagen
                 }
