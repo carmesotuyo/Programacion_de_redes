@@ -125,7 +125,17 @@ namespace ServerApp
                     break;
                 case "6":
                     Console.WriteLine("entramos a la opcion 6"); //debug
-                    msgHandler.SendMessage(_productController.verMasProducto(msgHandler));
+                    string info = _productController.verMasProducto(msgHandler);
+                    string[] datos = info.Split("#");
+                    string vaImagen = datos[0];
+                    string nombreImagen = datos[1];
+                    string mensajeAEnviar = datos[2];
+                    msgHandler.SendMessage(mensajeAEnviar);
+                    msgHandler.SendMessage(vaImagen);
+                    if (vaImagen == "1")
+                    {
+                        fileHandler.SendFile(filesPath + nombreImagen);
+                    }
                     break;
                 case "7":
                     string productos = _productController.productosComprados(msgHandler);

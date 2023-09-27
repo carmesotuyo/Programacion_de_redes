@@ -57,6 +57,7 @@ namespace ServerApp.Controllers
 
                 if(atributoAModificar == "imagen")
                 {
+                    validarNombreArchivoSinEspacios(nuevoValor);
                     string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
                     if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
                     fileHandler.ReceiveFile(_filesPath);
@@ -91,6 +92,7 @@ namespace ServerApp.Controllers
                 int stock = int.Parse(datos[5]);
 
                 Producto producto;
+                validarNombreArchivoSinEspacios(pathImagen);
 
                 if(pathImagen != Protocol.NoImage)
                 {
@@ -173,13 +175,22 @@ namespace ServerApp.Controllers
 
                 // Buscamos el prodcuto con la informacion
                 Producto p = _productLogic.VerMasProducto(nombreProd);
+                bool vaImagen = p.Imagen != Protocol.NoImage;
+                if (vaImagen)
+                {
+                    retorno.AppendLine("1#"+p.Imagen+"#"); // indicamos que va a recibir imagen
+                }
+                else
+                {
+                    retorno.AppendLine("0# #"); // indicamos que no va imagen
+                }
                 retorno.AppendLine("Nombre: " + p.Nombre);
                 retorno.AppendLine("Descripcion: " + p.Descripcion);
                 retorno.AppendLine("Precio: " + p.Precio.ToString());
-                if(p.Imagen != Protocol.NoImage) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
                 retorno.AppendLine("Stock: " + p.Stock.ToString());
+                if (vaImagen) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
 
-                if(p.calificaciones.Count > 0)
+                if (p.calificaciones.Count > 0)
                 {
                     retorno.AppendLine("Promedio de calificaciones: " + p.promedioCalificaciones);
                     retorno.AppendLine("Calificaciones: ");
@@ -260,6 +271,12 @@ namespace ServerApp.Controllers
         {
             FileHandler _fileHandler = new FileHandler();
             _fileHandler.DeleteFile(pathImagenesGuardadas+nombreImagen);
+        }
+
+        private void validarNombreArchivoSinEspacios(string pathImagen)
+        {
+            string[] datos = pathImagen.Split(" ");
+            if (datos.Count() > 1) throw new Exception("La imagen ingresada no puede tener espacios en blanco en su nombre. Proba cambiandolos por '_' ");
         }
     }
 }
