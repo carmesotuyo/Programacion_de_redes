@@ -1,47 +1,44 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/Logic/ProductLogic.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/ProgramServer.cs">
     <Files>
-      <File FileName="ClientApp/ProgramCliente.cs" Line="148" Column="54" />
-      <File FileName="ServerApp/ProgramServer.cs" Line="107" Column="72" />
-      <File FileName="ServerApp/Controllers/ProductController.cs" Line="121" Column="39" />
-      <File FileName="ServerApp/Domain/Producto.cs" />
-      <File FileName="ServerApp/Logic/UserLogic.cs" />
-      <File FileName="ServerApp/Database/SingletonDB.cs" Line="98" Column="21" />
-      <File FileName="ServerApp/Logic/ProductLogic.cs" Line="39" Column="31" />
-      <File FileName="ServerApp/Domain/Calificacion.cs" />
+      <File FileName="ServerApp/ProgramServer.cs" Line="120" Column="43" />
+      <File FileName="ServerApp/Controllers/ProductController.cs" Line="60" Column="67" />
+      <File FileName="ServerApp/Logic/ProductLogic.cs" Line="73" Column="17" />
+      <File FileName="ServerApp/Domain/Producto.cs" Line="53" Column="65" />
+      <File FileName="ServerApp/Logic/UserLogic.cs" Line="55" Column="52" />
+      <File FileName="ServerApp/Database/SingletonDB.cs" Line="88" Column="1" />
+      <File FileName="ServerApp/Domain/Calificacion.cs" Line="17" Column="1" />
       <File FileName="ServerApp/Domain/Usuario.cs" />
-      <File FileName="Communication/FileHandler.cs" Line="6" Column="21" />
+      <File FileName="Communication/FileHandler.cs" Line="42" Column="1" />
       <File FileName="Communication/Protocol.cs" />
       <File FileName="Communication/SettingsManager.cs" />
-      <File FileName="Communication/FileCommsHandler.cs" Line="22" Column="35" />
-      <File FileName="Communication/FileStreamHandler.cs" />
+      <File FileName="Communication/FileCommsHandler.cs" Line="40" Column="21" />
+      <File FileName="Communication/FileStreamHandler.cs" Line="29" Column="21" />
       <File FileName="Communication/SocketHelper.cs" />
-      <File FileName="ServerApp/App.config" />
-      <File FileName="ServerApp/ServerConfig.cs" />
+      <File FileName="ServerApp/ServerConfig.cs" Line="8" Column="1" />
+      <File FileName="Communication/MessageCommsHandler.cs" Line="31" Column="1" />
+      <File FileName="ServerApp/App.config" Line="21" Column="47" />
+      <File FileName="ServerApp/Controllers/UserController.cs" Line="31" Column="46" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="ClientApp" expanded="True" />
-            <Node name="Communication" expanded="True" />
             <Node name="ServerApp">
-              <Node name="Controllers" expanded="True" />
-              <Node name="Database" expanded="True" />
-              <Node name="Logic">
-                <Node name="ProductLogic.cs" selected="True" />
-              </Node>
+              <Node name="Domain" expanded="True" />
+              <Node name="Logic" expanded="True" />
+              <Node name="ProgramServer.cs" selected="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
 </Properties>

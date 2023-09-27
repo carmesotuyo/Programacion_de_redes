@@ -170,13 +170,22 @@ namespace ServerApp.Controllers
             {
                 // Capturamos la informacion
                 string nombreProd = msgHandler.ReceiveMessage();
+                bool vaImagen = false;
 
                 // Buscamos el prodcuto con la informacion
                 Producto p = _productLogic.VerMasProducto(nombreProd);
+                if (p.Imagen != Protocol.NoImage)
+                {
+                    vaImagen = true;
+                    retorno.AppendLine("1#"+p.Imagen+"#"); // indicamos que va a recibir imagen
+                } else
+                {
+                    retorno.AppendLine("0# #"); // indicamos que no va imagen
+                }
                 retorno.AppendLine("Nombre: " + p.Nombre);
                 retorno.AppendLine("Descripcion: " + p.Descripcion);
                 retorno.AppendLine("Precio: " + p.Precio.ToString());
-                if(p.Imagen != Protocol.NoImage) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
+                if(vaImagen) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
                 retorno.AppendLine("Stock: " + p.Stock.ToString());
 
                 if(p.calificaciones.Count > 0)

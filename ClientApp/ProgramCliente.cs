@@ -8,6 +8,8 @@ namespace ClientApp
     public class ProgramCliente
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
+        private static string filesPath = settingsMngr.ReadSettings(ClientConfig.imagePathconfigkey);
+
         public static void Main(string[] args)
         {
             bool estaAutenticado = false;
@@ -63,11 +65,6 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "1":
-                            //TODO:
-                            // pasar a otra carpeta mas prolija despues
-                            //agregar validacion para que no se puedan ingresar simbolos especiales -> #
-                            // validar en precio y stock que los tipos de datos se pueden parsear a int/float segun corresponde
-
                             if (estaAutenticado)
                             {
                                 Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
@@ -210,7 +207,16 @@ namespace ClientApp
                             //Mandamos al server la informacion
                             msgHandler.SendMessage(nombreProductoMasInfo);
                             // Esperamos exito o error del server
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            string[] infoRecibida = msgHandler.ReceiveMessage().Split("#");
+                            string traeImagen = infoRecibida[0];
+                            string nombreImagen = infoRecibida[1]; // viene como un espacio si no hay imagen asociada
+                            string datosAMostrar = infoRecibida[2];
+                            Console.WriteLine(datosAMostrar);
+                            if(traeImagen == "1")
+                            {
+                                fileHandler.ReceiveFile(filesPath);
+                                Console.WriteLine("Recibiste la imagen en tu carpeta seleccionada: "+filesPath);
+                            }
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "7":
