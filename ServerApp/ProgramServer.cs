@@ -128,7 +128,12 @@ namespace ServerApp
                     msgHandler.SendMessage(_productController.verMasProducto(msgHandler));
                     break;
                 case "7":
-                    // Implementa la lógica para calificar un producto
+                    string productos = _productController.productosComprados(msgHandler);
+                    msgHandler.SendMessage(productos);
+                    if(!productos.Contains("El usuario no compró"))
+                    {
+                        msgHandler.SendMessage(_productController.calificarProducto(msgHandler));
+                    }
                     break;
                 case "8":
                     Console.WriteLine("entramos a la opcion 8"); //debug

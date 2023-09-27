@@ -39,7 +39,7 @@ namespace ServerApp.Domain
             return Stock;
         }
 
-		public int actualizarPromedioDeCalificaciones()
+		private int actualizarPromedioDeCalificaciones()
 		{
 			int sumaPuntajes = 0;
 			int totalPuntajes = 0;
@@ -55,9 +55,10 @@ namespace ServerApp.Domain
 
 		public List<Calificacion> agregarCalificacion(Calificacion calificacion)
 		{
-			if (calificacion.producto == this)
+			if (calificacion.producto.Nombre == this.Nombre)
 			{
 				calificaciones.Add(calificacion);
+				actualizarPromedioDeCalificaciones();
                 return calificaciones;
             }
 			else throw new Exception("Esta calificación no pertenece a este producto.");

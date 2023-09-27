@@ -81,6 +81,14 @@ namespace ServerApp.Logic
             return _database.buscarUsuario(username);
         }
 
+        public List<Producto> ProductosComprados(Usuario usuario)
+        {
+            if (!_database.existeUsuario(usuario)) throw new Exception("El usuario no está registrado ");
+            List<Producto> comprados = _database.productosComprados(usuario);
+            if (comprados.Count() == 0) throw new Exception("El usuario no compró ningún producto  ");
+            return comprados;
+        }
+
     }
 }
 

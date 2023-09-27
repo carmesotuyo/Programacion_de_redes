@@ -9,6 +9,7 @@ namespace ServerApp.Controllers
 	public class ProductController
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
+        private readonly UserLogic _userLogic = new UserLogic();
         private readonly string _filesPath;
 
 		public ProductController(string filesPath)
@@ -40,9 +41,8 @@ namespace ServerApp.Controllers
             
         }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler) {
-
-
+        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        {
             string mensajeACliente = "";
             try
             {
@@ -53,7 +53,7 @@ namespace ServerApp.Controllers
                 string atributoAModificar = datos[2].ToLower();
                 string nuevoValor = datos[3];
 
-                Producto p = _productLogic.BuscarProductos(nombreProd)[0];
+                Producto p = _productLogic.buscarUnProducto(nombreProd);
 
                 if(atributoAModificar == "imagen")
                 {
@@ -63,7 +63,7 @@ namespace ServerApp.Controllers
                     mensajeACliente = "Imagen del producto actualizada con éxito.";
                 } else
                 {
-                    _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
+                    mensajeACliente = _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
                 }
             }
             catch(Exception e)
@@ -155,7 +155,8 @@ namespace ServerApp.Controllers
                 return retorno.ToString();
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return "Hubo un error: " + e.Message;
             }
             
@@ -178,6 +179,19 @@ namespace ServerApp.Controllers
                 if(p.Imagen != Protocol.NoImage) retorno.AppendLine("Nombre de imagen: " + p.Imagen);
                 retorno.AppendLine("Stock: " + p.Stock.ToString());
 
+                if(p.calificaciones.Count > 0)
+                {
+                    retorno.AppendLine("Promedio de calificaciones: " + p.promedioCalificaciones);
+                    retorno.AppendLine("Calificaciones: ");
+                    foreach (Calificacion cal in p.calificaciones)
+                    {
+                        retorno.AppendLine("Puntaje: " + cal.puntaje + ". Comentario: " + cal.comentario);
+                    }
+                } else
+                {
+                    retorno.AppendLine("El producto aun no ha sido calificado");
+                }
+                
                 return retorno.ToString();
             }
             catch (Exception e)
@@ -193,6 +207,53 @@ namespace ServerApp.Controllers
            FileHandler _fileHandeler = new FileHandler();
 
            return _fileHandeler.GetFileName(imagen);
+        }
+
+        public string productosComprados(MessageCommsHandler msgHandler)
+        {
+            StringBuilder retorno = new StringBuilder();
+            try
+            {
+                // Recibimos el user para mostrarle sus productos comprados
+                string user = msgHandler.ReceiveMessage();
+                Usuario u = _userLogic.buscarUsuario(user);
+
+                List<Producto> productos = _userLogic.ProductosComprados(u);
+
+                retorno.AppendLine("Sus productos comprados:");
+                foreach (Producto prod in productos)
+                {
+                    retorno.AppendLine(" - " + prod.Nombre);
+                }
+
+                return retorno.ToString();
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        public string calificarProducto(MessageCommsHandler msgHandler)
+        {
+            string mensajeAlCliente = "";
+            try
+            {
+                // Capturamos la informacion
+                string info = msgHandler.ReceiveMessage();
+                string[] datos = info.Split("#");
+                string user = datos[0];
+                string nombreProd = datos[1];
+                string puntaje = datos[2];
+                string comentario = datos[3];
+
+                mensajeAlCliente = _productLogic.calificarProducto(user, nombreProd, puntaje, comentario);
+            }
+            catch (Exception e)
+            {
+                mensajeAlCliente = "Hubo un error: " + e.Message;
+            }
+            return mensajeAlCliente;
         }
 
         private void BorrarImagen(string pathImagenesGuardadas, string nombreImagen)

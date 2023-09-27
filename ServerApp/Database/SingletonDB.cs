@@ -10,11 +10,12 @@ namespace ServerApp.Database
         {
             _productos = new List<Producto>();
             _usuarios = new List<Usuario>();
+            _calificaciones = new List<Calificacion>();
         }
 
         private static SingletonDB? _instance;
         private List<Producto> _productos;
-        //private List<Calificacion> _calificaciones; // a implementar en otro PR
+        private List<Calificacion> _calificaciones;
         private List<Usuario> _usuarios;
 
 
@@ -39,11 +40,7 @@ namespace ServerApp.Database
         }
       
         public List<Producto> darListaProductosCompradosPorUsuario(Usuario u) {
-            List<Producto> retorno = new List<Producto>();
-            foreach (Producto p in u.comprados) { 
-                retorno.Add(p);
-            }
-            return retorno;
+            return u.comprados;
         }
       
         public List<Producto> agregarProducto(Producto producto)
@@ -51,8 +48,9 @@ namespace ServerApp.Database
             _productos.Add(producto);
             return _productos;
         }
+
         public List<Producto> buscarProductoPorNombre(string nombre)
-{
+        {
             List<Producto> retorno = new List<Producto>();
             foreach (Producto p in _productos) {
                 if (p.Nombre.Contains(nombre)) { 
@@ -84,7 +82,7 @@ namespace ServerApp.Database
         }
         public Producto modificarProducto (Producto p, string nombreOriginalProd) {
 
-            Producto prodOriginal = buscarProductoPorNombre(nombreOriginalProd)[0];
+            Producto prodOriginal = buscarUnProducto(nombreOriginalProd);
 
             prodOriginal.Nombre = p.Nombre;
             prodOriginal.Descripcion = p.Descripcion;
@@ -164,6 +162,26 @@ namespace ServerApp.Database
                 }
             }
             return existe;
+        }
+
+        public List<Producto> productosComprados(Usuario usuario)
+        {
+            Usuario usuarioEncontrado = _usuarios.FirstOrDefault(u => u.mail == usuario.mail);
+            return usuarioEncontrado.comprados;
+        }
+
+        public Producto encontrarProducto(string nombre)
+        {
+            return _productos.FirstOrDefault(p => p.Nombre == nombre);
+        }
+
+        public Producto agregarCalificacion(string nombreProd, int puntaje, string comentario)
+        {
+            Producto prod = encontrarProducto(nombreProd);
+            Calificacion cal = new(prod, puntaje, comentario);
+            _calificaciones.Add(cal);
+            prod.agregarCalificacion(cal);
+            return prod;
         }
 
         public Usuario buscarUsuario(string username)

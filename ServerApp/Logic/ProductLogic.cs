@@ -2,6 +2,7 @@ using ServerApp.Database;
 using ServerApp.Domain;
 using Communication;
 using System;
+using System.Linq;
 
 namespace ServerApp.Logic
 {
@@ -136,6 +137,47 @@ namespace ServerApp.Logic
 		{
 			existeProducto(nombreProd);
 			return buscarUnProducto(nombreProd);
+        }
+
+		public string calificarProducto(string username, string nombreProducto, string puntaje, string comentario)
+		{
+			string ret = "";
+			int punt;
+			try
+			{
+                comproElProducto(username, nombreProducto);
+                punt = validarPuntaje(puntaje);
+                Producto prod = _database.agregarCalificacion(nombreProducto, punt, comentario);
+                ret = "Producto " + prod.Nombre + " calificado con puntaje " + puntaje;
+            } catch(Exception e)
+			{
+				ret = e.Message;
+			}
+			return ret;
+
+        }
+
+        private int validarPuntaje(string puntaje)
+        {
+            int p;
+            string msjError = "Debe ingresar un valor numérico entero del 1 al 5 ";
+            try
+            {
+                p = int.Parse(puntaje);
+                if (p < 1 || p > 5) throw new Exception(msjError);
+            } catch(Exception e)
+            {
+                throw new Exception(msjError);
+            }
+            return p;
+        }
+
+        private void comproElProducto(string username, string nombreProducto)
+        {
+            existeProducto(nombreProducto);
+            Usuario u = _userLogic.buscarUsuario(username);
+            Producto p = buscarUnProducto(nombreProducto);
+            if (!u.comprados.Contains(p)) throw new Exception("No compraste el producto " + p.Nombre);
         }
 
         private void existeProducto(string nombre)

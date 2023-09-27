@@ -120,12 +120,19 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "2":
-                            Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
-                            Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
-                            string nombreProductoAComprar = Console.ReadLine();
-                            msgHandler.SendMessage("2");
-                            msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
+                                Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
+                                string nombreProductoAComprar = Console.ReadLine();
+                                msgHandler.SendMessage("2");
+                                msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            } else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
+                            
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "3":
@@ -207,8 +214,35 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "7":
-                            Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
-                            // Implementa la lógica para calificar un producto aquí
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
+                                // Enviamos el comando y mostramos el listado de productos comprados por el user
+                                msgHandler.SendMessage("7");
+                                msgHandler.SendMessage(user);
+                                string productos = msgHandler.ReceiveMessage();
+                                Console.WriteLine(productos);
+
+                                if(!productos.Contains("El usuario no compró"))
+                                {
+                                    // Le pedimos la información para calificar
+                                    Console.WriteLine("Ingrese el nombre del producto que desea calificar");
+                                    string productoACalificar = Console.ReadLine();
+                                    Console.WriteLine("Ingrese un valor entero del 1 al 5 para calificar su producto");
+                                    string puntaje = Console.ReadLine();
+                                    Console.WriteLine("Escriba un comentario, si no quiere dejar comentario presione enter");
+                                    string comentario = Console.ReadLine();
+
+                                    msgHandler.SendMessage(user + "#" + productoACalificar + "#" + puntaje + "#" + comentario);
+                                    Console.WriteLine(msgHandler.ReceiveMessage());
+                                }
+
+                                Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
                             break;
                         case "8":
                             Console.WriteLine("Seleccionó la opción 8: Ver todos los productos");
