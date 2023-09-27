@@ -125,7 +125,6 @@ namespace ServerApp
                     break;
                 case "6":
                     Console.WriteLine("entramos a la opcion 6"); //debug
-                    //msgHandler.SendMessage(_productController.verMasProducto(msgHandler, fileHandler, filesPath));
                     string info = _productController.verMasProducto(msgHandler);
                     string[] datos = info.Split("#");
                     string vaImagen = datos[0];
