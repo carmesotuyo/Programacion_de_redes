@@ -40,11 +40,7 @@ namespace ServerApp.Database
         }
       
         public List<Producto> darListaProductosCompradosPorUsuario(Usuario u) {
-            List<Producto> retorno = new List<Producto>();
-            foreach (Producto p in u.comprados) { 
-                retorno.Add(p);
-            }
-            return retorno;
+            return u.comprados;
         }
       
         public List<Producto> agregarProducto(Producto producto)
