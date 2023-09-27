@@ -120,12 +120,19 @@ namespace ClientApp
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "2":
-                            Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
-                            Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
-                            string nombreProductoAComprar = Console.ReadLine();
-                            msgHandler.SendMessage("2");
-                            msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
-                            Console.WriteLine(msgHandler.ReceiveMessage());
+                            if (estaAutenticado)
+                            {
+                                Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
+                                Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
+                                string nombreProductoAComprar = Console.ReadLine();
+                                msgHandler.SendMessage("2");
+                                msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
+                                Console.WriteLine(msgHandler.ReceiveMessage());
+                            } else
+                            {
+                                Console.WriteLine("Para realizar esta acción debes estar logeado");
+                            }
+                            
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
                         case "3":
