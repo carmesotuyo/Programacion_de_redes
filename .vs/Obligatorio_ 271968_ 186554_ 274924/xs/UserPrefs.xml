@@ -1,23 +1,27 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ClientApp/ProgramCliente.cs">
+    <Files>
+      <File FileName="ServerApp/ProgramServer.cs" />
+      <File FileName="ClientApp/ProgramCliente.cs" Line="330" Column="10" />
+      <File FileName="ServerApp/Controllers/UserController.cs" />
+      <File FileName="ServerApp/Logic/UserLogic.cs" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="ServerApp">
-              <Node name="Database" expanded="True" />
-              <Node name="ProgramServer.cs" selected="True" />
-            </Node>
+            <Node name="ClientApp" expanded="True" selected="True" />
+            <Node name="ServerApp" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
