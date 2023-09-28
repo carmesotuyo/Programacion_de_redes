@@ -1,8 +1,6 @@
 using ServerApp.Database;
 using ServerApp.Domain;
 using Communication;
-using System;
-using System.Linq;
 
 namespace ServerApp.Logic
 {
@@ -26,7 +24,7 @@ namespace ServerApp.Logic
 			Usuario usuario = _userLogic.buscarUsuario(username);
 			_database.agregarProducto(producto);
 			usuario.agregarProductoAPublicados(producto);
-			return _database.buscarUnProducto(producto.Nombre); // confirmamos que se guardó
+			return producto;
 		}
 
 		private void validarProductoRepetido(Producto producto)

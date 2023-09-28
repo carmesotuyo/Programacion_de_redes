@@ -9,10 +9,8 @@ namespace ServerApp.Domain
 		public string Descripcion { get; set; }
 		public float Precio { get; set; }
 		public string Imagen { get; set; }
-
         public int Stock { get; set; }
 		public List<Calificacion> calificaciones;
-
 		public int promedioCalificaciones;
 
 		public Producto(string nombre, string descripcion, float precio, int stock, string imagen = Protocol.NoImage)

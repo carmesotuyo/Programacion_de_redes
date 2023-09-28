@@ -1,11 +1,7 @@
 ﻿using Communication;
 using ServerApp.Domain;
 using ServerApp.Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerApp.Controllers
 {
@@ -30,7 +26,6 @@ namespace ServerApp.Controllers
         }
 
         public string agregarProductoACompras(MessageCommsHandler msgHandler) {
-            Console.WriteLine("llegue al metodo");
             string mensajeACliente = "";
             string user = "";
             string nombreProd = "";
@@ -59,7 +54,7 @@ namespace ServerApp.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                mensajeACliente = "Ocurrió un error: " + ex.Message;
+                mensajeACliente = "Hubo un error: " + ex.Message;
 
             }
             return mensajeACliente;

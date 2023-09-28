@@ -111,8 +111,7 @@ namespace Communication
                     offset += Protocol.MaxPacketSize;
                 }
                 //3- Escribo esa parte del archivo a disco
-                _fileStreamHandler.Write(fileName, data); // recibe el archivo en el mismo lugar donde esta la aplicacion, podemos definir un path donde queremos que se reciban los archivos
-                // habria que verificar que no haya otro archivo con el mismo nombre
+                _fileStreamHandler.Write(fileName, data);
                 currentPart++;
             }
         }
