@@ -16,6 +16,8 @@ namespace ServerApp
         private static readonly UserController _userController = new();
         NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
         NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
+        private static Dictionary<Socket, bool> clientesConectados = new();
+        private static bool salir = false;
 
         public static void Main(string[] args)
         {
@@ -23,6 +25,7 @@ namespace ServerApp
             server.agregarUsuarios();
             server.agregarProductos();
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
+            Console.WriteLine("Para cerrar este servidor ingrese 'salir' en cualquier momento");
             
             var socketServer = new Socket(
             AddressFamily.InterNetwork,
@@ -38,25 +41,49 @@ namespace ServerApp
             socketServer.Bind(localEndpoint); // vinculo el socket al EndPoint
             socketServer.Listen(2); // Pongo al Servidor en modo escucha
             int clientes = 0;
-            bool salir = false;
-
+            new Thread(() => CerrarServidor(socketServer)).Start();
 
             while (!salir)
             {
                 var socketClient = socketServer.Accept();
+                clientesConectados.Add(socketClient, true);
                 clientes++;
                 int nro = clientes;
                 Console.WriteLine("Acepte un nuevo pedido de Conexion");
                 new Thread(() => ManejarCliente(socketClient, nro)).Start();
-
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
             // Cierro el socket
-            socketServer.Shutdown(SocketShutdown.Both);
-            socketServer.Close();
+        }
 
+        static void CerrarServidor(Socket socketServer)
+        {
+            try
+            {
+                salir = Console.ReadLine() == "salir";
+                if (salir)
+                {
+                    // cerramos todas las conexiones con los clientes
+                    foreach (Socket cliente in clientesConectados.Keys)
+                    {
+                        MessageCommsHandler msgHandler = new(cliente);
+                        msgHandler.SendMessage("El servidor se deconectará ");
+                        cliente.Shutdown(SocketShutdown.Both);
+                        cliente.Disconnect(false);
+                    }
+
+                    //cerramos el server
+                    socketServer.Shutdown(SocketShutdown.Both);
+                    socketServer.Close();
+                    Console.WriteLine("Servidor cerrado con exito");
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine("Hubo un error al cerrar el servidor: "+e.Message);
+            }
+            
         }
 
         static void ManejarCliente(Socket socketCliente, int nro)
@@ -67,7 +94,7 @@ namespace ServerApp
 
             try
             {
-                bool clienteConectado = true;
+                bool clienteConectado = clientesConectados.First(c => c.Key == socketCliente).Value;
 
                 while (clienteConectado)
                 {
