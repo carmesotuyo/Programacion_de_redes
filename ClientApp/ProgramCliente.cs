@@ -254,9 +254,10 @@ namespace ClientApp
                             Console.WriteLine(msgHandler.ReceiveMessage());
                             Console.WriteLine("Ingrese un valor del menú principal para realizar otra acción");
                             break;
-                        case "desconectar":
+                        case "salir":
                             parar = true;
                             Console.WriteLine("Desconectando");
+                            socketCliente.Disconnect(true);
                             break;
                         default:
                             Console.WriteLine("Opción no válida. Ingrese un valor dentro las opciones indicadas previamente.");
@@ -269,10 +270,10 @@ namespace ClientApp
                 Console.WriteLine("Error de comunicacion: " + ex);
             }
             finally {
-                Console.WriteLine("Cierro el Cliente");
                 // Cerrar la conexion.
                 socketCliente.Shutdown(SocketShutdown.Both);
                 socketCliente.Close();
+                Console.WriteLine("Cliente cerrado");
             }        
         }
 
@@ -293,6 +294,7 @@ namespace ClientApp
             menu.AppendLine("* Seleccione 6 para ver más acerca de un producto");
             menu.AppendLine("* Seleccione 7 para calificar un producto");
             menu.AppendLine("* Seleccione 8 para ver el listado de productos");
+            menu.AppendLine("Escriba 'salir' para desconectarse");
             menu.AppendLine("Muchas gracias por elegirnos!");
             menu.AppendLine("****************************");
             return menu.ToString();

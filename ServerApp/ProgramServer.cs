@@ -2,7 +2,6 @@
 using System.Net;
 using Communication;
 using ServerApp.Controllers;
-using ServerApp.Domain;
 using System.Collections.Specialized;
 using System.Configuration;
 
@@ -69,13 +68,13 @@ namespace ServerApp
                     // cerramos todas las conexiones con los clientes
                     foreach (Socket cliente in clientesConectados.Keys)
                     {
-                        MessageCommsHandler msgHandler = new(cliente);
+                        //MessageCommsHandler msgHandler = new(cliente);
                         //msgHandler.SendMessage("El servidor se deconectará ");
-                        Console.WriteLine("Cerrando cliente {0}", clientenro);
-                        cliente.Shutdown(SocketShutdown.Both);
-                        //cliente.Disconnect(false);
-                        cliente.Close();
-                        Console.WriteLine("Cerre cliente {0}", clientenro);
+                        Console.WriteLine("Desconectando cliente {0}", clientenro);
+                        //cliente.Shutdown(SocketShutdown.Both);
+                        cliente.Disconnect(false);
+                        //cliente.Close();
+                        Console.WriteLine("Desconecte cliente {0}", clientenro);
                         clientenro++;
                     }
 
@@ -120,7 +119,7 @@ namespace ServerApp
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Cliente {0} {1}", nro, e.Message);
             }
         }
 
