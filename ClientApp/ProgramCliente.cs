@@ -11,13 +11,14 @@ namespace ClientApp
         private static string filesPath = settingsMngr.ReadSettings(ClientConfig.imagePathconfigkey);
         private static string elegirOtraOpcionMsg = "Ingrese un valor del menú principal para realizar otra acción";
         private static string noEstaLogueadoMsg = "Para realizar esta acción debes estar logeado";
+        private static bool estaAutenticado = false;
+        private static string user = "";
 
         public static void Main(string[] args)
         {
-            bool estaAutenticado = false;
-            string user = "";
             bool parar = false;
             Console.WriteLine("Iniciando Aplicacion Cliente....!!!");
+
             while (!parar)
             {
                 Console.WriteLine("Presione enter para conectarse al Servidor");
@@ -38,30 +39,30 @@ namespace ClientApp
                             switch (comando)
                             {
                                 case "0":
-                                    Autenticarse(user, msgHandler, estaAutenticado);
-                                    
+                                    Autenticarse(msgHandler);
+
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "1":
-                                    if (estaAutenticado) PublicarProducto(user, msgHandler, fileHandler);
+                                    if (estaAutenticado) PublicarProducto(msgHandler, fileHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "2":
-                                    if (estaAutenticado) ComprarProducto(user, msgHandler);
+                                    if (estaAutenticado) ComprarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "3":
-                                    if (estaAutenticado) ModificarProducto(user, msgHandler, fileHandler);
+                                    if (estaAutenticado) ModificarProducto(msgHandler, fileHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "4":
-                                    if (estaAutenticado) EliminarProducto(user, msgHandler);
+                                    if (estaAutenticado) EliminarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
@@ -77,7 +78,7 @@ namespace ClientApp
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "7":
-                                    if (estaAutenticado) CalificarProducto(user, msgHandler);
+                                    if (estaAutenticado) CalificarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
@@ -155,7 +156,7 @@ namespace ClientApp
             return menu.ToString();
         }
 
-        private static void Autenticarse(string user, MessageCommsHandler msgHandler, bool estaAutenticado)
+        private static void Autenticarse(MessageCommsHandler msgHandler)
         {
             msgHandler.SendMessage("0");
             string credenciales = Login.PedirDatosLogin();
@@ -175,7 +176,7 @@ namespace ClientApp
             }
         }
 
-        private static void PublicarProducto(string user, MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        private static void PublicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
             Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
 
@@ -220,7 +221,7 @@ namespace ClientApp
             Console.WriteLine(msgHandler.ReceiveMessage());
         }
 
-        private static void ComprarProducto(string user, MessageCommsHandler msgHandler)
+        private static void ComprarProducto(MessageCommsHandler msgHandler)
         {
             Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
             Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
@@ -230,7 +231,7 @@ namespace ClientApp
             Console.WriteLine(msgHandler.ReceiveMessage());
         }
 
-        private static void ModificarProducto(string user, MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        private static void ModificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
             Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
             Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
@@ -258,7 +259,7 @@ namespace ClientApp
             Console.WriteLine(msgHandler.ReceiveMessage());
         }
 
-        private static void EliminarProducto(string user, MessageCommsHandler msgHandler)
+        private static void EliminarProducto(MessageCommsHandler msgHandler)
         {
             Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
             Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
@@ -304,7 +305,7 @@ namespace ClientApp
             }
         }
 
-        private static void CalificarProducto(string user, MessageCommsHandler msgHandler)
+        private static void CalificarProducto(MessageCommsHandler msgHandler)
         {
             Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
             // Enviamos el comando y mostramos el listado de productos comprados por el user
