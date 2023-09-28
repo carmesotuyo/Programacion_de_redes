@@ -1,5 +1,4 @@
-﻿using System;
-namespace ServerApp.Domain
+﻿namespace ServerApp.Domain
 {
 	public class Calificacion
 	{
@@ -7,12 +6,12 @@ namespace ServerApp.Domain
 		public string comentario;
 		public Producto producto;
 
-		public Calificacion(Producto producto, int puntaje, string comentario)
+		public Calificacion(Producto producto, int puntaje, string comentario = "")
 		{
             this.producto = producto;
 			this.puntaje = puntaje;
-			this.comentario = comentario;
-		}
+            this.comentario = comentario;
+        }
 	}
 }
 
