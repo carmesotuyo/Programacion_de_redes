@@ -1,31 +1,31 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/carmelasotuyo/Desktop/PDR/N6A_274924_186554_271968/ServerApp/ProgramServer.cs" relfile="ServerApp/ProgramServer.cs" line="84" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/ProgramServer.cs">
     <Files>
-      <File FileName="ServerApp/Controllers/UserController.cs" Line="4" Column="19" IsPinned="True" />
-      <File FileName="ServerApp/ProgramServer.cs" Line="84" Column="84" />
-      <File FileName="ServerApp/Controllers/ProductController.cs" />
-      <File FileName="ClientApp/ProgramCliente.cs" />
-      <File FileName="Communication/FileStreamHandler.cs" />
-      <File FileName="ClientApp/Login.cs" />
+      <File FileName="ServerApp/ProgramServer.cs" Line="120" Column="78" />
+      <File FileName="ServerApp/Controllers/ProductController.cs" Line="1" Column="1" />
+      <File FileName="ClientApp/ProgramCliente.cs" Line="263" Column="78" />
+      <File FileName="Communication/SocketHelper.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="ServerApp" expanded="True">
+            <Node name="ClientApp" selected="True" />
+            <Node name="ServerApp">
               <Node name="Controllers" expanded="True" />
-              <Node name="ProgramServer.cs" selected="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

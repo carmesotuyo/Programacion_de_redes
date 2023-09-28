@@ -44,12 +44,19 @@ namespace ServerApp
 
             while (!salir)
             {
-                var socketClient = socketServer.Accept();
-                clientesConectados.Add(socketClient, true);
-                clientes++;
-                int nro = clientes;
-                Console.WriteLine("Acepte un nuevo pedido de Conexion");
-                new Thread(() => ManejarCliente(socketClient, nro)).Start();
+                try
+                {
+                    var socketClient = socketServer.Accept();
+                    clientesConectados.Add(socketClient, true);
+                    clientes++;
+                    int nro = clientes;
+                    Console.WriteLine("Acepte un nuevo pedido de Conexion");
+                    new Thread(() => ManejarCliente(socketClient, nro)).Start();
+                }
+                catch(Exception e)
+                {
+                    //Console.WriteLine("hola");
+                }
             }
 
             //Console.ReadLine();
@@ -68,18 +75,19 @@ namespace ServerApp
                     // cerramos todas las conexiones con los clientes
                     foreach (Socket cliente in clientesConectados.Keys)
                     {
-                        //MessageCommsHandler msgHandler = new(cliente);
-                        //msgHandler.SendMessage("El servidor se deconectará ");
-                        Console.WriteLine("Desconectando cliente {0}", clientenro);
-                        //cliente.Shutdown(SocketShutdown.Both);
-                        cliente.Disconnect(false);
-                        //cliente.Close();
-                        Console.WriteLine("Desconecte cliente {0}", clientenro);
+                        if (clientesConectados[cliente]) // desconecta solo los que estaban conectados
+                        {
+                            Console.WriteLine("Desconectando cliente {0}", clientenro);
+                            cliente.Disconnect(false);
+                            //cliente.Shutdown(SocketShutdown.Both);
+                            //cliente.Close();
+                            Console.WriteLine("Desconecte cliente {0}", clientenro);
+                        }
                         clientenro++;
                     }
 
                     //cerramos el server
-                    socketServer.Shutdown(SocketShutdown.Both);
+                    //socketServer.Shutdown(SocketShutdown.Both);
                     socketServer.Close();
                     Console.WriteLine("Servidor cerrado con exito");
                 }
@@ -98,16 +106,16 @@ namespace ServerApp
 
             try
             {
-                bool clienteConectado = clientesConectados.First(c => c.Key == socketCliente).Value;
 
-                while (clienteConectado)
+                while (clientesConectados.First(c => c.Key == socketCliente).Value)
                 {
                     // Leer la selección del cliente
                     string comando = msgHandler.ReceiveMessage();
                     Console.WriteLine("opcion recibida {0}", comando); // debug
 
                     // Procesar la selección del cliente
-                    ProcesarSeleccion(msgHandler, comando, fileHandler);
+                    bool desconecta = ProcesarSeleccion(msgHandler, comando, fileHandler);
+                    if(desconecta) clientesConectados[socketCliente] = false;
                 }
 
 
@@ -123,7 +131,7 @@ namespace ServerApp
             }
         }
 
-        private static void ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
+        private static bool ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
         {
             switch (opcion)
             {
@@ -131,7 +139,6 @@ namespace ServerApp
                     Console.WriteLine("El cliente entro a la opcion 0"); //debug
                     string datosLogin = msgHandler.ReceiveMessage();
                     Console.WriteLine("Datos de login " + datosLogin); //debug
-                    //logica de login
                     msgHandler.SendMessage(""+_userController.VerificarLogin(datosLogin));
                     break;
                 case "1":
@@ -180,10 +187,13 @@ namespace ServerApp
                     Console.WriteLine("entramos a la opcion 8"); //debug
                     msgHandler.SendMessage(_productController.darProductos());
                     break;
+                case "Desconectando cliente":
+                    return true;
                 default:
-                    // Opción no válida, TODO resolver que hacer
+                    // Opción no válida, espera otra opción del cliente
                     break;
             }
+            return false;
         }
 
         private void agregarUsuarios()
