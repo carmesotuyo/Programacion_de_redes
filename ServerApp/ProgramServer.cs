@@ -65,13 +65,18 @@ namespace ServerApp
                 salir = Console.ReadLine() == "salir";
                 if (salir)
                 {
+                    int clientenro = 1;
                     // cerramos todas las conexiones con los clientes
                     foreach (Socket cliente in clientesConectados.Keys)
                     {
                         MessageCommsHandler msgHandler = new(cliente);
-                        msgHandler.SendMessage("El servidor se deconectará ");
+                        //msgHandler.SendMessage("El servidor se deconectará ");
+                        Console.WriteLine("Cerrando cliente {0}", clientenro);
                         cliente.Shutdown(SocketShutdown.Both);
-                        cliente.Disconnect(false);
+                        //cliente.Disconnect(false);
+                        cliente.Close();
+                        Console.WriteLine("Cerre cliente {0}", clientenro);
+                        clientenro++;
                     }
 
                     //cerramos el server
