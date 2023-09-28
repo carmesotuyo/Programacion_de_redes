@@ -26,7 +26,6 @@ namespace ServerApp.Controllers
         }
 
         public string agregarProductoACompras(MessageCommsHandler msgHandler) {
-            Console.WriteLine("llegue al metodo");
             string mensajeACliente = "";
             string user = "";
             string nombreProd = "";
@@ -55,7 +54,7 @@ namespace ServerApp.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                mensajeACliente = "Ocurrió un error: " + ex.Message;
+                mensajeACliente = "Hubo un error: " + ex.Message;
 
             }
             return mensajeACliente;

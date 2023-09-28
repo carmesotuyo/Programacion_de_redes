@@ -30,8 +30,7 @@ namespace ServerApp.Logic
 
             return autenticado;
         }
-
-        //metodo para agregar un usuario
+        
         public Usuario agregarUsuario(string mail, string clave)
         {
             Usuario newUser = new Usuario(mail, clave);
@@ -42,35 +41,22 @@ namespace ServerApp.Logic
 
         private void validarUsuarioRepetido(Usuario usuario)
         {
-            if (_database.existeUsuario(usuario))
-            {
-                throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
-            }
+            if (_database.existeUsuario(usuario)) throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
         }
+
         public List<Producto> darProductosComprados(Usuario u)
         {
             return _database.darListaProductosCompradosPorUsuario(u);
         }
+
         public List<Producto> agregarProductoACompras(Producto p, Usuario u)
         {
-            if (_database.existeProducto(p))
-            {
-                if (_database.tieneStock(p))
-                {
-                    _database.agregarProductoACompras(p, u);
-                    return u.comprados;
-                }
-                else
-                {
-                    throw new Exception("El producto que quieres comprar no tiene stock disponible");
-                }
-
-            }
-            else
-            {
-                throw new Exception("El producto que quieres comprar no existe");
-            }
+            if (!_database.existeProducto(p)) throw new Exception("El producto que quieres comprar no existe");
+            if (!_database.tieneStock(p)) throw new Exception("El producto que quieres comprar no tiene stock disponible");
+            _database.agregarProductoACompras(p, u);
+            return u.comprados; 
         }
+
         public Usuario buscarUsuario(string username)
         {
             return _database.buscarUsuario(username);

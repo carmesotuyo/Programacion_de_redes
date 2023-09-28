@@ -142,7 +142,6 @@ namespace ServerApp.Database
             return u.comprados;
         }
 
-        //metodo para agregar usuarios
         public List<Usuario> agregarUsuario(Usuario usuario)
         {
             _usuarios.Add(usuario);

@@ -25,20 +25,23 @@ namespace ServerApp
             server.agregarProductos();
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             Console.WriteLine("Para cerrar este servidor ingrese 'salir' en cualquier momento");
-            
-            var socketServer = new Socket(
-            AddressFamily.InterNetwork,
-                SocketType.Stream,
-                    ProtocolType.Tcp);
 
-            string ipServer = settingsMngr.ReadSettings(ServerConfig.serverIPconfigkey);
-            int ipPort = int.Parse(settingsMngr.ReadSettings(ServerConfig.serverPortconfigkey));
+            Socket socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                string ipServer = settingsMngr.ReadSettings(ServerConfig.serverIPconfigkey);
+                int ipPort = int.Parse(settingsMngr.ReadSettings(ServerConfig.serverPortconfigkey));
 
-            var localEndpoint = new IPEndPoint(IPAddress.Parse(ipServer), ipPort);
-            // puertos 0 a 65535   pero del 1 al 1024 estan reservados  
+                var localEndpoint = new IPEndPoint(IPAddress.Parse(ipServer), ipPort);
+                // puertos 0 a 65535   pero del 1 al 1024 estan reservados  
 
-            socketServer.Bind(localEndpoint); // vinculo el socket al EndPoint
-            socketServer.Listen(2); // Pongo al Servidor en modo escucha
+                socketServer.Bind(localEndpoint); // vinculo el socket al EndPoint
+                socketServer.Listen(2); // Pongo al Servidor en modo escucha
+
+            } catch(Exception e)
+            {
+                Console.WriteLine("Hubo un error al iniciar el servidor: " + e.Message);
+            }
             int clientes = 0;
             new Thread(() => CerrarServidor(socketServer)).Start();
 
@@ -55,13 +58,9 @@ namespace ServerApp
                 }
                 catch(Exception e)
                 {
-                    //Console.WriteLine("hola");
+                    Console.WriteLine("Hubo un error al intentar aceptar un cliente: " + e.Message);
                 }
             }
-
-            //Console.ReadLine();
-
-            // Cierro el socket
         }
 
         static void CerrarServidor(Socket socketServer)
@@ -77,23 +76,19 @@ namespace ServerApp
                     {
                         if (clientesConectados[cliente]) // desconecta solo los que estaban conectados
                         {
-                            Console.WriteLine("Desconectando cliente {0}", clientenro);
                             cliente.Disconnect(false);
-                            //cliente.Shutdown(SocketShutdown.Both);
-                            //cliente.Close();
                             Console.WriteLine("Desconecte cliente {0}", clientenro);
                         }
                         clientenro++;
                     }
 
                     //cerramos el server
-                    //socketServer.Shutdown(SocketShutdown.Both);
                     socketServer.Close();
                     Console.WriteLine("Servidor cerrado con exito");
                 }
             } catch(Exception e)
             {
-                Console.WriteLine("Hubo un error al cerrar el servidor: "+e.Message);
+                Console.WriteLine("Hubo un error al cerrar el servidor: " + e.Message);
             }
             
         }
@@ -111,7 +106,6 @@ namespace ServerApp
                 {
                     // Leer la selección del cliente
                     string comando = msgHandler.ReceiveMessage();
-                    Console.WriteLine("opcion recibida {0}", comando); // debug
 
                     // Procesar la selección del cliente
                     bool desconecta = ProcesarSeleccion(msgHandler, comando, fileHandler);
@@ -136,33 +130,25 @@ namespace ServerApp
             switch (opcion)
             {
                 case "0":
-                    Console.WriteLine("El cliente entro a la opcion 0"); //debug
                     string datosLogin = msgHandler.ReceiveMessage();
-                    Console.WriteLine("Datos de login " + datosLogin); //debug
                     msgHandler.SendMessage(""+_userController.VerificarLogin(datosLogin));
                     break;
                 case "1":
-                    Console.WriteLine("entramos a la opcion 1"); //debug
                     msgHandler.SendMessage(_productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    Console.WriteLine("entramos a la opcion 2"); //debug
                     msgHandler.SendMessage(_userController.agregarProductoACompras(msgHandler));
                     break;
                 case "3":
-                    Console.WriteLine("entramos a la opcion 3"); //debug
                     msgHandler.SendMessage(_productController.modificarProducto(msgHandler, fileHandler));
                     break;
                 case "4":
-                    Console.WriteLine("entramos a la opcion 4"); //debug
                     msgHandler.SendMessage(_productController.eliminarProducto(msgHandler));
                     break;
                 case "5":
-                    Console.WriteLine("entramos a la opcion 5"); //debug
                     msgHandler.SendMessage(_productController.productosBuscados(msgHandler));
                     break;
                 case "6":
-                    Console.WriteLine("entramos a la opcion 6"); //debug
                     string info = _productController.verMasProducto(msgHandler);
                     string[] datos = info.Split("#");
                     string vaImagen = datos[0];
@@ -184,10 +170,9 @@ namespace ServerApp
                     }
                     break;
                 case "8":
-                    Console.WriteLine("entramos a la opcion 8"); //debug
                     msgHandler.SendMessage(_productController.darProductos());
                     break;
-                case "Desconectando cliente":
+                case "salir":
                     return true;
                 default:
                     // Opción no válida, espera otra opción del cliente
@@ -208,6 +193,7 @@ namespace ServerApp
                 _userController.crearUsuario(correo, clave);
             }
         }
+
         private void agregarProductos() {
             foreach (string key in productos.AllKeys)
             {
