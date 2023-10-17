@@ -64,12 +64,12 @@ namespace Communication
             while (fileSize > offset)
             {
                 byte[] data;
-                //Es el último segmento?
+                //Es el ultimo segmento?
                 if (currentPart == fileParts)
                 {
                     var lastPartSize = (int)(fileSize - offset);
-                    //1- Leo de disco el último segmento
-                    //2- Guardo el último segmento en un buffer
+                    //1- Leo de disco el ultimo segmento
+                    //2- Guardo el ultimo segmento en un buffer
                     data = _fileStreamHandler.Read(path, offset, lastPartSize); //Puntos 1 y 2
                     offset += lastPartSize;
                 }
@@ -81,7 +81,7 @@ namespace Communication
                     offset += Protocol.MaxPacketSize;
                 }
 
-                _socketHelper.Send(data); //3- Envío ese segmento a travez de la red
+                _socketHelper.Send(data); //3- Envio ese segmento a travez de la red
                 currentPart++;
             }
         }

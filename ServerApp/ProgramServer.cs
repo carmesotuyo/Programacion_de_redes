@@ -104,10 +104,10 @@ namespace ServerApp
 
                 while (clientesConectados.First(c => c.Key == socketCliente).Value)
                 {
-                    // Leer la selección del cliente
+                    // Leer la seleccion del cliente
                     string comando = msgHandler.ReceiveMessage();
 
-                    // Procesar la selección del cliente
+                    // Procesar la seleccion del cliente
                     bool desconecta = ProcesarSeleccion(msgHandler, comando, fileHandler);
                     if(desconecta) clientesConectados[socketCliente] = false;
                 }
@@ -164,7 +164,7 @@ namespace ServerApp
                 case "7":
                     string productos = _productController.productosComprados(msgHandler);
                     msgHandler.SendMessage(productos);
-                    if(!productos.Contains("El usuario no compró"))
+                    if(!productos.Contains("El usuario no compro"))
                     {
                         msgHandler.SendMessage(_productController.calificarProducto(msgHandler));
                     }
@@ -175,7 +175,7 @@ namespace ServerApp
                 case "salir":
                     return true;
                 default:
-                    // Opción no válida, espera otra opción del cliente
+                    // Opcion no valida, espera otra opcion del cliente
                     break;
             }
             return false;

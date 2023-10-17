@@ -41,7 +41,7 @@ namespace ServerApp.Logic
 
         private void validarUsuarioRepetido(Usuario usuario)
         {
-            if (_database.existeUsuario(usuario)) throw new Exception("El mail que intentas ingresar ya está en uso, prueba con otro");
+            if (_database.existeUsuario(usuario)) throw new Exception("El mail que intentas ingresar ya esta en uso, prueba con otro");
         }
 
         public List<Producto> darProductosComprados(Usuario u)
@@ -64,9 +64,9 @@ namespace ServerApp.Logic
 
         public List<Producto> ProductosComprados(Usuario usuario)
         {
-            if (!_database.existeUsuario(usuario)) throw new Exception("El usuario no está registrado ");
+            if (!_database.existeUsuario(usuario)) throw new Exception("El usuario no esta registrado ");
             List<Producto> comprados = _database.productosComprados(usuario);
-            if (comprados.Count() == 0) throw new Exception("El usuario no compró ningún producto  ");
+            if (comprados.Count() == 0) throw new Exception("El usuario no compro ningun producto  ");
             return comprados;
         }
 

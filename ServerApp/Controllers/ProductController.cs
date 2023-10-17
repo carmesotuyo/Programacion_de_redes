@@ -61,7 +61,7 @@ namespace ServerApp.Controllers
                     string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
                     if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
                     fileHandler.ReceiveFile(_filesPath);
-                    mensajeACliente = "Imagen del producto actualizada con éxito.";
+                    mensajeACliente = "Imagen del producto actualizada con exito.";
                 } else
                 {
                     mensajeACliente = _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
@@ -106,7 +106,7 @@ namespace ServerApp.Controllers
                     producto = new (nombre, descripcion, precio, stock);
                 }
 
-                // Llamamos a la lógica para publicarlo
+                // Llamamos a la logica para publicarlo
                 _productLogic.publicarProducto(producto, user);
                 mensajeAlCliente = "Producto ingresado con exito: " + nombre;
             }

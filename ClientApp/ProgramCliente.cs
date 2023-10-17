@@ -9,8 +9,8 @@ namespace ClientApp
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
         private static string filesPath = settingsMngr.ReadSettings(ClientConfig.imagePathconfigkey);
-        private static string elegirOtraOpcionMsg = "Ingrese un valor del menú principal para realizar otra acción";
-        private static string noEstaLogueadoMsg = "Para realizar esta acción debes estar logeado";
+        private static string elegirOtraOpcionMsg = "Ingrese un valor del menu principal para realizar otra accion";
+        private static string noEstaLogueadoMsg = "Para realizar esta accion debes estar logeado";
         private static bool estaAutenticado = false;
         private static string user = "";
 
@@ -95,7 +95,7 @@ namespace ClientApp
                                     socketCliente.Disconnect(true);
                                     break;
                                 default:
-                                    Console.WriteLine("Opción no válida. Ingrese un valor dentro las opciones indicadas previamente.");
+                                    Console.WriteLine("Opcion no valida. Ingrese un valor dentro las opciones indicadas previamente.");
                                     break;
                             }
                         }
@@ -137,7 +137,7 @@ namespace ClientApp
 
         private static string GetMenu()
         {
-            // Define el menú y devuelve su representación en cadena
+            // Define el menu y devuelve su representacion en cadena
             StringBuilder menu = new StringBuilder();
             menu.AppendLine("****************************");
             menu.AppendLine("Bienvenido a dreamteam Shop");
@@ -147,7 +147,7 @@ namespace ClientApp
             menu.AppendLine("* Seleccione 3 para modificar un producto publicado");
             menu.AppendLine("* Seleccione 4 para eliminar un producto");
             menu.AppendLine("* Seleccione 5 para buscar un producto");
-            menu.AppendLine("* Seleccione 6 para ver más acerca de un producto");
+            menu.AppendLine("* Seleccione 6 para ver mas acerca de un producto");
             menu.AppendLine("* Seleccione 7 para calificar un producto");
             menu.AppendLine("* Seleccione 8 para ver el listado de productos");
             menu.AppendLine("Escriba 'salir' para desconectarse");
@@ -178,13 +178,13 @@ namespace ClientApp
 
         private static void PublicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
+            Console.WriteLine("Selecciono la opcion 1: Publicar un producto");
 
-            // Le pedimos la información al cliente
+            // Le pedimos la informacion al cliente
             Console.WriteLine("Ingrese nombre del producto");
             string nombre = Console.ReadLine();
 
-            Console.WriteLine("Ingrese una descripción para su producto");
+            Console.WriteLine("Ingrese una descripcion para su producto");
             string descripcion = Console.ReadLine();
 
             Console.WriteLine("Ingrese el precio");
@@ -223,7 +223,7 @@ namespace ClientApp
 
         private static void ComprarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
+            Console.WriteLine("Selecciono la opcion 2: Comprar un producto");
             Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
             string nombreProductoAComprar = Console.ReadLine();
             msgHandler.SendMessage("2");
@@ -233,7 +233,7 @@ namespace ClientApp
 
         private static void ModificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
+            Console.WriteLine("Selecciono la opcion 3: Modificar un producto publicado");
             Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
 
             string nombreProducto = Console.ReadLine();
@@ -261,7 +261,7 @@ namespace ClientApp
 
         private static void EliminarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
+            Console.WriteLine("Selecciono la opcion 4: Eliminar un producto");
             Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
             string nombreProductoABorrar = Console.ReadLine();
             //Mandamos al server el comando
@@ -274,7 +274,7 @@ namespace ClientApp
 
         private static void BuscarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 5: Buscar un producto");
+            Console.WriteLine("Selecciono la opcion 5: Buscar un producto");
             Console.WriteLine("Para buscar porfavor ingrese alguna letra que contenga el nombre del producto que busca");
             string textoABuscar = Console.ReadLine();
             //Mandamos al server el comando
@@ -287,7 +287,7 @@ namespace ClientApp
 
         private static void VerMasInfoProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 6: Ver más acerca de un producto");
+            Console.WriteLine("Selecciono la opcion 6: Ver mas acerca de un producto");
             Console.WriteLine("Para buscar porfavor ingrese nombre del producto que quiere ver mas informacion");
             string nombreProductoMasInfo = Console.ReadLine();
             //Mandamos al server el comando
@@ -307,16 +307,16 @@ namespace ClientApp
 
         private static void CalificarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
+            Console.WriteLine("Selecciono la opcion 7: Calificar un producto");
             // Enviamos el comando y mostramos el listado de productos comprados por el user
             msgHandler.SendMessage("7");
             msgHandler.SendMessage(user);
             string productos = msgHandler.ReceiveMessage();
             Console.WriteLine(productos);
 
-            if (!productos.Contains("El usuario no compró"))
+            if (!productos.Contains("El usuario no compro"))
             {
-                // Le pedimos la información para calificar
+                // Le pedimos la informacion para calificar
                 Console.WriteLine("Ingrese el nombre del producto que desea calificar");
                 string productoACalificar = Console.ReadLine();
                 Console.WriteLine("Ingrese un valor entero del 1 al 5 para calificar su producto");
@@ -331,7 +331,7 @@ namespace ClientApp
 
         private static void VerTodosProductos(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 8: Ver todos los productos");
+            Console.WriteLine("Selecciono la opcion 8: Ver todos los productos");
             msgHandler.SendMessage("8");
             Console.WriteLine(msgHandler.ReceiveMessage());
         }
