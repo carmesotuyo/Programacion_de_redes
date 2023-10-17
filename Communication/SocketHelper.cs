@@ -1,49 +1,51 @@
-﻿using System.Net.Sockets;
+﻿using System.Drawing;
+using System.Net.Sockets;
 
 namespace Communication
 {
     public class SocketHelper
     {
-        private readonly Socket _socket;
+        private readonly TcpClient _tcpClient;
 
-        public SocketHelper(Socket socket)
+        public SocketHelper(TcpClient tcpClient)
         {
-            _socket = socket;
+            _tcpClient = tcpClient;
         }
 
-        public void Send(byte[] data)
+        public async Task SendAsync(byte[] data)
         {
             int offset = 0;
-            while (offset < data.Length)
-            {
-                var sent = _socket.Send(
-                    data,
-                    offset,
-                    data.Length - offset,
-                    SocketFlags.None);
-                if (sent == 0)
-                    throw new Exception("Connection lost");
-                offset += sent;
-            }
+            int size = data.Length;
+
+            // Necesitamos pedir el stream para enviar
+            var networkStream = _tcpClient.GetStream();
+
+            await networkStream.WriteAsync(data, offset, size);
         }
 
-        public byte[] Receive(int length)
+        public async Task<byte[]> ReceiveAsync(int length)
         {
             int offset = 0;
             var data = new byte[length];
-            while (offset < length)
-            {
-                var received = _socket.Receive(
-                    data,
-                    offset,
-                    length - offset,
-                    SocketFlags.None);
-                if (received == 0)
-                    throw new Exception("Connection lost");
-                offset += received;
-            }
+            var networkStream = _tcpClient.GetStream();
 
-            return data;
+            try
+            {
+                while (offset < length)
+                {
+
+                    int received = await networkStream.ReadAsync(data, offset, length - offset);
+
+                    offset += received;
+
+                }
+                return data;
+            }
+            catch
+            {
+                throw new Exception("Cliente desconectado");
+
+            }
         }
     }
 }
