@@ -39,7 +39,7 @@ namespace ServerApp.Logic
 
         public void ValidarImagenRepetida(string imagen)
         {
-            if (_database.existeImagen(imagen)) throw new Exception("Una imagen con ese nombre ya existe, probá cambiándolo :)");
+            if (_database.existeImagen(imagen)) throw new Exception("Una imagen con ese nombre ya existe, proba cambiandolo :)");
         }
 
         public void ValidarNombreRepetido(string nombre)
@@ -80,23 +80,23 @@ namespace ServerApp.Logic
                 case "nombre":
                     ValidarNombreRepetido(nuevoValor);
                     producto.Nombre = nuevoValor;
-                    mensajeACliente = "Nombre del producto actualizado con éxito.";
+                    mensajeACliente = "Nombre del producto actualizado con exito.";
                     break;
 
                 case "descripcion":
                     producto.Descripcion = nuevoValor;
-                    mensajeACliente = "Descripción del producto actualizada con éxito.";
+                    mensajeACliente = "Descripcion del producto actualizada con exito.";
                     break;
 
                 case "precio":
                     if (float.TryParse(nuevoValor, out float nuevoPrecio))
                     {
                         producto.Precio = nuevoPrecio;
-                        mensajeACliente = "Precio del producto actualizado con éxito.";
+                        mensajeACliente = "Precio del producto actualizado con exito.";
                     }
                     else
                     {
-                        mensajeACliente = "El nuevo valor de precio no es válido.";
+                        mensajeACliente = "El nuevo valor de precio no es valido.";
                     }
                     break;
 
@@ -104,16 +104,16 @@ namespace ServerApp.Logic
                     if (int.TryParse(nuevoValor, out int nuevoStock))
                     {
                         producto.Stock = nuevoStock;
-                        mensajeACliente = "Stock del producto actualizado con éxito.";
+                        mensajeACliente = "Stock del producto actualizado con exito.";
                     }
                     else
                     {
-                        mensajeACliente = "El nuevo valor de stock no es válido.";
+                        mensajeACliente = "El nuevo valor de stock no es valido.";
                     }
                     break;
 
                 default:
-                    mensajeACliente = "Atributo no válido. No se realizó ninguna actualización.";
+                    mensajeACliente = "Atributo no valido. No se realizo ninguna actualizacion.";
                     break;
 
             }
@@ -158,7 +158,7 @@ namespace ServerApp.Logic
         private int validarPuntaje(string puntaje)
         {
             int p;
-            string msjError = "Debe ingresar un valor numérico entero del 1 al 5 ";
+            string msjError = "Debe ingresar un valor numerico entero del 1 al 5 ";
             try
             {
                 p = int.Parse(puntaje);
@@ -185,7 +185,7 @@ namespace ServerApp.Logic
 
         private void tienePermisos(string usuario, Producto producto)
         {
-            if (!esQuienPublicoElProducto(usuario, producto)) throw new Exception("No tiene permiso para modificar un producto que no publicó");
+            if (!esQuienPublicoElProducto(usuario, producto)) throw new Exception("No tiene permiso para modificar un producto que no publico");
         }
 
         private bool esQuienPublicoElProducto(string username, Producto prod)

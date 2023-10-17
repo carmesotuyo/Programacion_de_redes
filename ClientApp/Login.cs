@@ -4,7 +4,7 @@
     {
         public static string PedirDatosLogin()
         {
-            Console.WriteLine("Seleccionó la opción 0: Iniciar sesión");
+            Console.WriteLine("Selecciono la opcion 0: Iniciar sesion");
             Console.WriteLine("Ingrese su usuario: ");
             string user = Console.ReadLine();
             Console.WriteLine("Ingrese su contraseña: ");
