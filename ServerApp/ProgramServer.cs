@@ -60,7 +60,12 @@ namespace ServerApp
                     }
                 }
 
-            } catch(Exception e)
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("Cliente desconectado por un error");
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("Hubo un error al iniciar el servidor: " + e.Message);
             }
