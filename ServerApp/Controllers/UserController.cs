@@ -25,7 +25,7 @@ namespace ServerApp.Controllers
             _userLogic.agregarUsuario(mail, clave);
         }
 
-        public string agregarProductoACompras(MessageCommsHandler msgHandler) {
+        public async Task<string> agregarProductoACompras(MessageCommsHandler msgHandler) {
             string mensajeACliente = "";
             string user = "";
             string nombreProd = "";
@@ -33,7 +33,7 @@ namespace ServerApp.Controllers
                 int i = 1;
                 
                 StringBuilder retorno = new StringBuilder();
-                string informacionRecibida = msgHandler.ReceiveMessage();
+                string informacionRecibida = await msgHandler.ReceiveMessageAsync();
                 string[] info = informacionRecibida.Split("#");
                 user = info[0];
                 nombreProd = info[1];

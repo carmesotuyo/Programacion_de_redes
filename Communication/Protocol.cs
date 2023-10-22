@@ -10,10 +10,10 @@ namespace Communication
         public const int MaxPacketSize = 32768; //32KB tamaño maximo de los paquetes que vamos a enviar
         public const string NoImage = "SIN_IMAGEN";
 
-        public static long CalculateFileParts(long fileSize)
+        public static async Task<long> CalculateFilePartsAsync(long fileSize)
         {
             var fileParts = fileSize / MaxPacketSize;
-            return fileParts * MaxPacketSize == fileSize ? fileParts : fileParts + 1; // si sobra hace un paquete mas
+            return await Task.Run(() => fileParts * MaxPacketSize == fileSize ? fileParts : fileParts + 1);
         }
     }
 }
