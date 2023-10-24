@@ -10,12 +10,13 @@ namespace Communication
 
         public async Task<string> GetFileNameAsync(string path)
         {
-            if (await FileExistsAsync(path))
-            {
-                return new FileInfo(path).Name;
-            }
+            //if (await FileExistsAsync(path))
+            //{
+            //    return new FileInfo(path).Name;
+            //}
 
-            throw new Exception("File does not exist");
+            //throw new Exception("File does not exist");
+            return new FileInfo(path).Name;
         }
 
 
