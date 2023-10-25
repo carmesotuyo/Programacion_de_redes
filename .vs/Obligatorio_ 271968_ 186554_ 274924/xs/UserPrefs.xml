@@ -1,4 +1,8 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ClientApp/ProgramCliente.cs">
     <Files>
       <File FileName="ServerApp/ProgramServer.cs" />
@@ -9,7 +13,7 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Obligatorio_ 271968_ 186554_ 274924">
+          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
             <Node name="ClientApp" expanded="True" selected="True" />
             <Node name="ServerApp" expanded="True" />
           </Node>
@@ -17,11 +21,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
