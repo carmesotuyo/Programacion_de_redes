@@ -9,12 +9,12 @@ namespace ClientApp
     {
         static readonly SettingsManager settingsMngr = new SettingsManager();
         private static string filesPath = settingsMngr.ReadSettings(ClientConfig.imagePathconfigkey);
-        private static string elegirOtraOpcionMsg = "Ingrese un valor del menú principal para realizar otra acción";
-        private static string noEstaLogueadoMsg = "Para realizar esta acción debes estar logeado";
+        private static string elegirOtraOpcionMsg = "Ingrese un valor del menu principal para realizar otra accion";
+        private static string noEstaLogueadoMsg = "Para realizar esta accion debes estar logeado";
         private static bool estaAutenticado = false;
         private static string user = "";
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             bool parar = false;
             Console.WriteLine("Iniciando Aplicacion Cliente....!!!");
@@ -24,10 +24,10 @@ namespace ClientApp
                 Console.WriteLine("Presione enter para conectarse al Servidor");
                 if (Console.ReadLine()!= null)
                 {
-                    Socket socketCliente = ConectarseAlServidor();
+                    TcpClient tcpClient = await ConectarseAlServidorAsync();
 
-                    MessageCommsHandler msgHandler = new MessageCommsHandler(socketCliente);
-                    FileCommsHandler fileHandler = new FileCommsHandler(socketCliente);
+                    MessageCommsHandler msgHandler = new MessageCommsHandler(tcpClient);
+                    FileCommsHandler fileHandler = new FileCommsHandler(tcpClient);
 
                     try
                     {
@@ -39,63 +39,63 @@ namespace ClientApp
                             switch (comando)
                             {
                                 case "0":
-                                    Autenticarse(msgHandler);
+                                    await Autenticarse(msgHandler);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "1":
-                                    if (estaAutenticado) PublicarProducto(msgHandler, fileHandler);
+                                    if (estaAutenticado) await PublicarProducto(msgHandler, fileHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "2":
-                                    if (estaAutenticado) ComprarProducto(msgHandler);
+                                    if (estaAutenticado) await ComprarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "3":
-                                    if (estaAutenticado) ModificarProducto(msgHandler, fileHandler);
+                                    if (estaAutenticado) await ModificarProducto(msgHandler, fileHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "4":
-                                    if (estaAutenticado) EliminarProducto(msgHandler);
+                                    if (estaAutenticado) await EliminarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "5":
-                                    BuscarProducto(msgHandler);
+                                    await BuscarProducto(msgHandler);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "6":
-                                    VerMasInfoProducto(msgHandler, fileHandler);
+                                    await VerMasInfoProducto(msgHandler, fileHandler);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "7":
-                                    if (estaAutenticado) CalificarProducto(msgHandler);
+                                    if (estaAutenticado) await CalificarProducto(msgHandler);
                                     else Console.WriteLine(noEstaLogueadoMsg);
 
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "8":
-                                    VerTodosProductos(msgHandler);
+                                    await VerTodosProductos(msgHandler);
                                     
                                     Console.WriteLine(elegirOtraOpcionMsg);
                                     break;
                                 case "salir":
                                     parar = true;
                                     Console.WriteLine("Desconectando");
-                                    msgHandler.SendMessage("salir");
-                                    socketCliente.Disconnect(true);
+                                    await msgHandler.SendMessageAsync("salir");
+                                    tcpClient.Close();
                                     break;
                                 default:
-                                    Console.WriteLine("Opción no válida. Ingrese un valor dentro las opciones indicadas previamente.");
+                                    Console.WriteLine("Opcion no valida. Ingrese un valor dentro las opciones indicadas previamente.");
                                     break;
                             }
                         }
@@ -107,8 +107,7 @@ namespace ClientApp
                     finally
                     {
                         // Cerrar la conexion.
-                        socketCliente.Shutdown(SocketShutdown.Both);
-                        socketCliente.Close();
+                        tcpClient.Close();
                         Console.WriteLine("Cliente cerrado");
                     }
                 }
@@ -117,27 +116,25 @@ namespace ClientApp
                     
         }
 
-        private static Socket ConectarseAlServidor()
+        private static async Task<TcpClient> ConectarseAlServidorAsync()
         {
-            var socketCliente = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
             string ipServer = settingsMngr.ReadSettings(ClientConfig.serverIPconfigkey);
             string ipClient = settingsMngr.ReadSettings(ClientConfig.clientIPconfigkey);
             int serverPort = int.Parse(settingsMngr.ReadSettings(ClientConfig.serverPortconfigkey));
 
             var localEndPoint = new IPEndPoint(IPAddress.Parse(ipClient), 0);
-            socketCliente.Bind(localEndPoint);
             var serverEndpoint = new IPEndPoint(IPAddress.Parse(ipServer), serverPort);
-            socketCliente.Connect(serverEndpoint);
+            var tcpClient = new TcpClient(localEndPoint);
+            await tcpClient.ConnectAsync(serverEndpoint);
             Console.WriteLine("Cliente Conectado al Servidor...!!!");
-            return socketCliente;
+            return tcpClient;
         }
 
 
 
         private static string GetMenu()
         {
-            // Define el menú y devuelve su representación en cadena
+            // Define el menu y devuelve su representacion en cadena
             StringBuilder menu = new StringBuilder();
             menu.AppendLine("****************************");
             menu.AppendLine("Bienvenido a dreamteam Shop");
@@ -147,7 +144,7 @@ namespace ClientApp
             menu.AppendLine("* Seleccione 3 para modificar un producto publicado");
             menu.AppendLine("* Seleccione 4 para eliminar un producto");
             menu.AppendLine("* Seleccione 5 para buscar un producto");
-            menu.AppendLine("* Seleccione 6 para ver más acerca de un producto");
+            menu.AppendLine("* Seleccione 6 para ver mas acerca de un producto");
             menu.AppendLine("* Seleccione 7 para calificar un producto");
             menu.AppendLine("* Seleccione 8 para ver el listado de productos");
             menu.AppendLine("Escriba 'salir' para desconectarse");
@@ -156,13 +153,13 @@ namespace ClientApp
             return menu.ToString();
         }
 
-        private static void Autenticarse(MessageCommsHandler msgHandler)
+        private static async Task Autenticarse(MessageCommsHandler msgHandler)
         {
-            msgHandler.SendMessage("0");
+            await msgHandler.SendMessageAsync("0");
             string credenciales = Login.PedirDatosLogin();
-            msgHandler.SendMessage(credenciales);
+            await msgHandler.SendMessageAsync(credenciales);
 
-            string respuesta = msgHandler.ReceiveMessage();
+            string respuesta = await msgHandler.ReceiveMessageAsync();
 
             if (respuesta == "1")
             {
@@ -176,15 +173,15 @@ namespace ClientApp
             }
         }
 
-        private static void PublicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        private static async Task PublicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 1: Publicar un producto");
+            Console.WriteLine("Selecciono la opcion 1: Publicar un producto");
 
-            // Le pedimos la información al cliente
+            // Le pedimos la informacion al cliente
             Console.WriteLine("Ingrese nombre del producto");
             string nombre = Console.ReadLine();
 
-            Console.WriteLine("Ingrese una descripción para su producto");
+            Console.WriteLine("Ingrese una descripcion para su producto");
             string descripcion = Console.ReadLine();
 
             Console.WriteLine("Ingrese el precio");
@@ -205,35 +202,35 @@ namespace ClientApp
             string stock = Console.ReadLine();
 
             //Mandamos al server el comando
-            msgHandler.SendMessage("1");
+            await msgHandler.SendMessageAsync("1");
 
             //Mandamos al server la informacion
             string info = user + "#" + nombre + "#" + descripcion + "#" + precio + "#" + imagen + "#" + stock;
-            msgHandler.SendMessage(info);
+            await msgHandler.SendMessageAsync(info);
 
             if (subeImagen)
             {
                 //Mandamos al server el archivo de imagen
-                fileHandler.SendFile(imagen);
+                await fileHandler.SendFileAsync(imagen);
             }
 
             // Esperamos exito o error del server
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
 
-        private static void ComprarProducto(MessageCommsHandler msgHandler)
+        private static async Task ComprarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 2: Comprar un producto");
+            Console.WriteLine("Selecciono la opcion 2: Comprar un producto");
             Console.WriteLine("Para comprar un producto porfavor ingrese el nombre de producto a comprar");
             string nombreProductoAComprar = Console.ReadLine();
-            msgHandler.SendMessage("2");
-            msgHandler.SendMessage(user + "#" + nombreProductoAComprar);
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            await msgHandler.SendMessageAsync("2");
+            await msgHandler.SendMessageAsync(user + "#" + nombreProductoAComprar);
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
 
-        private static void ModificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        private static async Task ModificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 3: Modificar un producto publicado");
+            Console.WriteLine("Selecciono la opcion 3: Modificar un producto publicado");
             Console.WriteLine("Para modificar porfavor ingrese el nombre de producto a modificar");
 
             string nombreProducto = Console.ReadLine();
@@ -244,79 +241,79 @@ namespace ClientApp
             Console.WriteLine("Ingrese el nuevo valor del atributo seleccionado, en caso de la imagen ingrese la ruta completa");
             string nuevoValorDelAtributo = Console.ReadLine();
 
-            msgHandler.SendMessage("3");
+            await msgHandler.SendMessageAsync("3");
 
             string informacion = user + "#" + nombreProducto + "#" + atributoAModificar + "#" + nuevoValorDelAtributo;
 
-            msgHandler.SendMessage(informacion);
+            await msgHandler.SendMessageAsync(informacion);
 
             if (atributoAModificar.ToLower() == "imagen")
             {
-                fileHandler.SendFile(nuevoValorDelAtributo);
+                await fileHandler.SendFileAsync(nuevoValorDelAtributo);
             }
 
             // Esperamos exito o error del server
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
 
-        private static void EliminarProducto(MessageCommsHandler msgHandler)
+        private static async Task EliminarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 4: Eliminar un producto");
+            Console.WriteLine("Selecciono la opcion 4: Eliminar un producto");
             Console.WriteLine("Para eliminar porfavor ingrese el nombre del producto que quiere eliminar");
             string nombreProductoABorrar = Console.ReadLine();
             //Mandamos al server el comando
-            msgHandler.SendMessage("4");
+            await msgHandler.SendMessageAsync("4");
             //Mandamos al server la informacion
-            msgHandler.SendMessage(user + "#" + nombreProductoABorrar);
+            await msgHandler.SendMessageAsync(user + "#" + nombreProductoABorrar);
             // Esperamos exito o error del server
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
 
-        private static void BuscarProducto(MessageCommsHandler msgHandler)
+        private static async Task BuscarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 5: Buscar un producto");
+            Console.WriteLine("Selecciono la opcion 5: Buscar un producto");
             Console.WriteLine("Para buscar porfavor ingrese alguna letra que contenga el nombre del producto que busca");
             string textoABuscar = Console.ReadLine();
             //Mandamos al server el comando
-            msgHandler.SendMessage("5");
+            await msgHandler.SendMessageAsync("5");
             //Mandamos al server la informacion
-            msgHandler.SendMessage(textoABuscar);
+            await msgHandler.SendMessageAsync(textoABuscar);
             // Esperamos exito o error del server
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
 
-        private static void VerMasInfoProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        private static async Task VerMasInfoProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
-            Console.WriteLine("Seleccionó la opción 6: Ver más acerca de un producto");
+            Console.WriteLine("Selecciono la opcion 6: Ver mas acerca de un producto");
             Console.WriteLine("Para buscar porfavor ingrese nombre del producto que quiere ver mas informacion");
             string nombreProductoMasInfo = Console.ReadLine();
             //Mandamos al server el comando
-            msgHandler.SendMessage("6");
+            await msgHandler.SendMessageAsync("6");
             //Mandamos al server la informacion
-            msgHandler.SendMessage(nombreProductoMasInfo);
+            await msgHandler.SendMessageAsync(nombreProductoMasInfo);
             // Esperamos exito o error del server
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
             // Validamos si debemos recibir una imagen asociada
-            string vieneImagen = msgHandler.ReceiveMessage();
+            string vieneImagen = await msgHandler.ReceiveMessageAsync();
             if (vieneImagen == "1")
             {
-                fileHandler.ReceiveFile(filesPath);
+                await fileHandler.ReceiveFileAsync(filesPath);
                 Console.WriteLine("Recibiste la imagen en tu carpeta seleccionada: " + filesPath);
             }
         }
 
-        private static void CalificarProducto(MessageCommsHandler msgHandler)
+        private static async Task CalificarProducto(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 7: Calificar un producto");
+            Console.WriteLine("Selecciono la opcion 7: Calificar un producto");
             // Enviamos el comando y mostramos el listado de productos comprados por el user
-            msgHandler.SendMessage("7");
-            msgHandler.SendMessage(user);
-            string productos = msgHandler.ReceiveMessage();
+            await msgHandler.SendMessageAsync("7");
+            await msgHandler.SendMessageAsync(user);
+            string productos = await msgHandler.ReceiveMessageAsync();
             Console.WriteLine(productos);
 
-            if (!productos.Contains("El usuario no compró"))
+            if (!productos.Contains("El usuario no compro"))
             {
-                // Le pedimos la información para calificar
+                // Le pedimos la informacion para calificar
                 Console.WriteLine("Ingrese el nombre del producto que desea calificar");
                 string productoACalificar = Console.ReadLine();
                 Console.WriteLine("Ingrese un valor entero del 1 al 5 para calificar su producto");
@@ -324,16 +321,16 @@ namespace ClientApp
                 Console.WriteLine("Escriba un comentario, si no quiere dejar comentario presione enter");
                 string comentario = Console.ReadLine();
 
-                msgHandler.SendMessage(user + "#" + productoACalificar + "#" + puntaje + "#" + comentario);
-                Console.WriteLine(msgHandler.ReceiveMessage());
+                await msgHandler.SendMessageAsync(user + "#" + productoACalificar + "#" + puntaje + "#" + comentario);
+                Console.WriteLine(await msgHandler.ReceiveMessageAsync());
             }
         }
 
-        private static void VerTodosProductos(MessageCommsHandler msgHandler)
+        private static async Task VerTodosProductos(MessageCommsHandler msgHandler)
         {
-            Console.WriteLine("Seleccionó la opción 8: Ver todos los productos");
-            msgHandler.SendMessage("8");
-            Console.WriteLine(msgHandler.ReceiveMessage());
+            Console.WriteLine("Selecciono la opcion 8: Ver todos los productos");
+            await msgHandler.SendMessageAsync("8");
+            Console.WriteLine(await msgHandler.ReceiveMessageAsync());
         }
     }
 }

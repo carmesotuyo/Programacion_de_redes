@@ -59,7 +59,7 @@ namespace ServerApp.Domain
 				actualizarPromedioDeCalificaciones();
                 return calificaciones;
             }
-			else throw new Exception("Esta calificación no pertenece a este producto.");
+			else throw new Exception("Esta calificacion no pertenece a este producto.");
 		}
     }
 }

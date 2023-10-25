@@ -41,12 +41,12 @@ namespace ServerApp.Controllers
             
         }
 
-        public string modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
+        public async Task<string> modificarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileHandler)
         {
             string mensajeACliente = "";
             try
             {
-                string info = msgHandler.ReceiveMessage();
+                string info = await msgHandler.ReceiveMessageAsync();
                 string[] datos = info.Split('#');
                 string username = datos[0];
                 string nombreProd = datos[1];
@@ -58,10 +58,10 @@ namespace ServerApp.Controllers
                 if(atributoAModificar == "imagen")
                 {
                     validarNombreArchivoSinEspacios(nuevoValor);
-                    string imagenAnterior = _productLogic.CambiarImagen(p, username, DameNombreImagen(nuevoValor));
+                    string imagenAnterior = _productLogic.CambiarImagen(p, username, await DameNombreImagen(nuevoValor));
                     if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
-                    fileHandler.ReceiveFile(_filesPath);
-                    mensajeACliente = "Imagen del producto actualizada con éxito.";
+                    await fileHandler.ReceiveFileAsync(_filesPath);
+                    mensajeACliente = "Imagen del producto actualizada con exito.";
                 } else
                 {
                     mensajeACliente = _productLogic.modificarProducto(p, username, atributoAModificar, nuevoValor);
@@ -76,13 +76,13 @@ namespace ServerApp.Controllers
 
         }
 
-		public string publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler)
+		public async Task<string> publicarProducto(MessageCommsHandler msgHandler, FileCommsHandler fileCommsHandler)
         {
             string mensajeAlCliente = "";
             try
 			{
                 // Capturamos la informacion
-                string info = msgHandler.ReceiveMessage();
+                string info = await msgHandler.ReceiveMessageAsync();
                 string[] datos = info.Split("#");
                 string user = datos[0];
                 string nombre = datos[1];
@@ -97,16 +97,16 @@ namespace ServerApp.Controllers
                 if(pathImagen != Protocol.NoImage)
                 {
                     // Creamos el producto con la info obtenida
-                    producto = new (nombre, descripcion, precio, stock, DameNombreImagen(pathImagen));
+                    producto = new (nombre, descripcion, precio, stock, await DameNombreImagen(pathImagen));
                     // Recibimos la imagen
-                    fileCommsHandler.ReceiveFile(_filesPath);
+                    await fileCommsHandler.ReceiveFileAsync(_filesPath);
                 } else
                 {
                     // Creamos el producto sin imagen
                     producto = new (nombre, descripcion, precio, stock);
                 }
 
-                // Llamamos a la lógica para publicarlo
+                // Llamamos a la logica para publicarlo
                 _productLogic.publicarProducto(producto, user);
                 mensajeAlCliente = "Producto ingresado con exito: " + nombre;
             }
@@ -117,10 +117,10 @@ namespace ServerApp.Controllers
             return mensajeAlCliente;
         }
 
-        public string eliminarProducto(MessageCommsHandler msgHandler) {
+        public async Task<string> eliminarProducto(MessageCommsHandler msgHandler) {
             string retorno = "";
             try {
-                string[] datos = msgHandler.ReceiveMessage().Split("#");
+                string[] datos = (await msgHandler.ReceiveMessageAsync()).Split("#");
                 string username = datos[0];
                 string nombreProd = datos[1];
 
@@ -137,14 +137,14 @@ namespace ServerApp.Controllers
         
         }
 
-        public string productosBuscados(MessageCommsHandler msgHandler)
+        public async Task<string> productosBuscados(MessageCommsHandler msgHandler)
         {
             int i = 1;
             List<Producto> listaProd = new List<Producto>();
             StringBuilder retorno = new StringBuilder();
             try {
                 // Capturamos la informacion
-                string nombreProd = msgHandler.ReceiveMessage();
+                string nombreProd = await msgHandler.ReceiveMessageAsync();
 
                 // Buscamos el prodcuto con la informacion
                 listaProd = _productLogic.BuscarProductos(nombreProd);
@@ -164,14 +164,14 @@ namespace ServerApp.Controllers
             
         }
 
-        public string verMasProducto(MessageCommsHandler msgHandler)
+        public async Task<string> verMasProducto(MessageCommsHandler msgHandler)
         {
             
             StringBuilder retorno = new StringBuilder();
             try
             {
                 // Capturamos la informacion
-                string nombreProd = msgHandler.ReceiveMessage();
+                string nombreProd = await msgHandler.ReceiveMessageAsync();
 
                 // Buscamos el prodcuto con la informacion
                 Producto p = _productLogic.VerMasProducto(nombreProd);
@@ -213,20 +213,20 @@ namespace ServerApp.Controllers
 
         }
 
-        private string DameNombreImagen(string imagen)
+        private async Task<string> DameNombreImagen(string imagen)
         {
            FileHandler _fileHandeler = new FileHandler();
 
-           return _fileHandeler.GetFileName(imagen);
+           return await _fileHandeler.GetFileNameAsync(imagen);
         }
 
-        public string productosComprados(MessageCommsHandler msgHandler)
+        public async Task<string> productosComprados(MessageCommsHandler msgHandler)
         {
             StringBuilder retorno = new StringBuilder();
             try
             {
                 // Recibimos el user para mostrarle sus productos comprados
-                string user = msgHandler.ReceiveMessage();
+                string user = await msgHandler.ReceiveMessageAsync();
                 Usuario u = _userLogic.buscarUsuario(user);
 
                 List<Producto> productos = _userLogic.ProductosComprados(u);
@@ -245,13 +245,13 @@ namespace ServerApp.Controllers
             }
         }
 
-        public string calificarProducto(MessageCommsHandler msgHandler)
+        public async Task<string> calificarProducto(MessageCommsHandler msgHandler)
         {
             string mensajeAlCliente = "";
             try
             {
                 // Capturamos la informacion
-                string info = msgHandler.ReceiveMessage();
+                string info = await msgHandler.ReceiveMessageAsync();
                 string[] datos = info.Split("#");
                 string user = datos[0];
                 string nombreProd = datos[1];
@@ -267,10 +267,10 @@ namespace ServerApp.Controllers
             return mensajeAlCliente;
         }
 
-        private void BorrarImagen(string pathImagenesGuardadas, string nombreImagen)
+        private async Task BorrarImagen(string pathImagenesGuardadas, string nombreImagen)
         {
             FileHandler _fileHandler = new FileHandler();
-            _fileHandler.DeleteFile(pathImagenesGuardadas+nombreImagen);
+            await _fileHandler.DeleteFileAsync(pathImagenesGuardadas+nombreImagen);
         }
 
         private void validarNombreArchivoSinEspacios(string pathImagen)

@@ -3,24 +3,26 @@ namespace Communication
 {
     public class FileHandler
     {
-        public bool FileExists(string path)
+        public async Task<bool> FileExistsAsync(string path)
         {
-            return File.Exists(path);
+            return await Task.Run(() => File.Exists(path));
         }
 
-        public string GetFileName(string path)
+        public async Task<string> GetFileNameAsync(string path)
         {
-            if (FileExists(path))
-            {
-                return new FileInfo(path).Name;
-            }
+            //if (await FileExistsAsync(path))
+            //{
+            //    return new FileInfo(path).Name;
+            //}
 
-            throw new Exception("File does not exist");
+            //throw new Exception("File does not exist");
+            return new FileInfo(path).Name;
         }
 
-        public long GetFileSize(string path)
+
+        public async Task<long> GetFileSizeAsync(string path)
         {
-            if (FileExists(path))
+            if (await FileExistsAsync(path))
             {
                 return new FileInfo(path).Length;
             }
@@ -28,9 +30,9 @@ namespace Communication
             throw new Exception("File does not exist");
         }
 
-        public void DeleteFile(string path)
+        public async Task DeleteFileAsync(string path)
         {
-            if (FileExists(path))
+            if (await FileExistsAsync(path))
             {
                 File.Delete(path);
             }
