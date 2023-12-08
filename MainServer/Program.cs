@@ -1,25 +1,33 @@
-﻿using MainServer.Services;
+﻿using Grpc.Net.Client;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using MainServer.Services;
 
-namespace MainServer;
-
-public class Program
+namespace MainServer
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
+            // Configuración del servidor gRPC
+            builder.Services.AddGrpc();
+            var app = builder.Build();
 
-        // Add services to the container.
-        builder.Services.AddGrpc();
+            // Configuración del servidor de correo
+            var correoChannel = GrpcChannel.ForAddress("http://localhost:5239");
+            var correoClient = new Correo.Greeter.GreeterClient(correoChannel);
 
-        var app = builder.Build();
+            // Configuración del servidor principal
+            app.MapGrpcService<GreeterService>();
+            app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client.");
 
-        // Configure the HTTP request pipeline.
-        app.MapGrpcService<GreeterService>();
-        app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-
-        app.Run();
+            app.Run();
+        }
     }
 }
+
+
+

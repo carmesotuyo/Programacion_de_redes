@@ -5,19 +5,19 @@ option csharp_namespace = "Correo";
 package greet;
 
 // The greeting service definition.
-service Greeter {
+service Correo {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc EnviarCorreo(EnviarCorreoRequest) returns (EnviarCorreoResponse);
 }
 
 // The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message EnviarCorreoRequest {
+  string destinatario = 1;
+  string mensaje = 2;
 }
 
 // The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+message EnviarCorreoResponse {
+  string resultado = 1;
 }
-
 
