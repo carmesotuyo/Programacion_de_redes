@@ -1,27 +1,27 @@
 ﻿<Properties StartupConfiguration="{FEF25021-E62C-4C8D-9978-A9078FABD664}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ClientApp/ProgramCliente.cs">
+  <MonoDevelop.Ide.ItemProperties.Correo FirstBuild="True" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/App.config">
     <Files>
       <File FileName="ServerApp/ProgramServer.cs" />
-      <File FileName="ClientApp/ProgramCliente.cs" Line="330" Column="10" />
+      <File FileName="ClientApp/ProgramCliente.cs" />
       <File FileName="ServerApp/Controllers/UserController.cs" />
       <File FileName="ServerApp/Logic/UserLogic.cs" />
+      <File FileName="ServerApp/App.config" Line="10" Column="60" />
+      <File FileName="ClientApp/App.config" />
+      <File FileName="Communication/FileHandler.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="ClientApp" expanded="True" selected="True" />
-            <Node name="ServerApp" expanded="True" />
-          </Node>
+          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.MainServer FirstBuild="True" />
 </Properties>
