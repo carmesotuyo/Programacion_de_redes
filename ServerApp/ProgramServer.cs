@@ -9,20 +9,21 @@ namespace ServerApp
 {
     public class ProgramServer
     {
-        static readonly SettingsManager settingsMngr = new();
-        private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
-        private static readonly ProductController _productController = new(filesPath);
-        private static readonly UserController _userController = new();
-        NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
-        NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
-        private static Dictionary<TcpClient, bool> clientesConectados = new();
-        private static bool salir = false;
-
+        
         public static async Task HandleServer()
         {
+            SettingsManager settingsMngr = new();
+            string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+            ProductController _productController = new(filesPath);
+            UserController _userController = new();
+            NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
+            NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
+            Dictionary<TcpClient, bool> clientesConectados = new();
+            bool salir = false;
+
             ProgramServer server = new ProgramServer();
-            server.agregarUsuarios();
-            server.agregarProductos();
+            server.agregarUsuarios(usuarios, _userController);
+            server.agregarProductos(productos, _productController);
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             Console.WriteLine("Para cerrar este servidor ingrese 'salir' en cualquier momento");
 
@@ -41,7 +42,7 @@ namespace ServerApp
 
                 int clientes = 0;
 
-                var CerrarServidorTask = Task.Run(() => CerrarServidor(tcpListener)); //todo deberia ser async?
+                var CerrarServidorTask = Task.Run(() => CerrarServidor(tcpListener, salir, clientesConectados)); //todo deberia ser async?
 
                 while (!salir)
                 {
@@ -52,7 +53,7 @@ namespace ServerApp
                         clientes++;
                         int nro = clientes;
                         Console.WriteLine("Acepte un nuevo pedido de Conexion");
-                        var tarea = Task.Run(async () => await ManejarClienteAsync(tcpClient, nro));
+                        var tarea = Task.Run(async () => await ManejarClienteAsync(tcpClient, nro, clientesConectados, _userController, _productController, filesPath));
                     }
                     catch (Exception e)
                     {
@@ -75,7 +76,7 @@ namespace ServerApp
             Console.ReadLine(); // no se que hace esto pero el profe lo tiene
         }
 
-        static void CerrarServidor(TcpListener tcpListener)
+        static void CerrarServidor(TcpListener tcpListener, bool salir, Dictionary<TcpClient, bool> clientesConectados)
         {
             try
             {
@@ -105,7 +106,7 @@ namespace ServerApp
             
         }
 
-        static async Task ManejarClienteAsync(TcpClient tcpClient, int nro)
+        static async Task ManejarClienteAsync(TcpClient tcpClient, int nro, Dictionary<TcpClient, bool> clientesConectados, UserController _userController, ProductController _productController, string filesPath)
         {
             Console.WriteLine("Cliente {0} conectado", nro);
             MessageCommsHandler msgHandler = new(tcpClient);
@@ -120,7 +121,7 @@ namespace ServerApp
                     string comando = await msgHandler.ReceiveMessageAsync();
 
                     // Procesar la seleccion del cliente
-                    bool desconecta = await ProcesarSeleccion(msgHandler, comando, fileHandler);
+                    bool desconecta = await ProcesarSeleccion(msgHandler, comando, fileHandler, _userController, _productController, filesPath);
                     if(desconecta) clientesConectados[tcpClient] = false;
                 }
 
@@ -133,7 +134,7 @@ namespace ServerApp
             }
         }
 
-        private static async Task<bool> ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
+        private static async Task<bool> ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, UserController _userController, ProductController _productController, string filesPath)
         {
             switch (opcion)
             {
@@ -189,7 +190,7 @@ namespace ServerApp
             return false;
         }
 
-        private void agregarUsuarios()
+        private void agregarUsuarios(NameValueCollection usuarios, UserController _userController)
         {
             foreach (string key in usuarios.AllKeys)
             {
@@ -202,7 +203,7 @@ namespace ServerApp
             }
         }
 
-        private void agregarProductos() {
+        private void agregarProductos(NameValueCollection productos, ProductController _productController) {
             foreach (string key in productos.AllKeys)
             {
                 string[] prodInfo = productos[key].Split(',');

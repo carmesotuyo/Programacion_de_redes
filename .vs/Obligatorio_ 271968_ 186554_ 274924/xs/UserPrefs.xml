@@ -1,29 +1,32 @@
-﻿<Properties StartupConfiguration="{A396BE71-A6DF-432C-9517-B82DE1A48BE4}|Default">
-  <MultiItemStartupConfigurations />
+﻿<Properties StartupConfiguration="{135870D2-D65C-46F4-89C4-ED2782FFC7BA}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/carmelasotuyo/Desktop/N6A_274924_186554_271968/ServerApp/ProgramServer.cs" relfile="ServerApp/ProgramServer.cs" line="19" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ServerApp/ServerApp.csproj">
+  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.ClientApp PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MainServer/Program.cs">
     <Files>
-      <File FileName="ClientApp/App.config" />
-      <File FileName="Communication/FileHandler.cs" />
-      <File FileName="Correo/Protos/greet.proto" />
-      <File FileName="MainServer/Properties/launchSettings.json" />
-      <File FileName="MainServer/Program.cs" Line="1" Column="1" />
-      <File FileName="ServerApp/ServerApp.csproj" Line="4" Column="6" />
+      <File FileName="ServerApp/ProgramServer.cs" />
+      <File FileName="MainServer/Program.cs" Line="9" Column="23" />
+      <File FileName="Communication/SettingsManager.cs" />
+      <File FileName="ServerApp/App.config" />
+      <File FileName=".vs/Obligatorio_ 271968_ 186554_ 274924/xs/UserPrefs.xml" />
+      <File FileName="MainServer/MainServer.csproj" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="ServerApp" selected="True" />
+          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
+            <Node name="MainServer" selected="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.ClientApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.MainServer PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
 </Properties>

@@ -163,7 +163,7 @@ namespace ServerApp.Logic
             {
                 p = int.Parse(puntaje);
                 if (p < 1 || p > 5) throw new Exception(msjError);
-            } catch(Exception e)
+            } catch(Exception)
             {
                 throw new Exception(msjError);
             }

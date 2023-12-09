@@ -7,6 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.25.1" />
     <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
@@ -24,5 +27,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Protos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MainServer\MainServer.csproj" />
   </ItemGroup>
 </Project>
