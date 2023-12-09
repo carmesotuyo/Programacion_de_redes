@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace Correo;
 class Program
@@ -19,14 +20,17 @@ class Program
                               exchange: "Compras",
                               routingKey: "");
 
-            Console.WriteLine(" [*] Waiting for logs.");
+            Console.WriteLine(" [*] Esperando por Compras.");
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+            consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine(" [x] {0}", message);
+                Compra compra = JsonSerializer.Deserialize<Compra>(message);
+
+                Console.WriteLine(" [x] Enviando correo a "+ compra.Usuario+" por comprar producto "+ compra.NombreProducto);
+                await Task.Delay(5000);
             };
             channel.BasicConsume(queue: queueName,
                                  autoAck: true,

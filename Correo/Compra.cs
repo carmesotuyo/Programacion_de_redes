@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ServerApp.Domain
+namespace Correo
 {
 	public class Compra
     {
@@ -23,6 +23,8 @@ namespace ServerApp.Domain
         {
             MensajeEntregadoACliente = mensaje;
         }
+
+        public Compra() { }
 	}
 }
 

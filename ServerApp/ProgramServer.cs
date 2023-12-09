@@ -150,11 +150,13 @@ namespace ServerApp
                     await msgHandler.SendMessageAsync(await _productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    Compra result = await _userController.agregarProductoACompras(msgHandler);
-                    await msgHandler.SendMessageAsync(result.MensajeEntregadoACliente);
-                    if(result.NombreProducto != null)
+                    Compra compra = await _userController.agregarProductoACompras(msgHandler);
+                    await msgHandler.SendMessageAsync(compra.MensajeEntregadoACliente);
+                    if(compra.NombreProducto != null)
                     {
-                        string mensaje = JsonSerializer.Serialize(result);
+                        Console.WriteLine("----------USER NAME----------"); //debug
+                        Console.WriteLine(compra.Usuario); //debug
+                        string mensaje = JsonSerializer.Serialize(compra);
                         EnviarMensajeRabbitMQ(mensaje);
                     }
                     break;
