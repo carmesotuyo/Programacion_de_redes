@@ -25,8 +25,9 @@ namespace ServerApp.Controllers
             _userLogic.agregarUsuario(mail, clave);
         }
 
-        public async Task<string> agregarProductoACompras(MessageCommsHandler msgHandler) {
+        public async Task<Compra> agregarProductoACompras(MessageCommsHandler msgHandler) {
             string mensajeACliente = "";
+            Compra compra = new Compra(mensajeACliente);
             string user = "";
             string nombreProd = "";
             try {
@@ -50,14 +51,20 @@ namespace ServerApp.Controllers
 
                 }
                 mensajeACliente = "Producto agregado a lista de compras" + retorno.ToString();
+                compra.Usuario = u.mail;
+                compra.NombreProducto = p.Nombre;
+                compra.Precio = p.Precio;
+                compra.Fecha = DateTime.Now;
+                compra.MensajeEntregadoACliente = mensajeACliente;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 mensajeACliente = "Hubo un error: " + ex.Message;
+                compra.MensajeEntregadoACliente = mensajeACliente;
 
             }
-            return mensajeACliente;
+            return compra;
         }
     }
 }
