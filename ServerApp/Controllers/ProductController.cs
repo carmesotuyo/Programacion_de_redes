@@ -59,7 +59,7 @@ namespace ServerApp.Controllers
                 {
                     validarNombreArchivoSinEspacios(nuevoValor);
                     string imagenAnterior = _productLogic.CambiarImagen(p, username, await DameNombreImagen(nuevoValor));
-                    if (imagenAnterior != Protocol.NoImage) BorrarImagen(_filesPath, imagenAnterior);
+                    if (imagenAnterior != Protocol.NoImage) await BorrarImagen(_filesPath, imagenAnterior);
                     await fileHandler.ReceiveFileAsync(_filesPath);
                     mensajeACliente = "Imagen del producto actualizada con exito.";
                 } else
@@ -125,7 +125,7 @@ namespace ServerApp.Controllers
                 string nombreProd = datos[1];
 
                 Producto eliminado = _productLogic.eliminarProducto(nombreProd, username);
-                if (eliminado.Imagen != Protocol.NoImage) BorrarImagen(_filesPath, eliminado.Imagen);
+                if (eliminado.Imagen != Protocol.NoImage) await BorrarImagen(_filesPath, eliminado.Imagen);
 
                 retorno = "Se ha eliminado exitosamente el producto: "+ eliminado.Nombre;
             }
