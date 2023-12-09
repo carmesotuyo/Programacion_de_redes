@@ -1,15 +1,19 @@
 ﻿using MainServer.Services;
+using ServerApp;
 
 namespace MainServer;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
         // Additional configuration is required to successfully run gRPC on macOS.
         // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
+
+        // Iniciamos el servidor original
+        await ProgramServer.HandleServer();
 
         // Add services to the container.
         builder.Services.AddGrpc();

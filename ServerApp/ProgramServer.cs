@@ -18,7 +18,7 @@ namespace ServerApp
         private static Dictionary<TcpClient, bool> clientesConectados = new();
         private static bool salir = false;
 
-        public static async Task Main(string[] args)
+        public static async Task HandleServer()
         {
             ProgramServer server = new ProgramServer();
             server.agregarUsuarios();
