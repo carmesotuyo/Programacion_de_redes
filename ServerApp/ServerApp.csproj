@@ -12,6 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.0" />
   </ItemGroup>
 
   <ItemGroup>

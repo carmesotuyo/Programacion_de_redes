@@ -4,6 +4,8 @@ using Communication;
 using ServerApp.Controllers;
 using System.Collections.Specialized;
 using System.Configuration;
+using RabbitMQ.Client;
+using System.Text;
 
 namespace ServerApp
 {
@@ -146,7 +148,14 @@ namespace ServerApp
                     await msgHandler.SendMessageAsync(await _productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    await msgHandler.SendMessageAsync(await _userController.agregarProductoACompras(msgHandler));
+                    string result = await _userController.agregarProductoACompras(msgHandler);
+                    await msgHandler.SendMessageAsync(result);
+                    if(!result.Contains("Hubo un error"))
+                    {
+                        // Si la compra es exitosa, envía un mensaje a RabbitMQ
+                        var detalleCompra = ObtenerDetalleCompra(msgHandler);
+                        EnviarMensajeRabbitMQ(detalleCompra);
+                    }
                     break;
                 case "3":
                     await msgHandler.SendMessageAsync(await _productController.modificarProducto(msgHandler, fileHandler));
@@ -215,6 +224,32 @@ namespace ServerApp
 
                 _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
             }
+        }
+
+        private static void EnviarMensajeRabbitMQ(string mensaje)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(exchange: "Compras", type: ExchangeType.Fanout);
+
+                var body = Encoding.UTF8.GetBytes(mensaje);
+
+                channel.BasicPublish(exchange: "Compras",
+                                     routingKey: "",
+                                     basicProperties: null,
+                                     body: body);
+
+                Console.WriteLine(" [x] Mensaje Enviado a RabbitMQ: {0}", mensaje);
+            }
+        }
+
+        private static string ObtenerDetalleCompra(MessageCommsHandler msgHandler)
+        {
+            // Lógica para obtener el detalle de la compra en formato JSON
+            // Puedes usar los métodos de msgHandler para recibir más información si es necesario
+            // Retorna el detalle en formato JSON
         }
 
     }

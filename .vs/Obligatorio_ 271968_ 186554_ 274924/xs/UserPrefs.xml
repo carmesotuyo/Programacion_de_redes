@@ -1,28 +1,38 @@
 ﻿<Properties StartupConfiguration="{135870D2-D65C-46F4-89C4-ED2782FFC7BA}|Default">
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/carmelasotuyo/Desktop/N6A_274924_186554_271968/ServerApp/ProgramServer.cs" relfile="ServerApp/ProgramServer.cs" line="19" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.ItemProperties.ClientApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MainServer/Program.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="ServerApp/ProgramServer.cs" />
-      <File FileName="MainServer/Program.cs" Line="9" Column="23" />
-      <File FileName="Communication/SettingsManager.cs" />
-      <File FileName="ServerApp/App.config" />
-      <File FileName=".vs/Obligatorio_ 271968_ 186554_ 274924/xs/UserPrefs.xml" />
-      <File FileName="MainServer/MainServer.csproj" />
+      <File FileName="ServerApp/ProgramServer.cs" Line="17" Column="1" />
+      <File FileName="Communication/SettingsManager.cs" Line="13" Column="40" />
+      <File FileName="ServerApp/App.config" Line="1" Column="1" />
+      <File FileName="MainServer/Program.cs" Line="17" Column="10" />
+      <File FileName="MainServer/Protos/correo.proto" Line="1" Column="1" />
+      <File FileName="MainServer/Protos/greet.proto" Line="6" Column="1" />
+      <File FileName="MainServer/greet.proto" Line="1" Column="1" />
+      <File FileName="Correo/Program.cs" Line="8" Column="9" />
+      <File FileName="Correo/Correo.csproj" Line="26" Column="64" />
+      <File FileName="Correo/Protos/greet.proto" Line="3" Column="34" />
+      <File FileName="MainServer/Properties/launchSettings.json" Line="5" Column="26" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
-            <Node name="MainServer" selected="True" />
+          <Node name="Obligatorio_ 271968_ 186554_ 274924">
+            <Node name="Correo" expanded="True">
+              <Node name="Protos" expanded="True" />
+            </Node>
+            <Node name="MainServer" expanded="True">
+              <Node name="Properties" expanded="True" />
+              <Node name="Protos" expanded="True" />
+              <Node name="Services" expanded="True" />
+            </Node>
           </Node>
         </State>
       </Pad>

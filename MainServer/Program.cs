@@ -16,7 +16,7 @@ public class Program
         try
         {
             // Iniciamos el servidor original
-            await ProgramServer.HandleServer();
+            var taskServerTcp = Task.Run(async () => await ProgramServer.HandleServer());
 
         }
         catch (Exception e)
