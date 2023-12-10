@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Connections;
+﻿using ComprasServer.Logic;
+using Microsoft.AspNetCore.Connections;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -8,7 +9,9 @@ namespace ComprasServer.Service
 {
     public class MQService
     {
+        private readonly ComprasLogic _compraLogic = new ComprasLogic();
         public MQService() {
+
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -33,8 +36,7 @@ namespace ComprasServer.Service
 
                     //=========== Acá hago algo con el mensaje que llega ===========
                     
-                    //Console.WriteLine(" [x] Enviando correo a " + compra.Usuario + " por comprar producto " + compra.NombreProducto);
-                    //await Task.Delay(5000);
+                    _compraLogic.agregarCompra(compra);
                     
                     //==============================================================
                 };
