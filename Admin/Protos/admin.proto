@@ -1,0 +1,57 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Admin";
+
+package admin;
+
+// The admin service definition.
+service Admin {
+
+  // Functions availables
+  rpc PostProduct(ProductDTO) returns (MessageReply);
+  rpc DeleteProduct(ProductDTO) returns (MessageReply);
+ 
+}
+
+message ProductDTO {
+	string user = 1;
+	string nombre = 2;
+	string descripcion = 3;
+	float precio =  4;
+	int32 stock = 5;
+	// List<Calificacion> calificaciones = 5;
+	//int32 id = 5;
+	// string imagen = 7;
+}
+
+message Id {
+	int32 id = 1;
+}
+
+
+message MessageReply {
+	string message = 1;
+}
+
+// DEBUG PROTO DE GREETER
+//syntax = "proto3";
+
+//option csharp_namespace = "Admin";
+
+//package greet;
+
+// The greeting service definition.
+//service Greeter {
+  // Sends a greeting
+  //rpc SayHello (HelloRequest) returns (HelloReply);
+//}
+
+// The request message containing the user's name.
+//message HelloRequest {
+  //string name = 1;
+//}
+
+// The response message containing the greetings.
+//message HelloReply {
+  //string message = 1;
+//}

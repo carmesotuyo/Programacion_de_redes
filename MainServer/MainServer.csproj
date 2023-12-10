@@ -10,7 +10,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\admin.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +24,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Protos\admin.proto" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
