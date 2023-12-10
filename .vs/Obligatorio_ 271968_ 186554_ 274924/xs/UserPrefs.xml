@@ -1,41 +1,48 @@
 ﻿<Properties StartupConfiguration="{135870D2-D65C-46F4-89C4-ED2782FFC7BA}|Default">
   <MonoDevelop.Ide.ItemProperties.ClientApp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.ItemProperties.ServerApp PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.MainServer PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.Workbench ActiveDocument="MainServer/Services/AdminService.cs">
     <Files>
-      <File FileName="ServerApp/ProgramServer.cs" Line="29" Column="36" />
-      <File FileName="Admin/Program.cs" Line="7" Column="30" />
-      <File FileName="Admin/WeatherForecast.cs" Line="1" Column="1" />
-      <File FileName="Admin/ServerConfig.cs" Line="6" Column="30" />
-      <File FileName="Admin/Controllers/AdminController.cs" Line="36" Column="64" />
-      <File FileName="Admin/Protos/admin.proto" Line="7" Column="30" />
-      <File FileName="MainServer/Program.cs" Line="33" Column="40" />
-      <File FileName="Admin/Controllers/WeatherForecastController.cs" Line="14" Column="57" />
-      <File FileName="MainServer/Protos/admin.proto" Line="23" Column="17" />
-      <File FileName="ServerApp/Domain/Producto.cs" Line="11" Column="14" />
-      <File FileName="MainServer/Services/AdminService.cs" Line="36" Column="36" />
-      <File FileName="ServerApp/Controllers/ProductController.cs" Line="11" Column="9" />
-      <File FileName="ServerApp/Logic/ProductLogic.cs" Line="62" Column="19" />
-      <File FileName="Admin/Admin.csproj" Line="1" Column="1" />
-      <File FileName="MainServer/MainServer.csproj" Line="1" Column="1" />
+      <File FileName="ServerApp/Logic/UserLogic.cs" Line="6" Column="18" />
+      <File FileName="ServerApp/ProgramServer.cs" Line="226" Column="51" />
+      <File FileName="Admin/Program.cs" />
+      <File FileName="Admin/WeatherForecast.cs" />
+      <File FileName="Admin/ServerConfig.cs" />
+      <File FileName="Admin/Controllers/AdminController.cs" Line="56" Column="38" />
+      <File FileName="Admin/Protos/admin.proto" Line="22" Column="18" />
+      <File FileName="MainServer/Program.cs" />
+      <File FileName="MainServer/Protos/admin.proto" Line="24" Column="24" />
+      <File FileName="ServerApp/Domain/Producto.cs" />
+      <File FileName="MainServer/Services/AdminService.cs" Line="51" Column="73" />
+      <File FileName="ServerApp/Controllers/ProductController.cs" Line="56" Column="17" />
+      <File FileName="ServerApp/Logic/ProductLogic.cs" Line="91" Column="19" />
+      <File FileName="Admin/Admin.csproj" />
+      <File FileName="MainServer/MainServer.csproj" />
+      <File FileName="ServerApp/Database/SingletonDB.cs" Line="62" Column="25" />
+      <File FileName="ClientApp/Login.cs" Line="5" Column="30" />
+      <File FileName="ServerApp/Controllers/UserController.cs" Line="20" Column="40" />
+      <File FileName="MainServer/App.config" Line="21" Column="51" />
+      <File FileName="ClientApp/App.config" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
-            <Node name="Admin">
+            <Node name="Admin" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="Protos" expanded="True" />
             </Node>
-            <Node name="ClientApp" expanded="True" />
-            <Node name="MainServer">
-              <Node name="Properties" expanded="True" />
-              <Node name="Services">
-                <Node name="AdminService.cs" selected="True" />
-              </Node>
+            <Node name="MainServer" expanded="True">
+              <Node name="Protos" expanded="True" />
+              <Node name="Services" expanded="True" />
+            </Node>
+            <Node name="ServerApp" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Database" expanded="True" />
+              <Node name="Logic" expanded="True" />
             </Node>
           </Node>
         </State>
