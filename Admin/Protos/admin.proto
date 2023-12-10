@@ -10,6 +10,7 @@ service Admin {
   // Functions availables
   rpc PostProduct(ProductDTO) returns (MessageReply);
   rpc DeleteProduct(ProductDTO) returns (MessageReply);
+  rpc PutProduct(ProductDTO) returns (MessageReply);
  
 }
 
@@ -19,6 +20,8 @@ message ProductDTO {
 	string descripcion = 3;
 	float precio =  4;
 	int32 stock = 5;
+	string atributoAModificar = 6;
+	string nuevoValor = 7;
 }
 
 message Id {

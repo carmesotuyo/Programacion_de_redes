@@ -47,6 +47,15 @@ namespace Admin.Controllers
             return Ok(reply.Message);
         }
 
+        [HttpPut("products")]
+        public async Task<ActionResult> PutProduct([FromBody] ProductDTO product)
+        {
+            using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
+            client = new Admin.AdminClient(channel);
+            var reply = await client.PutProductAsync(product);
+            return Ok(reply.Message);
+        }
+
 
 
 

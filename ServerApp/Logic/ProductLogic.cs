@@ -65,7 +65,7 @@ namespace ServerApp.Logic
 			existeProducto(nombreProd);
             existeUsuario(username);
             Producto p = buscarUnProducto(nombreProd);
-			tienePermisos(username, p);
+			tienePermisos(username, nombreProd);
 
             _database.eliminarProducto(p);
             return p;
@@ -76,7 +76,8 @@ namespace ServerApp.Logic
             string mensajeACliente = "";
 
             existeProducto(producto.Nombre);
-            tienePermisos(user, producto);
+            existeUsuario(user);
+            tienePermisos(user, producto.Nombre);
             switch (atributo)
             {
                 case "nombre":
@@ -127,7 +128,7 @@ namespace ServerApp.Logic
 			existeProducto(producto.Nombre);
             Producto prodAModificar = buscarUnProducto(producto.Nombre);
 			string imagenAnterior = prodAModificar.Imagen;
-            tienePermisos(user, prodAModificar);
+            tienePermisos(user, producto.Nombre);
 			ValidarImagenRepetida(nuevaImagen);
 			producto.Imagen = nuevaImagen;
 			return imagenAnterior;
@@ -185,14 +186,15 @@ namespace ServerApp.Logic
             if (buscarProductoPorNombre(nombre).Count == 0) throw new Exception("El producto ingresado no existe :(");
         }
 
-        private void tienePermisos(string usuario, Producto producto)
+        private void tienePermisos(string usuario, string producto)
         {
             if (!esQuienPublicoElProducto(usuario, producto)) throw new Exception("No tiene permiso para modificar un producto que no publico");
         }
 
-        private bool esQuienPublicoElProducto(string username, Producto prod)
+        private bool esQuienPublicoElProducto(string username, string nombreProd)
         {
             Usuario user = _userLogic.buscarUsuario(username);
+            Producto prod = buscarUnProducto(nombreProd);
             bool es = false;
             if (user.publicados.Contains(prod)) es = true;
             return es;
