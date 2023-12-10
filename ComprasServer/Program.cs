@@ -89,6 +89,7 @@ namespace ComprasServer
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Compra compra = JsonSerializer.Deserialize<Compra>(message);
+                    //compra.Fecha = compra.Fecha.ToShortDateString();
 
                     _compraLogic.agregarCompra(compra);
                 };

@@ -20,7 +20,7 @@ namespace ComprasServer.Controllers
         public ActionResult<List<Compra>> GetListadoCompras(
             [FromQuery] string? usuario = null,
             [FromQuery] string? nombreProducto = null,
-            [FromQuery] DateTime? fecha = null,
+            [FromQuery] string? fecha = null,
             [FromQuery] float? precio = null)
         {
             // Llama al método centralizado en ComprasLogic para obtener el listado filtrado
