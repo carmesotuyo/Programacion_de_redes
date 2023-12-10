@@ -154,8 +154,6 @@ namespace ServerApp
                     await msgHandler.SendMessageAsync(compra.MensajeEntregadoACliente);
                     if(compra.NombreProducto != null)
                     {
-                        Console.WriteLine("----------USER NAME----------"); //debug
-                        Console.WriteLine(compra.Usuario); //debug
                         string mensaje = JsonSerializer.Serialize(compra);
                         EnviarMensajeRabbitMQ(mensaje);
                     }
