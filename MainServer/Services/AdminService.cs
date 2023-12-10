@@ -2,13 +2,14 @@
 using ServerApp.Domain;
 using Grpc.Core;
 using ServerApp.Logic;
+using ServerApp.Controllers;
 
 namespace MainServer.Services
 {
 	public class AdminService : Admin.AdminBase
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
-        private readonly UserLogic _userLogic = new UserLogic();
+        private readonly UserController _userController = new UserController();
 
         public override Task<MessageReply> PostProduct(ProductDTO request, ServerCallContext context)
         {
@@ -57,20 +58,20 @@ namespace MainServer.Services
             return Task.FromResult(new MessageReply { Message = message });
         }
 
-        public override Task<MessageReply> PostCompra(CompraDTO request, ServerCallContext context)
+        public override async Task<MessageReply> PostCompra(CompraDTO request, ServerCallContext context)
         {
             Console.WriteLine("Antes de realizar compra de producto {0}", request.Producto); //debug
             string message;
             try
             {
-                Producto p = _productLogic.buscarUnProducto(request.Producto);
-                message = "Producto comprado: " + _userLogic.agregarProductoACompras(p, request.User);
+                message = (await _userController.agregarProductoAComprasAdmin(request.User, request.Producto)).MensajeEntregadoACliente;
             }
             catch (Exception e)
             {
                 message = "Hubo un error: " + e.Message;
             }
-            return Task.FromResult(new MessageReply { Message = message });
+            //return Task.FromResult(new MessageReply { Message = message }); //debug
+            return await Task.Run(() => new MessageReply { Message = message });
         }
 
         public Producto DTOToProducto(ProductDTO productDTO)

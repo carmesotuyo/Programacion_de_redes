@@ -1,7 +1,9 @@
 ﻿using Communication;
+using RabbitMQ.Client;
 using ServerApp.Domain;
 using ServerApp.Logic;
 using System.Text;
+using System.Text.Json;
 
 namespace ServerApp.Controllers
 {
@@ -56,6 +58,8 @@ namespace ServerApp.Controllers
                 compra.Precio = p.Precio;
                 compra.Fecha = DateTime.Now.ToShortDateString();
                 compra.MensajeEntregadoACliente = mensajeACliente;
+
+                EnviarMensajeRabbitMQ(compra);
             }
             catch (Exception ex)
             {
@@ -65,6 +69,61 @@ namespace ServerApp.Controllers
 
             }
             return compra;
+        }
+
+        public async Task<Compra> agregarProductoAComprasAdmin(string user, string nombreProd)
+        {
+            string mensajeACliente = "";
+            Compra compra = new Compra(mensajeACliente);
+            try
+            {
+                Usuario u = _userLogic.buscarUsuario(user);
+
+                Producto p = _productLogic.buscarUnProducto(nombreProd);
+
+                _userLogic.agregarProductoACompras(p, user);
+                string productoComprado = null;
+                foreach (Producto prod in _userLogic.darProductosComprados(u))
+                {
+                    if (prod.Nombre == nombreProd) productoComprado = prod.Nombre; // con esto validamos que se haya agregado
+
+                }
+                compra.Usuario = u.mail;
+                compra.NombreProducto = p.Nombre;
+                compra.Precio = p.Precio;
+                compra.Fecha = DateTime.Now.ToShortDateString();
+                compra.MensajeEntregadoACliente = "Producto agregado a lista de compras: " + productoComprado;
+
+                EnviarMensajeRabbitMQ(compra);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                mensajeACliente = "Hubo un error: " + ex.Message;
+                compra.MensajeEntregadoACliente = mensajeACliente;
+
+            }
+            return compra;
+        }
+
+        private static void EnviarMensajeRabbitMQ(Compra compra)
+        {
+            string mensajeARabbit = JsonSerializer.Serialize(compra);
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare(exchange: "Compras", type: ExchangeType.Fanout);
+
+                var body = Encoding.UTF8.GetBytes(mensajeARabbit);
+
+                channel.BasicPublish(exchange: "Compras",
+                                     routingKey: "",
+                                     basicProperties: null,
+                                     body: body);
+
+                Console.WriteLine(" [x] Mensaje Enviado a RabbitMQ: {0}", mensajeARabbit);
+            }
         }
     }
 }

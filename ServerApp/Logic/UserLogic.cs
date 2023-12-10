@@ -60,7 +60,7 @@ namespace ServerApp.Logic
 
         public Usuario buscarUsuario(string username)
         {
-            return _database.buscarUsuario(username);
+            return _database.buscarUsuario(username) ?? throw new Exception("El usuario no existe");
         }
 
         public List<Producto> ProductosComprados(Usuario usuario)
