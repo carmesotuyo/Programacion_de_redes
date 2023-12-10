@@ -1,5 +1,4 @@
 using ComprasServer.Logic;
-using ComprasServer.Service;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
@@ -10,14 +9,13 @@ namespace ComprasServer
     public class Program
     {
         private static readonly ComprasLogic _compraLogic = new ComprasLogic();
-        //private static MQService mq;
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             try
             {
-                // Iniciamos el servidor original
+                // Iniciamos RabbitMQ
                 var taskMQ = Task.Run(async () =>
                 {
                     await InitializeMQServiceAsync();
@@ -54,20 +52,12 @@ namespace ComprasServer
 
 
             app.MapControllers();
-
-            // Inicializar MQService de forma asíncrona
-            
-            
-            //mq = new MQService();
             app.Run();
             
         }
 
         private static async Task InitializeMQServiceAsync()
         {
-            //mq = new MQService();
-            // Si MQService tiene operaciones asíncronas, también podrías esperarlas aquí
-            // Ejemplo: await mq.InicializarAsync();
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -88,7 +78,6 @@ namespace ComprasServer
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Compra compra = JsonSerializer.Deserialize<Compra>(message);
-                    //compra.Fecha = compra.Fecha.ToShortDateString();
 
                     _compraLogic.agregarCompra(compra);
                 };
