@@ -21,7 +21,6 @@ namespace ComprasServer
                 var taskMQ = Task.Run(async () =>
                 {
                     await InitializeMQServiceAsync();
-                    Console.WriteLine("Se llamó al metodo");
                 });
 
             }
