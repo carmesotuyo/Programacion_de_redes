@@ -37,7 +37,10 @@ namespace ComprasServer.Service
                     //=========== Acá hago algo con el mensaje que llega ===========
                     
                     _compraLogic.agregarCompra(compra);
-                    
+                    Console.WriteLine("================================Acá llegó la info ========================");
+                    Console.WriteLine(compra);
+                    Console.WriteLine("================================si se guardó ========================");
+                    Console.WriteLine(_compraLogic.darListadoCompras());
                     //==============================================================
                 };
                 channel.BasicConsume(queue: queueName,
@@ -45,7 +48,7 @@ namespace ComprasServer.Service
                                      consumer: consumer);
 
                 Console.WriteLine(" Press [enter] to exit.");
-                Console.ReadLine();
+                //Console.ReadLine();
             }
 
         }

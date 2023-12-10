@@ -38,6 +38,23 @@
             return _compras;
         }
 
+        public List<Compra> FiltrarCompras(
+            string? usuario = null,
+            string? nombreProducto = null,
+            DateTime? fecha = null,
+            float? precio = null)
+        {
+            var comprasFiltradas = _compras
+                .Where(compra =>
+                    (usuario == null || compra.Usuario.Equals(usuario, StringComparison.OrdinalIgnoreCase)) &&
+                    (nombreProducto == null || compra.NombreProducto.Equals(nombreProducto, StringComparison.OrdinalIgnoreCase)) &&
+                    (!fecha.HasValue || compra.Fecha.Date == fecha.Value.Date) &&
+                    (!precio.HasValue || compra.Precio == precio.Value))
+                .ToList();
+
+            return comprasFiltradas;
+        }
+
         public List<Compra> BuscarComprasPorProducto(string nombreProducto)
         {
             return _compras.Where(c => c.NombreProducto.Equals(nombreProducto, StringComparison.OrdinalIgnoreCase)).ToList();

@@ -17,9 +17,14 @@ namespace ComprasServer.Logic
             return compra;
         }
 
-        public List<Compra> darListadoCompras()
+        public List<Compra> darListadoCompras(
+            string? usuario = null,
+            string? nombreProducto = null,
+            DateTime? fecha = null,
+            float? precio = null)
         {
-            return _database.darListaCompras();
+            // Llama al método centralizado en SingletonDB para filtrar compras
+            return _database.FiltrarCompras(usuario, nombreProducto, fecha, precio);
         }
 
         public List<Compra> BuscarComprasPorProducto(string nombreProducto)
