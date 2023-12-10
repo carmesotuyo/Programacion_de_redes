@@ -6,10 +6,10 @@ namespace ServerApp.Domain
         public string Usuario { get; set; }
         public string NombreProducto { get; set; }
         public float Precio { get; set; }
-        public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         public string MensajeEntregadoACliente { get; set; }
 
-        public Compra(string user, string producto, float precio, DateTime fecha, string mensaje)
+        public Compra(string user, string producto, float precio, string fecha, string mensaje)
 		{
             Usuario = user;
             NombreProducto = producto;

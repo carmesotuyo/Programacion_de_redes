@@ -5,34 +5,19 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Admin/Protos/admin.proto">
     <Files>
       <File FileName="ServerApp/ProgramServer.cs" />
       <File FileName="Admin/Program.cs" />
       <File FileName="Admin/WeatherForecast.cs" />
-      <File FileName="Admin/ServerConfig.cs" />
-      <File FileName="Admin/Controllers/AdminController.cs" Line="13" Column="42" />
-      <File FileName="Admin/Protos/admin.proto" />
-      <File FileName="MainServer/Program.cs" />
-      <File FileName="Admin/Controllers/WeatherForecastController.cs" />
-      <File FileName="MainServer/Protos/admin.proto" />
-      <File FileName="ServerApp/Domain/Producto.cs" />
-      <File FileName="MainServer/Services/AdminService.cs" Line="35" Column="33" />
-      <File FileName="ServerApp/Controllers/ProductController.cs" />
-      <File FileName="ServerApp/Logic/ProductLogic.cs" />
-      <File FileName="Admin/Admin.csproj" />
-      <File FileName="MainServer/MainServer.csproj" />
-      <File FileName=".vs/Obligatorio_ 271968_ 186554_ 274924/xs/UserPrefs.xml" Line="1" Column="1" />
+      <File FileName="Admin/ServerConfig.cs" Line="6" Column="30" />
+      <File FileName="Admin/Protos/admin.proto" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Obligatorio_ 271968_ 186554_ 274924">
-            <Node name="Admin">
-              <Node name="Controllers">
-                <Node name="AdminController.cs" selected="True" />
-              </Node>
-            </Node>
+          <Node name="Obligatorio_ 271968_ 186554_ 274924" expanded="True">
+            <Node name="Admin" selected="True" />
           </Node>
         </State>
       </Pad>
