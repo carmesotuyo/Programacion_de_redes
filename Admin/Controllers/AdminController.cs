@@ -12,7 +12,7 @@ namespace Admin.Controllers
         private Admin.AdminClient client;
 
         [HttpPost("products")]
-        public async Task<ActionResult> PostProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> PostProduct([FromBody] ProductoNuevoDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
@@ -21,7 +21,7 @@ namespace Admin.Controllers
         }
 
         [HttpDelete("products")]
-        public async Task<ActionResult> DeleteProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> DeleteProduct([FromBody] ProductoBorrarDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
@@ -30,7 +30,7 @@ namespace Admin.Controllers
         }
 
         [HttpPut("products")]
-        public async Task<ActionResult> PutProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> PutProduct([FromBody] ProductoModificarDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
