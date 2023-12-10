@@ -2,15 +2,16 @@
 using ServerApp.Domain;
 using Grpc.Core;
 using ServerApp.Logic;
+using ServerApp.Controllers;
 
 namespace MainServer.Services
 {
 	public class AdminService : Admin.AdminBase
 	{
         private readonly ProductLogic _productLogic = new ProductLogic();
-        private readonly UserLogic _userLogic = new UserLogic();
+        private readonly UserController _userController = new UserController();
 
-        public override Task<MessageReply> PostProduct(ProductDTO request, ServerCallContext context)
+        public override Task<MessageReply> PostProduct(ProductoNuevoDTO request, ServerCallContext context)
         {
             Console.WriteLine("Antes de crear el producto con nombre {0}", request.Nombre); //debug
             string message;
@@ -24,14 +25,14 @@ namespace MainServer.Services
             return Task.FromResult(new MessageReply { Message = message });
         }
 
-        public override Task<MessageReply> DeleteProduct(ProductDTO request, ServerCallContext context)
+        public override Task<MessageReply> DeleteProduct(ProductoBorrarDTO request, ServerCallContext context)
         {
-            Console.WriteLine("Antes de eliminar el producto con nombre {0}", request.Nombre); //debug
+            Console.WriteLine("Antes de eliminar el producto con nombre {0}", request.Producto); //debug
             bool couldDelete;
             string message = "";
             try
             {
-                couldDelete = _productLogic.eliminarProducto(request.Nombre, request.User) != null;
+                couldDelete = _productLogic.eliminarProducto(request.Producto, request.User) != null;
             } catch(Exception e)
             {
                 couldDelete = false;
@@ -41,7 +42,7 @@ namespace MainServer.Services
             return Task.FromResult(new MessageReply { Message = message });
         }
 
-        public override Task<MessageReply> PutProduct(ProductDTO request, ServerCallContext context)
+        public override Task<MessageReply> PutProduct(ProductoModificarDTO request, ServerCallContext context)
         {
             Console.WriteLine("Antes de modificar el producto con nombre {0}", request.Nombre); //debug
             string message;
@@ -57,7 +58,22 @@ namespace MainServer.Services
             return Task.FromResult(new MessageReply { Message = message });
         }
 
-        public Producto DTOToProducto(ProductDTO productDTO)
+        public override async Task<MessageReply> PostCompra(CompraDTO request, ServerCallContext context)
+        {
+            Console.WriteLine("Antes de realizar compra de producto {0}", request.Producto); //debug
+            string message;
+            try
+            {
+                message = (await _userController.agregarProductoAComprasAdmin(request.User, request.Producto)).MensajeEntregadoACliente;
+            }
+            catch (Exception e)
+            {
+                message = "Hubo un error: " + e.Message;
+            }
+            return await Task.Run(() => new MessageReply { Message = message });
+        }
+
+        public Producto DTOToProducto(ProductoNuevoDTO productDTO)
         {
             return new Producto(productDTO.Nombre, productDTO.Descripcion, productDTO.Precio, productDTO.Stock);
         }

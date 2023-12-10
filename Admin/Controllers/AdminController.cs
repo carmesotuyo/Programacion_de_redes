@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
-using Admin;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,7 +12,7 @@ namespace Admin.Controllers
         private Admin.AdminClient client;
 
         [HttpPost("products")]
-        public async Task<ActionResult> PostProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> PostProduct([FromBody] ProductoNuevoDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
@@ -26,7 +21,7 @@ namespace Admin.Controllers
         }
 
         [HttpDelete("products")]
-        public async Task<ActionResult> DeleteProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> DeleteProduct([FromBody] ProductoBorrarDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
@@ -35,7 +30,7 @@ namespace Admin.Controllers
         }
 
         [HttpPut("products")]
-        public async Task<ActionResult> PutProduct([FromBody] ProductDTO product)
+        public async Task<ActionResult> PutProduct([FromBody] ProductoModificarDTO product)
         {
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
@@ -43,6 +38,14 @@ namespace Admin.Controllers
             return Ok(reply.Message);
         }
 
+        [HttpPost("compras")]
+        public async Task<ActionResult> PostCompra([FromBody] CompraDTO compra)
+        {
+            using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
+            client = new Admin.AdminClient(channel);
+            var reply = await client.PostCompraAsync(compra);
+            return Ok(reply.Message);
+        }
 
     }
 }

@@ -49,8 +49,9 @@ namespace ServerApp.Logic
             return _database.darListaProductosCompradosPorUsuario(u);
         }
 
-        public List<Producto> agregarProductoACompras(Producto p, Usuario u)
+        public List<Producto> agregarProductoACompras(Producto p, string user)
         {
+            Usuario u = buscarUsuario(user);
             if (!_database.existeProducto(p)) throw new Exception("El producto que quieres comprar no existe");
             if (!_database.tieneStock(p)) throw new Exception("El producto que quieres comprar no tiene stock disponible");
             _database.agregarProductoACompras(p, u);
@@ -59,7 +60,7 @@ namespace ServerApp.Logic
 
         public Usuario buscarUsuario(string username)
         {
-            return _database.buscarUsuario(username);
+            return _database.buscarUsuario(username) ?? throw new Exception("El usuario no existe");
         }
 
         public List<Producto> ProductosComprados(Usuario usuario)

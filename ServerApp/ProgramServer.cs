@@ -152,11 +152,6 @@ namespace ServerApp
                 case "2":
                     Compra compra = await _userController.agregarProductoACompras(msgHandler);
                     await msgHandler.SendMessageAsync(compra.MensajeEntregadoACliente);
-                    if(compra.NombreProducto != null)
-                    {
-                        string mensaje = JsonSerializer.Serialize(compra);
-                        EnviarMensajeRabbitMQ(mensaje);
-                    }
                     break;
                 case "3":
                     await msgHandler.SendMessageAsync(await _productController.modificarProducto(msgHandler, fileHandler));
@@ -224,25 +219,6 @@ namespace ServerApp
                 string username = prodInfo[4];
 
                 _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
-            }
-        }
-
-        private static void EnviarMensajeRabbitMQ(string compra)
-        {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.ExchangeDeclare(exchange: "Compras", type: ExchangeType.Fanout);
-
-                var body = Encoding.UTF8.GetBytes(compra);
-
-                channel.BasicPublish(exchange: "Compras",
-                                     routingKey: "",
-                                     basicProperties: null,
-                                     body: body);
-
-                Console.WriteLine(" [x] Mensaje Enviado a RabbitMQ: {0}", compra);
             }
         }
 

@@ -8,24 +8,36 @@ package admin;
 service Admin {
 
   // Functions availables
-  rpc PostProduct(ProductDTO) returns (MessageReply);
-  rpc DeleteProduct(ProductDTO) returns (MessageReply);
-  rpc PutProduct(ProductDTO) returns (MessageReply);
+  rpc PostProduct(ProductoNuevoDTO) returns (MessageReply);
+  rpc DeleteProduct(ProductoBorrarDTO) returns (MessageReply);
+  rpc PutProduct(ProductoModificarDTO) returns (MessageReply);
+  rpc PostCompra(CompraDTO) returns (MessageReply);
  
 }
 
-message ProductDTO {
+message ProductoNuevoDTO {
 	string user = 1;
 	string nombre = 2;
 	string descripcion = 3;
 	float precio =  4;
 	int32 stock = 5;
+}
+
+message ProductoBorrarDTO {
+	string user = 1;
+	string producto = 2;
+}
+
+message ProductoModificarDTO {
+	string user = 1;
+	string nombre = 2;
 	string atributoAModificar = 6;
 	string nuevoValor = 7;
 }
 
-message Id {
-	int32 id = 1;
+message CompraDTO {
+	string user = 1;
+	string producto = 2;
 }
 
 
