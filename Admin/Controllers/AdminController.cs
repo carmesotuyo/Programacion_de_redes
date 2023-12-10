@@ -19,8 +19,6 @@ namespace Admin.Controllers
 
         private Admin.AdminClient client;
 
-
-
         //static readonly ISettingsManager SettingsMgr = new SettingsManager();
         //public AdminController()
         //{
@@ -37,6 +35,15 @@ namespace Admin.Controllers
             using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
             client = new Admin.AdminClient(channel);
             var reply = await client.PostProductAsync(product);
+            return Ok(reply.Message);
+        }
+
+        [HttpDelete("products")]
+        public async Task<ActionResult> DeleteProduct([FromBody] ProductDTO product)
+        {
+            using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
+            client = new Admin.AdminClient(channel);
+            var reply = await client.DeleteProductAsync(product);
             return Ok(reply.Message);
         }
 

@@ -21,8 +21,9 @@ namespace ServerApp.Logic
 		public Producto publicarProducto(Producto producto, string username)
 		{
 			validarProductoRepetido(producto);
-			Usuario usuario = _userLogic.buscarUsuario(username);
-			_database.agregarProducto(producto);
+            existeUsuario(username);
+            Usuario usuario = _userLogic.buscarUsuario(username);
+            _database.agregarProducto(producto);
 			usuario.agregarProductoAPublicados(producto);
 			return producto;
 		}
@@ -62,7 +63,8 @@ namespace ServerApp.Logic
 		public Producto eliminarProducto(string nombreProd, string username)
 		{
 			existeProducto(nombreProd);
-			Producto p = buscarUnProducto(nombreProd);
+            existeUsuario(username);
+            Producto p = buscarUnProducto(nombreProd);
 			tienePermisos(username, p);
 
             _database.eliminarProducto(p);
@@ -194,6 +196,11 @@ namespace ServerApp.Logic
             bool es = false;
             if (user.publicados.Contains(prod)) es = true;
             return es;
+        }
+
+        private void existeUsuario(string username)
+        {
+            if (_userLogic.buscarUsuario(username) == null) throw new Exception("El usuario ingresado no existe");
         }
     }
 }

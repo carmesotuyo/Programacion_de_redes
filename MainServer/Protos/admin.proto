@@ -19,9 +19,6 @@ message ProductDTO {
 	string descripcion = 3;
 	float precio =  4;
 	int32 stock = 5;
-	// List<Calificacion> calificaciones = 5;
-	//int32 id = 5;
-	// string imagen = 7;
 }
 
 message Id {
