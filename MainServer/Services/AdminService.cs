@@ -70,7 +70,6 @@ namespace MainServer.Services
             {
                 message = "Hubo un error: " + e.Message;
             }
-            //return Task.FromResult(new MessageReply { Message = message }); //debug
             return await Task.Run(() => new MessageReply { Message = message });
         }
 
