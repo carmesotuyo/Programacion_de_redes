@@ -3,6 +3,7 @@ using ServerApp.Domain;
 using Grpc.Core;
 using ServerApp.Logic;
 using ServerApp.Controllers;
+using System.Text.Json;
 
 namespace MainServer.Services
 {
@@ -80,7 +81,7 @@ namespace MainServer.Services
             try
             {
                 Producto prodEncontrado = _productLogic.buscarUnProducto(nombreProducto.Producto);
-                message = prodEncontrado.calificaciones.ToString(); // debug ver como se muestra esto
+                message = JsonSerializer.Serialize(prodEncontrado.calificaciones); // debug ver como se muestra esto
             }
             catch (Exception e)
             {
