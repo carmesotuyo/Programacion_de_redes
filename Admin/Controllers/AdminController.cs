@@ -10,24 +10,11 @@ using Admin;
 
 namespace Admin.Controllers
 {
-    //[Route("api/[controller]")] //debug
     [Route("admin")]
     [ApiController]
     public class AdminController : Controller
     {
-        // COSAS DEL EJEMPLO QUE NO ENTIENDO ------------------------ DEBUG
-
         private Admin.AdminClient client;
-
-        //static readonly ISettingsManager SettingsMgr = new SettingsManager();
-        //public AdminController()
-        //{
-
-
-        //    AppContext.SetSwitch(
-        //          "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
-        //}
 
         [HttpPost("products")]
         public async Task<ActionResult> PostProduct([FromBody] ProductDTO product)
@@ -57,41 +44,6 @@ namespace Admin.Controllers
         }
 
 
-
-
-        // COSAS POR DEFECTO ----------------------- DEBUG
-
-        //// GET: api/values
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
 
