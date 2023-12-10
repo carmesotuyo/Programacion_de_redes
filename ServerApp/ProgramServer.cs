@@ -22,12 +22,16 @@ namespace ServerApp
             UserController _userController = new();
             NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
             NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
+            NameValueCollection compras = ConfigurationManager.GetSection("Compras") as NameValueCollection;
+            NameValueCollection calificaciones = ConfigurationManager.GetSection("Calificaciones") as NameValueCollection;
             Dictionary<TcpClient, bool> clientesConectados = new();
             bool salir = false;
 
             ProgramServer server = new ProgramServer();
             server.agregarUsuarios(usuarios, _userController);
             server.agregarProductos(productos, _productController);
+            server.agregarCompras(compras, _userController);
+            server.agregarCalificaciones(calificaciones, _productController);
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             Console.WriteLine("Para cerrar este servidor ingrese 'salir' en cualquier momento");
 
@@ -219,6 +223,33 @@ namespace ServerApp
                 string username = prodInfo[4];
 
                 _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
+            }
+        }
+
+        private void agregarCompras(NameValueCollection compras, UserController userController)
+        {
+            foreach (string key in compras.AllKeys)
+            {
+                string[] compraInfo = compras[key].Split(',');
+                string nombreProd = compraInfo[0];
+                string username = compraInfo[1];
+
+                userController.agregarProductoAComprasAdmin(username, nombreProd);
+            }
+            
+        }
+
+        private void agregarCalificaciones(NameValueCollection calificaciones, ProductController productController)
+        {
+            foreach (string key in calificaciones.AllKeys)
+            {
+                string[] calificacionInfo = calificaciones[key].Split(',');
+                string nombreProd = calificacionInfo[0];
+                string username = calificacionInfo[1];
+                string puntaje = calificacionInfo[2];
+                string comentario = calificacionInfo[3];
+
+                productController.calificarProductoBase(username, nombreProd, puntaje, comentario);
             }
         }
 

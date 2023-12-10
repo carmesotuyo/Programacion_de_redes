@@ -73,6 +73,23 @@ namespace MainServer.Services
             return await Task.Run(() => new MessageReply { Message = message });
         }
 
+        public override Task<MessageReply> GetCalificaciones(CalificacionesDTO nombreProducto, ServerCallContext context)
+        {
+            Console.WriteLine("Antes de obtener las calificaciones de el producto {0}", nombreProducto.Producto); //debug
+            string message;
+            try
+            {
+                Producto prodEncontrado = _productLogic.buscarUnProducto(nombreProducto.Producto);
+                message = prodEncontrado.calificaciones.ToString(); // debug ver como se muestra esto
+            }
+            catch (Exception e)
+            {
+                message = "Hubo un error: " + e.Message;
+            }
+            return Task.FromResult(new MessageReply { Message = message });
+        }
+
+
         public Producto DTOToProducto(ProductoNuevoDTO productDTO)
         {
             return new Producto(productDTO.Nombre, productDTO.Descripcion, productDTO.Precio, productDTO.Stock);

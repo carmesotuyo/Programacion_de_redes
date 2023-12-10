@@ -47,6 +47,15 @@ namespace Admin.Controllers
             return Ok(reply.Message);
         }
 
+        [HttpGet("calificaciones")]
+        public async Task<ActionResult> GetCalificaciones([FromQuery] CalificacionesDTO nombreProducto)
+        {
+            using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
+            client = new Admin.AdminClient(channel);
+            var reply = await client.GetCalificacionesAsync(nombreProducto);
+            return Ok(reply.Message);
+        }
+
     }
 }
 
