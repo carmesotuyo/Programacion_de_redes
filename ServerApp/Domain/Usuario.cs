@@ -13,6 +13,7 @@
 			this.clave = clave;
 			comprados = new List<Producto>();
 			publicados = new List<Producto>();
+			// Debug
 		}
 
 		public List<Producto> agregarProductoAComprados(Producto producto)
