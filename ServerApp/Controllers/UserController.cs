@@ -54,7 +54,7 @@ namespace ServerApp.Controllers
                 compra.Usuario = u.mail;
                 compra.NombreProducto = p.Nombre;
                 compra.Precio = p.Precio;
-                compra.Fecha = DateTime.Now;
+                compra.Fecha = DateTime.Now.ToShortDateString();
                 compra.MensajeEntregadoACliente = mensajeACliente;
             }
             catch (Exception ex)
