@@ -42,7 +42,7 @@ namespace ServerApp.Controllers
 
                 Producto p = _productLogic.buscarUnProducto(nombreProd);
 
-                _userLogic.agregarProductoACompras(p, u);
+                _userLogic.agregarProductoACompras(p, user);
                 retorno = retorno.AppendLine();
                 foreach (Producto prod  in _userLogic.darProductosComprados(u))
                 {

@@ -11,6 +11,7 @@ service Admin {
   rpc PostProduct(ProductDTO) returns (MessageReply);
   rpc DeleteProduct(ProductDTO) returns (MessageReply);
   rpc PutProduct(ProductDTO) returns (MessageReply);
+  rpc PostCompra(CompraDTO) returns (MessageReply);
  
 }
 
@@ -24,8 +25,9 @@ message ProductDTO {
 	string nuevoValor = 7;
 }
 
-message Id {
-	int32 id = 1;
+message CompraDTO {
+	string user = 1;
+	string producto = 2;
 }
 
 

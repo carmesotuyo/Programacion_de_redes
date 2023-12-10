@@ -57,6 +57,22 @@ namespace MainServer.Services
             return Task.FromResult(new MessageReply { Message = message });
         }
 
+        public override Task<MessageReply> PostCompra(CompraDTO request, ServerCallContext context)
+        {
+            Console.WriteLine("Antes de realizar compra de producto {0}", request.Producto); //debug
+            string message;
+            try
+            {
+                Producto p = _productLogic.buscarUnProducto(request.Producto);
+                message = "Producto comprado: " + _userLogic.agregarProductoACompras(p, request.User);
+            }
+            catch (Exception e)
+            {
+                message = "Hubo un error: " + e.Message;
+            }
+            return Task.FromResult(new MessageReply { Message = message });
+        }
+
         public Producto DTOToProducto(ProductDTO productDTO)
         {
             return new Producto(productDTO.Nombre, productDTO.Descripcion, productDTO.Precio, productDTO.Stock);

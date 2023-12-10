@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
-using Admin;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,6 +38,14 @@ namespace Admin.Controllers
             return Ok(reply.Message);
         }
 
+        [HttpPost("compras")]
+        public async Task<ActionResult> PostCompra([FromBody] CompraDTO compra)
+        {
+            using var channel = GrpcChannel.ForAddress(ServerConfig.GrpcURL);
+            client = new Admin.AdminClient(channel);
+            var reply = await client.PostCompraAsync(compra);
+            return Ok(reply.Message);
+        }
 
     }
 }
