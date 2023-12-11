@@ -4,6 +4,7 @@ using Grpc.Core;
 using ServerApp.Logic;
 using ServerApp.Controllers;
 using System.Text.Json;
+using System.Text;
 
 namespace MainServer.Services
 {
@@ -81,7 +82,23 @@ namespace MainServer.Services
             try
             {
                 Producto prodEncontrado = _productLogic.buscarUnProducto(nombreProducto.Producto);
-                message = JsonSerializer.Serialize(prodEncontrado.calificaciones); // debug ver como se muestra esto
+
+                StringBuilder retorno = new StringBuilder();
+                int i = 1;
+                if (prodEncontrado.calificaciones.Count > 0)
+                {
+                    foreach (Calificacion c in prodEncontrado.calificaciones)
+                    {
+                        retorno.AppendLine(i + "- Puntaje: " + c.puntaje + " - Comentario: "+ c.comentario);
+                        i++;
+                    }
+                }
+                else
+                {
+                    retorno.AppendLine("El producto " + prodEncontrado.Nombre + " no ha sido calificado.");
+                }
+
+                message = retorno.ToString();
             }
             catch (Exception e)
             {
