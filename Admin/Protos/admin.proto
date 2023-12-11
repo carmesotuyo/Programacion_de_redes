@@ -12,6 +12,7 @@ service Admin {
   rpc DeleteProduct(ProductoBorrarDTO) returns (MessageReply);
   rpc PutProduct(ProductoModificarDTO) returns (MessageReply);
   rpc PostCompra(CompraDTO) returns (MessageReply);
+  rpc GetCalificaciones(CalificacionesDTO) returns (MessageReply);
  
 }
 
@@ -38,6 +39,10 @@ message ProductoModificarDTO {
 message CompraDTO {
 	string user = 1;
 	string producto = 2;
+}
+
+message CalificacionesDTO {
+	string producto = 1;
 }
 
 

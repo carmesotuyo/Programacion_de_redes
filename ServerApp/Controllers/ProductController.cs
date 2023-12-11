@@ -278,6 +278,20 @@ namespace ServerApp.Controllers
             string[] datos = pathImagen.Split(" ");
             if (datos.Count() > 1) throw new Exception("La imagen ingresada no puede tener espacios en blanco en su nombre. Proba cambiandolos por '_' ");
         }
+
+        public async Task<string> calificarProductoBase(string username, string nombreProd, string puntaje, string comentario)
+        {
+            string mensajeAlCliente = "";
+            try
+            {
+                mensajeAlCliente = _productLogic.calificarProducto(username, nombreProd, puntaje, comentario);
+            }
+            catch (Exception e)
+            {
+                mensajeAlCliente = "Hubo un error: " + e.Message;
+            }
+            return mensajeAlCliente;
+        }
     }
 }
 
