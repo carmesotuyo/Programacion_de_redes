@@ -7,22 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.59.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Protos\greet.proto" />
-    <None Remove="Protos\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Protos\" />
+    <ProjectReference Include="..\MainServer\MainServer.csproj" />
   </ItemGroup>
 </Project>

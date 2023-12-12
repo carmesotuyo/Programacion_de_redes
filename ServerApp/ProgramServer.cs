@@ -4,25 +4,34 @@ using Communication;
 using ServerApp.Controllers;
 using System.Collections.Specialized;
 using System.Configuration;
+using RabbitMQ.Client;
+using System.Text;
+using ServerApp.Domain;
+using System.Text.Json;
 
 namespace ServerApp
 {
     public class ProgramServer
     {
-        static readonly SettingsManager settingsMngr = new();
-        private static string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
-        private static readonly ProductController _productController = new(filesPath);
-        private static readonly UserController _userController = new();
-        NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
-        NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
-        private static Dictionary<TcpClient, bool> clientesConectados = new();
-        private static bool salir = false;
-
-        public static async Task Main(string[] args)
+        
+        public static async Task HandleServer()
         {
+            SettingsManager settingsMngr = new();
+            string filesPath = settingsMngr.ReadSettings(ServerConfig.imagePathconfigkey);
+            ProductController _productController = new(filesPath);
+            UserController _userController = new();
+            NameValueCollection usuarios = ConfigurationManager.GetSection("Usuarios") as NameValueCollection;
+            NameValueCollection productos = ConfigurationManager.GetSection("Productos") as NameValueCollection;
+            NameValueCollection compras = ConfigurationManager.GetSection("Compras") as NameValueCollection;
+            NameValueCollection calificaciones = ConfigurationManager.GetSection("Calificaciones") as NameValueCollection;
+            Dictionary<TcpClient, bool> clientesConectados = new();
+            bool salir = false;
+
             ProgramServer server = new ProgramServer();
-            server.agregarUsuarios();
-            server.agregarProductos();
+            server.agregarUsuarios(usuarios, _userController);
+            server.agregarProductos(productos, _productController);
+            server.agregarCompras(compras, _userController);
+            server.agregarCalificaciones(calificaciones, _productController);
             Console.WriteLine("Iniciando Aplicacion Servidor....!!!");
             Console.WriteLine("Para cerrar este servidor ingrese 'salir' en cualquier momento");
 
@@ -41,7 +50,7 @@ namespace ServerApp
 
                 int clientes = 0;
 
-                var CerrarServidorTask = Task.Run(() => CerrarServidor(tcpListener)); //todo deberia ser async?
+                var CerrarServidorTask = Task.Run(() => CerrarServidor(tcpListener, salir, clientesConectados)); //todo deberia ser async?
 
                 while (!salir)
                 {
@@ -52,7 +61,7 @@ namespace ServerApp
                         clientes++;
                         int nro = clientes;
                         Console.WriteLine("Acepte un nuevo pedido de Conexion");
-                        var tarea = Task.Run(async () => await ManejarClienteAsync(tcpClient, nro));
+                        var tarea = Task.Run(async () => await ManejarClienteAsync(tcpClient, nro, clientesConectados, _userController, _productController, filesPath));
                     }
                     catch (Exception e)
                     {
@@ -75,7 +84,7 @@ namespace ServerApp
             Console.ReadLine(); // no se que hace esto pero el profe lo tiene
         }
 
-        static void CerrarServidor(TcpListener tcpListener)
+        static void CerrarServidor(TcpListener tcpListener, bool salir, Dictionary<TcpClient, bool> clientesConectados)
         {
             try
             {
@@ -105,7 +114,7 @@ namespace ServerApp
             
         }
 
-        static async Task ManejarClienteAsync(TcpClient tcpClient, int nro)
+        static async Task ManejarClienteAsync(TcpClient tcpClient, int nro, Dictionary<TcpClient, bool> clientesConectados, UserController _userController, ProductController _productController, string filesPath)
         {
             Console.WriteLine("Cliente {0} conectado", nro);
             MessageCommsHandler msgHandler = new(tcpClient);
@@ -120,7 +129,7 @@ namespace ServerApp
                     string comando = await msgHandler.ReceiveMessageAsync();
 
                     // Procesar la seleccion del cliente
-                    bool desconecta = await ProcesarSeleccion(msgHandler, comando, fileHandler);
+                    bool desconecta = await ProcesarSeleccion(msgHandler, comando, fileHandler, _userController, _productController, filesPath);
                     if(desconecta) clientesConectados[tcpClient] = false;
                 }
 
@@ -133,7 +142,7 @@ namespace ServerApp
             }
         }
 
-        private static async Task<bool> ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler)
+        private static async Task<bool> ProcesarSeleccion(MessageCommsHandler msgHandler, string opcion, FileCommsHandler fileHandler, UserController _userController, ProductController _productController, string filesPath)
         {
             switch (opcion)
             {
@@ -145,7 +154,8 @@ namespace ServerApp
                     await msgHandler.SendMessageAsync(await _productController.publicarProducto(msgHandler, fileHandler));
                     break;
                 case "2":
-                    await msgHandler.SendMessageAsync(await _userController.agregarProductoACompras(msgHandler));
+                    Compra compra = await _userController.agregarProductoACompras(msgHandler);
+                    await msgHandler.SendMessageAsync(compra.MensajeEntregadoACliente);
                     break;
                 case "3":
                     await msgHandler.SendMessageAsync(await _productController.modificarProducto(msgHandler, fileHandler));
@@ -189,7 +199,7 @@ namespace ServerApp
             return false;
         }
 
-        private void agregarUsuarios()
+        private void agregarUsuarios(NameValueCollection usuarios, UserController _userController)
         {
             foreach (string key in usuarios.AllKeys)
             {
@@ -202,7 +212,7 @@ namespace ServerApp
             }
         }
 
-        private void agregarProductos() {
+        private void agregarProductos(NameValueCollection productos, ProductController _productController) {
             foreach (string key in productos.AllKeys)
             {
                 string[] prodInfo = productos[key].Split(',');
@@ -213,6 +223,33 @@ namespace ServerApp
                 string username = prodInfo[4];
 
                 _productController.agregarProductosBase(nombreProd,descrProd,precio,stock, username);
+            }
+        }
+
+        private void agregarCompras(NameValueCollection compras, UserController userController)
+        {
+            foreach (string key in compras.AllKeys)
+            {
+                string[] compraInfo = compras[key].Split(',');
+                string nombreProd = compraInfo[0];
+                string username = compraInfo[1];
+
+                userController.agregarProductoAComprasAdmin(username, nombreProd);
+            }
+            
+        }
+
+        private void agregarCalificaciones(NameValueCollection calificaciones, ProductController productController)
+        {
+            foreach (string key in calificaciones.AllKeys)
+            {
+                string[] calificacionInfo = calificaciones[key].Split(',');
+                string nombreProd = calificacionInfo[0];
+                string username = calificacionInfo[1];
+                string puntaje = calificacionInfo[2];
+                string comentario = calificacionInfo[3];
+
+                productController.calificarProductoBase(username, nombreProd, puntaje, comentario);
             }
         }
 
